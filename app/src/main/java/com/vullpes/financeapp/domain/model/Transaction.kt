@@ -8,5 +8,8 @@ data class Transaction(
     val categoryName:String,
     val accountID: Int,
     val accountName:String,
+    val deposit: Boolean,
+    val withdrawal:Boolean,
+    val value:Double,
     val dateTransaction: Date
 )
