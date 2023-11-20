@@ -1,4 +1,8 @@
 package com.vullpes.financeapp.domain.usecases.account
 
-class ListAccountUseCase {
+import com.vullpes.financeapp.domain.AccountRepository
+import javax.inject.Inject
+
+class ListAccountUseCase @Inject constructor(private val accountRepository: AccountRepository) {
+    suspend fun operator() = accountRepository.getAccounts()
 }
