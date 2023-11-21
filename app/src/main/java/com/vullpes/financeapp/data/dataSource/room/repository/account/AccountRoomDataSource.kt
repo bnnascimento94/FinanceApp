@@ -1,13 +1,10 @@
-package com.vullpes.financeapp.domain
+package com.vullpes.financeapp.data.dataSource.room.repository.account
 
 import com.vullpes.financeapp.domain.model.Account
-import com.vullpes.financeapp.util.Resource
 import kotlinx.coroutines.flow.Flow
 
-
-interface AccountRepository {
+interface AccountRoomDataSource {
     suspend fun createAccount(account: Account)
-
     suspend fun updateAccount(account: Account)
     fun getAccounts(): Flow<Account>
 }
