@@ -20,4 +20,8 @@ abstract class FinanceAppDatabase:RoomDatabase() {
     abstract fun accountDao(): AccountDao
     abstract fun categoryDao(): CategoryDao
     abstract fun transactionDao(): TransactionDao
+
+    companion object{
+        const val DATABASE_NAME = "finance_app_database"
+    }
 }
