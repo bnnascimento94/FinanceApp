@@ -2,6 +2,7 @@ package com.vullpes.financeapp.data.dataSource.room.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.vullpes.financeapp.domain.model.Transaction
 import java.util.Date
 
 @Entity
@@ -16,4 +17,9 @@ data class TransactionDb(
     val withdrawal:Boolean,
     val value:Double,
     val dateTransaction: Date
+)
+
+
+fun Transaction.toTransactionDb() = TransactionDb(
+    transactionID, categoryID, categoryName, accountID, accountName, deposit, withdrawal, value, dateTransaction
 )

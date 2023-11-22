@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import kotlinx.coroutines.flow.Flow
+import java.util.Date
 
 @Dao
 interface AccountDao {
@@ -21,6 +22,14 @@ interface AccountDao {
 
     @Query("select * from accountdb")
     fun getAccountDb(): Flow<List<AccountDb>>
+
+    @Query("select * from accountdb where accountID = :accountID")
+    fun findAccountById(accountID: Int): AccountDb
+
+    @Query("select * from accountdb " +
+            "JOIN transactiondb on accountdb.accountID = transactiondb.accountID " +
+            "where accountID = :accountID and dateTransaction between :date1 and :date2")
+    fun loadAccountTransactionsByDate(accountID:Int, date1: Date, date2: Date): Flow<Map<AccountDb, List<TransactionDb>>>
 
 
 }

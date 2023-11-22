@@ -22,9 +22,20 @@ interface TransactionDao {
     @Delete
     fun delete(transactionDb: TransactionDb)
 
+
+
+
     @Transaction
     @Query("select * from transactiondb where accountID = :accountID and dateTransaction between :date1 and :date2")
     fun getTransactionsByAccountAndDate(accountID:Int,date1:Date, date2: Date): Flow<List<AccountTransaction>>
+
+    @Transaction
+    @Query("select * from transactiondb where accountID = :accountID  and dateTransaction = :data ")
+    fun getTransactionByID(accountID: Int, data:Date): Flow<List<AccountTransaction>>
+
+    @Transaction
+    @Query("select * from transactiondb where transactionID = :transactionID ")
+    fun getTransactionByID(transactionID:Int): AccountTransaction?
 
     @Transaction
     @Query("select * from transactiondb where categoryID = :categoryID and dateTransaction between :date1 and :date2")

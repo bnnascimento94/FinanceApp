@@ -9,7 +9,7 @@ import java.util.Date
 interface TransactionRoomDataSource {
 
     suspend fun createTransaction(transaction: Transaction)
-    fun listTransactions(date: Date): Flow<List<Transaction>>
+    fun listTransactions(accountID:Int,date: Date): Flow<List<Transaction>>
     suspend fun deleteTransaction(transactrionID: Int)
     suspend fun updateTransaction(transaction: Transaction)
 
