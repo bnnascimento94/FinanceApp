@@ -28,8 +28,8 @@ interface AccountDao {
 
     @Query("select * from accountdb " +
             "JOIN transactiondb on accountdb.accountID = transactiondb.accountID " +
-            "where accountID = :accountID and dateTransaction between :date1 and :date2")
-    fun loadAccountTransactionsByDate(accountID:Int, date1: Date, date2: Date): Flow<Map<AccountDb, List<TransactionDb>>>
+            "where dateTransaction between :date1 and :date2")
+    fun loadAccountTransactionsByDate(date1: Date, date2: Date): Flow<Map<AccountDb, List<TransactionDb>>>
 
 
 }
