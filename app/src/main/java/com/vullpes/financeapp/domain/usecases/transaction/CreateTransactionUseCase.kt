@@ -10,10 +10,13 @@ class CreateTransactionUseCase @Inject constructor(private val transactionReposi
     suspend operator fun invoke(
         categoryID: Int,
         categoryName: String,
-        accountID: Int,
-        accountName: String,
+        accountFromID: Int,
+        accountFromName: String,
+        accountToID: Int? = null,
+        accountToName: String? = null,
         deposit: Boolean,
         withdrawal: Boolean,
+        transference:Boolean,
         value: Double,
         dateTransaction: Date
     ) {
@@ -22,13 +25,15 @@ class CreateTransactionUseCase @Inject constructor(private val transactionReposi
             transactionID = 0,
             categoryID = categoryID,
             categoryName = categoryName,
-            accountID = accountID,
-            accountName = accountName,
+            accountFromID = accountFromID,
+            accountFromName = accountFromName,
+            accountTo = accountToID,
+            accountToName = accountToName,
             deposit = deposit,
             withdrawal = withdrawal,
+            transference = transference,
             value = value,
             dateTransaction = dateTransaction
-
         )
 
 

@@ -7,20 +7,20 @@ import kotlinx.coroutines.flow.Flow
 import java.util.Date
 import javax.inject.Inject
 
-class TransactionRepositoryImpl @Inject constructor(transactionRoomDataSource: TransactionRoomDataSource) : TransactionRepository {
+class TransactionRepositoryImpl @Inject constructor(private val transactionRoomDataSource: TransactionRoomDataSource) : TransactionRepository {
     override suspend fun createTransaction(transaction: Transaction) {
-        TODO("Not yet implemented")
+        transactionRoomDataSource.createTransaction(transaction)
     }
 
-    override fun listTransactions(date: Date): Flow<List<Transaction>> {
-        TODO("Not yet implemented")
+    override fun listTransactions(accountID: Int,date: Date): Flow<List<Transaction>> {
+        return transactionRoomDataSource.listTransactions(accountID = accountID,date = date)
     }
 
     override suspend fun deleteTransaction(transactrionID: Int) {
-        TODO("Not yet implemented")
+        return transactionRoomDataSource.deleteTransaction(transactrionID)
     }
 
     override suspend fun updateTransaction(transaction: Transaction) {
-        TODO("Not yet implemented")
+        transactionRoomDataSource.updateTransaction(transaction)
     }
 }

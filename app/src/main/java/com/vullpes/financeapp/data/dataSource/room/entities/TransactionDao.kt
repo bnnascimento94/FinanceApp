@@ -26,11 +26,11 @@ interface TransactionDao {
 
 
     @Transaction
-    @Query("select * from transactiondb where accountID = :accountID and dateTransaction between :date1 and :date2")
+    @Query("select * from transactiondb where accountFromID = :accountID and dateTransaction between :date1 and :date2")
     fun getTransactionsByAccountAndDate(accountID:Int,date1:Date, date2: Date): Flow<List<AccountTransaction>>
 
     @Transaction
-    @Query("select * from transactiondb where accountID = :accountID  and dateTransaction = :data ")
+    @Query("select * from transactiondb where accountFromID = :accountID  and dateTransaction = :data ")
     fun getTransactionByID(accountID: Int, data:Date): Flow<List<AccountTransaction>>
 
     @Transaction

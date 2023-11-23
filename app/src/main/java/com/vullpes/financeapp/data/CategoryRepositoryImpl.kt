@@ -6,16 +6,16 @@ import com.vullpes.financeapp.domain.model.Category
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-class CategoryRepositoryImpl @Inject constructor(categoryRoomDataSource: CategoryRoomDataSource) : CategoryRepository {
+class CategoryRepositoryImpl @Inject constructor(private val categoryRoomDataSource: CategoryRoomDataSource) : CategoryRepository {
     override suspend fun createCategory(category: Category) {
-        TODO("Not yet implemented")
+        categoryRoomDataSource.createCategory(category)
     }
 
     override fun listCategories(): Flow<List<Category>> {
-        TODO("Not yet implemented")
+        return categoryRoomDataSource.listCategories()
     }
 
     override suspend fun updateCategory(category: Category) {
-        TODO("Not yet implemented")
+        categoryRoomDataSource.updateCategory(category)
     }
 }

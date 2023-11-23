@@ -8,14 +8,14 @@ import javax.inject.Inject
 
 class AccountRepositoryImpl @Inject constructor(private val accountRoomDataSource: AccountRoomDataSource): AccountRepository {
     override suspend fun createAccount(account: Account) {
-        TODO("Not yet implemented")
+        accountRoomDataSource.createAccount(account)
     }
 
     override suspend fun updateAccount(account: Account) {
-        TODO("Not yet implemented")
+        accountRoomDataSource.updateAccount(account)
     }
 
-    override fun getAccounts(): Flow<Account> {
-        TODO("Not yet implemented")
+    override fun getAccounts(): Flow<List<Account>> {
+        return accountRoomDataSource.getAccounts()
     }
 }

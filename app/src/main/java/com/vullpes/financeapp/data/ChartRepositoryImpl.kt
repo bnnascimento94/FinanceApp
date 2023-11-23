@@ -14,24 +14,24 @@ class ChartRepositoryImpl @Inject constructor(private val chartsRoomDataSource: 
         date1: Date,
         date2: Date
     ): Flow<Resource<Map<String, Double>>> {
-        TODO("Not yet implemented")
+        return chartsRoomDataSource.getAccountBalanceByDate(accountId = accountId, date1 = date1,date2= date2)
     }
 
     override fun getAccountBalanceByMonth(
         accountId: Int,
         month: Months
     ): Flow<Resource<Map<String, Double>>> {
-        TODO("Not yet implemented")
+        return chartsRoomDataSource.getAccountBalanceByMonth(accountId = accountId,month = month)
     }
 
     override fun getAllCategoryBalanceByDate(
         date1: Date,
         date2: Date
     ): Flow<Resource<Map<String, Map<String, Double>>>> {
-        TODO("Not yet implemented")
+        return chartsRoomDataSource.getAllCategoryBalanceByDate(date1, date2)
     }
 
     override fun getAllCategoryBalanceByMonth(month: Months): Flow<Resource<Map<String, Map<String, Double>>>> {
-        TODO("Not yet implemented")
+        return chartsRoomDataSource.getAllCategoryBalanceByMonth(month)
     }
 }

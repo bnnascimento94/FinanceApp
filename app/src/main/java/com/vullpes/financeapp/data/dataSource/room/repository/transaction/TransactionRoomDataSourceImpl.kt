@@ -17,7 +17,7 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
         try {
             val transactionDao = financeAppDatabase.transactionDao()
             val accountDao = financeAppDatabase.accountDao()
-            var account = accountDao.findAccountById(accountID = transaction.accountID)
+            var account = accountDao.findAccountById(accountID = transaction.accountFromID)
             var currentValue = account.accountBalance
 
             var accountTo: AccountDb? = transaction.accountTo?.let { accountDao.findAccountById(accountID = it) }
@@ -90,7 +90,7 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
                 var account = accountTransaction.accountDb
                 var currentValue = account.accountBalance
 
-                var accountTo: AccountDb? = currentTransaction.accountTo?.let { accountDao.findAccountById(accountID = it) }
+                var accountTo: AccountDb? = currentTransaction.accountToID?.let { accountDao.findAccountById(accountID = it) }
                 var accountToValue: Double? = accountTo?.accountBalance
 
                 if(currentTransaction.deposit){
@@ -110,7 +110,7 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
                     updateDayBalance(account)
                     if(currentTransaction.transference){
                         accountDao.update(accountTo!!)
-                        updateDayBalance(accountTo!!)
+                        updateDayBalance(accountTo)
                     }
                 }
 
@@ -135,7 +135,7 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
                     var account = transactionDbSaved.accountDb
                     var currentValue = account.accountBalance
 
-                    var accountTo: AccountDb? = it.accountTo?.let { accountDao.findAccountById(accountID = it) }
+                    var accountTo: AccountDb? = it.accountToID?.let { accountDao.findAccountById(accountID = it) }
                     var accountToValue: Double? = accountTo?.accountBalance
                     if(it.deposit){
                         currentValue += valueDifference
