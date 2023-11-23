@@ -87,7 +87,7 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
             transaction?.let { accountTransaction ->
                 val currentTransaction = accountTransaction.transactionDb
                 val transactionValue = currentTransaction.value
-                var account = accountTransaction.accountDb
+                var account = accountTransaction.accountFromDb
                 var currentValue = account.accountBalance
 
                 var accountTo: AccountDb? = currentTransaction.accountToID?.let { accountDao.findAccountById(accountID = it) }
@@ -132,7 +132,7 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
                     }else{
                         transaction.value - it.value
                     }
-                    var account = transactionDbSaved.accountDb
+                    var account = transactionDbSaved.accountFromDb
                     var currentValue = account.accountBalance
 
                     var accountTo: AccountDb? = it.accountToID?.let { accountDao.findAccountById(accountID = it) }

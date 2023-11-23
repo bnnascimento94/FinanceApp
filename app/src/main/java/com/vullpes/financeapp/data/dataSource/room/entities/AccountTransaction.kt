@@ -10,9 +10,15 @@ data class AccountTransaction(
 
     @Relation(
         parentColumn = "accountID",
-        entityColumn = "accountID"
+        entityColumn = "accountFromID"
     )
-    val accountDb: AccountDb,
+    val accountFromDb: AccountDb,
+
+    @Relation(
+        parentColumn = "accountID",
+        entityColumn = "accountToID"
+    )
+    val accountToDb: AccountDb?,
 
     @Relation(
         parentColumn = "categoryID",
@@ -26,10 +32,13 @@ fun AccountTransaction.toTransaction() = Transaction(
     transactionID = transactionDb.transactionID,
     categoryID = categoryDb.categoryID,
     categoryName = categoryDb.nameCategory,
-    accountFromID = accountDb.accountID,
-    accountFromName = accountDb.accountName,
+    accountFromID = accountFromDb.accountID,
+    accountFromName = accountFromDb.accountName,
+    accountTo = accountToDb?.accountID,
+    accountToName = accountToDb?.accountName,
     deposit = transactionDb.deposit,
     withdrawal = transactionDb.withdrawal,
+    transference = transactionDb.transference ,
     value = transactionDb.value,
     dateTransaction = transactionDb.dateTransaction
 )
