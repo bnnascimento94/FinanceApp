@@ -9,14 +9,14 @@ data class AccountTransaction(
     val transactionDb: TransactionDb,
 
     @Relation(
-        parentColumn = "accountID",
-        entityColumn = "accountFromID"
+        parentColumn = "accountFromID",
+        entityColumn = "accountID"
     )
     val accountFromDb: AccountDb,
 
     @Relation(
-        parentColumn = "accountID",
-        entityColumn = "accountToID"
+        parentColumn = "accountToID",
+        entityColumn = "accountID"
     )
     val accountToDb: AccountDb?,
 

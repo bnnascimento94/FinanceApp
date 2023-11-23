@@ -40,7 +40,7 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
                 updateDayBalance(account)
                 if(transaction.transference){
                     accountDao.update(accountTo!!)
-                    updateDayBalance(accountTo!!)
+                    updateDayBalance(accountTo)
                 }
             }
 
