@@ -19,17 +19,29 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
             val accountDao = financeAppDatabase.accountDao()
             var account = accountDao.findAccountById(accountID = transaction.accountID)
             var currentValue = account.accountBalance
+
+            var accountTo: AccountDb? = transaction.accountTo?.let { accountDao.findAccountById(accountID = it) }
+            var accountToValue: Double? = accountTo?.accountBalance
+
             if(transaction.deposit){
                 currentValue += transaction.value
             }else if(transaction.withdrawal){
                 currentValue -= transaction.value
+            }else if(transaction.transference){
+                currentValue -= transaction.value
+                accountToValue = accountToValue?.plus(transaction.value)
             }
             account = account.copy(accountBalance = currentValue)
+            accountTo = accountTo?.copy(accountBalance = accountToValue!!)
             financeAppDatabase.runInTransaction{
                 val transactionDb = transaction.toTransactionDb()
                 transactionDao.insert(transactionDb)
                 accountDao.update(account)
                 updateDayBalance(account)
+                if(transaction.transference){
+                    accountDao.update(accountTo!!)
+                    updateDayBalance(accountTo!!)
+                }
             }
 
 
@@ -42,7 +54,7 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
         val dateFormat = SimpleDateFormat("dd/MM/yyyy")
         val currentDate = dateFormat.parse(dateFormat.format(Date()))
         val dayBalanceDao = financeAppDatabase.dayBalanceDao()
-        val dayBalanceDb = dayBalanceDao.getDayBalance(currentDate = currentDate)
+        val dayBalanceDb = dayBalanceDao.getDayBalance(accountID = accountDb.accountID, currentDate = currentDate)
 
         dayBalanceDb?.let { dayBalance ->
             val dayAccountUpdated = dayBalance.copy(finalBalance = accountDb.accountBalance)
@@ -77,16 +89,29 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
                 val transactionValue = currentTransaction.value
                 var account = accountTransaction.accountDb
                 var currentValue = account.accountBalance
+
+                var accountTo: AccountDb? = currentTransaction.accountTo?.let { accountDao.findAccountById(accountID = it) }
+                var accountToValue: Double? = accountTo?.accountBalance
+
                 if(currentTransaction.deposit){
                     currentValue -= transactionValue
                 }else if(currentTransaction.withdrawal){
                     currentValue += transactionValue
+                }else if(currentTransaction.transference){
+                    currentValue += currentTransaction.value
+                    accountToValue = accountToValue?.minus(currentTransaction.value)
                 }
+
                 account = account.copy(accountBalance = currentValue)
+                accountTo = accountTo?.copy(accountBalance = accountToValue!!)
                 financeAppDatabase.runInTransaction{
                     transactionDao.delete(accountTransaction.transactionDb)
                     accountDao.update(account)
                     updateDayBalance(account)
+                    if(currentTransaction.transference){
+                        accountDao.update(accountTo!!)
+                        updateDayBalance(accountTo!!)
+                    }
                 }
 
             }
@@ -109,13 +134,26 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
                     }
                     var account = transactionDbSaved.accountDb
                     var currentValue = account.accountBalance
+
+                    var accountTo: AccountDb? = it.accountTo?.let { accountDao.findAccountById(accountID = it) }
+                    var accountToValue: Double? = accountTo?.accountBalance
                     if(it.deposit){
                         currentValue += valueDifference
                     }else if(it.withdrawal){
                         currentValue -= valueDifference
+                    }else if(transaction.transference){
+                        currentValue -= transaction.value
+                        accountToValue = accountToValue?.plus(transaction.value)
+                        accountTo = accountTo?.copy(accountBalance = accountToValue!!)
                     }
                     account = account.copy(accountBalance = currentValue)
                     accountDao.update(accountDb = account)
+                    updateDayBalance(account)
+
+                    if(transaction.transference){
+                        accountDao.update(accountTo!!)
+                        updateDayBalance(accountTo)
+                    }
                 }
             }
         }catch (e:Exception){

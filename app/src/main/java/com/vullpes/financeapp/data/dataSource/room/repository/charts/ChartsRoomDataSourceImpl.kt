@@ -2,6 +2,8 @@ package com.vullpes.financeapp.data.dataSource.room.repository.charts
 
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.entities.TransactionDb
+import com.vullpes.financeapp.data.dataSource.room.entities.toTransaction
+import com.vullpes.financeapp.domain.model.Transaction
 import com.vullpes.financeapp.util.Months
 import com.vullpes.financeapp.util.Resource
 import kotlinx.coroutines.flow.Flow
@@ -25,7 +27,6 @@ class ChartsRoomDataSourceImpl @Inject constructor(private val financeAppDatabas
             Resource.Success(listBalances.associate { it.date.toString(it.date) to it.finalBalance })
         }
     }
-
     override fun getAccountBalanceByMonth(
         accountId: Int,
         month: Months?
@@ -55,8 +56,6 @@ class ChartsRoomDataSourceImpl @Inject constructor(private val financeAppDatabas
         return finalbalance
     }
 
-
-
     override fun getAllCategoryBalanceByDate(
         date1: Date,
         date2: Date
@@ -80,8 +79,39 @@ class ChartsRoomDataSourceImpl @Inject constructor(private val financeAppDatabas
     override fun getAllCategoryBalanceByMonth(month: Months): Flow<Resource<Map<String, Map<String, Double>>>> {
         val dates = begginingAndEndOfMonth(month)
 
+        val accountDao = financeAppDatabase.accountDao()
+        val accountTransactions = accountDao.loadAccountTransactionsByDate(date1 = dates["firstDate"]!!,date2 = dates["lastDate"]!!)
 
-        TODO("Not yet implemented")
+        return accountTransactions.map { transactionsByAccount ->
+            val result = transactionsByAccount
+                .mapValues { listTransactions ->
+                    //here transactions were grouped by category then from these grouped transactions were extracted the final balance
+                    listTransactions.value.groupBy { transactionDb -> transactionDb.categoryName }
+                        .mapValues { transactionsGroupedByCategory -> calculateFinalBalance(transactionsGroupedByCategory.value) }
+                }
+                .mapKeys { listTransactions -> listTransactions.key.accountName }
+
+            Resource.Success(result)
+        }
+    }
+
+    override fun getTransactionsByAccountAndDate(
+        accountId: Int,
+        date1: Date,
+        date2: Date
+    ): Flow<Resource<Map<String, List<Transaction>>>> {
+        val accountDao = financeAppDatabase.accountDao()
+        val accountTransactions = accountDao.loadAccountTransactionsByDateAndAccountID(accountID = accountId, date1 = date1, date2 = date2)
+
+        return accountTransactions.map { transactionsByAccount ->
+            val result = transactionsByAccount
+                .mapValues { listTransactions ->
+                    listTransactions.value.map { it.toTransaction() }
+                }
+                .mapKeys { listTransactions -> listTransactions.key.accountName }
+
+            Resource.Success(result)
+        }
     }
 
     private fun Date.toString(date:Date):String{

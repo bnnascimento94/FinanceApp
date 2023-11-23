@@ -20,8 +20,8 @@ interface DayBalanceDao {
     @Delete
     fun delete(dayBalanceDb: DayBalanceDb)
 
-    @Query("select * from daybalancedb where date = :currentDate limit 1")
-    fun getDayBalance(currentDate: Date): DayBalanceDb?
+    @Query("select * from daybalancedb where accountID = :accountID and date = :currentDate limit 1")
+    fun getDayBalance(accountID:Int,currentDate: Date): DayBalanceDb?
 
     @Query("select * from daybalancedb where accountID = :accountID and date between :date1 and :date2")
     fun getDayBalanceByDates(accountID:Int, date1: Date, date2: Date): Flow<List<DayBalanceDb>>

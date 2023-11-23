@@ -13,13 +13,20 @@ data class TransactionDb(
     val categoryName:String,
     val accountID: Int,
     val accountName:String,
+    val accountTo: Int? = null,
+    val accountToName:String? = null,
     val deposit: Boolean,
     val withdrawal:Boolean,
+    val transference:Boolean,
     val value:Double,
     val dateTransaction: Date
 )
 
 
 fun Transaction.toTransactionDb() = TransactionDb(
-    transactionID, categoryID, categoryName, accountID, accountName, deposit, withdrawal, value, dateTransaction
+    transactionID, categoryID, categoryName, accountID, accountName, accountTo, accountToName, deposit, withdrawal, transference, value, dateTransaction
+)
+
+fun TransactionDb.toTransaction() = Transaction(
+    transactionID, categoryID, categoryName, accountID, accountName, accountTo, accountToName, deposit, withdrawal, transference, value, dateTransaction
 )
