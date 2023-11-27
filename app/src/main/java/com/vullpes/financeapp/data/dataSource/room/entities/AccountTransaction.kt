@@ -30,6 +30,7 @@ data class AccountTransaction(
 
 fun AccountTransaction.toTransaction() = Transaction(
     transactionID = transactionDb.transactionID,
+    name = transactionDb.name,
     categoryID = categoryDb.categoryID,
     categoryName = categoryDb.nameCategory,
     accountFromID = accountFromDb.accountID,

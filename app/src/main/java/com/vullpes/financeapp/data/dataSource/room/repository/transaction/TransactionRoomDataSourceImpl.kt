@@ -43,9 +43,6 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
                     updateDayBalance(accountTo)
                 }
             }
-
-
-
         }catch (e:Exception){
             throw e
         }

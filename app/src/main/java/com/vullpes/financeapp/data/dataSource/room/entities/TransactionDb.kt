@@ -9,6 +9,7 @@ import java.util.Date
 data class TransactionDb(
     @PrimaryKey
     val transactionID: Int,
+    val name:String,
     val categoryID:Int,
     val categoryName:String,
     val accountFromID: Int,
@@ -24,9 +25,9 @@ data class TransactionDb(
 
 
 fun Transaction.toTransactionDb() = TransactionDb(
-    transactionID, categoryID, categoryName, accountFromID, accountFromName, accountTo, accountToName, deposit, withdrawal, transference, value, dateTransaction
+    transactionID, name,categoryID, categoryName, accountFromID, accountFromName, accountTo, accountToName, deposit, withdrawal, transference, value, dateTransaction
 )
 
 fun TransactionDb.toTransaction() = Transaction(
-    transactionID, categoryID, categoryName, accountFromID, accountFromName, accountToID, accountToName, deposit, withdrawal, transference, value, dateTransaction
+    transactionID,name, categoryID, categoryName, accountFromID, accountFromName, accountToID, accountToName, deposit, withdrawal, transference, value, dateTransaction
 )

@@ -9,6 +9,7 @@ class CreateTransactionUseCase @Inject constructor(private val transactionReposi
 
     suspend operator fun invoke(
         categoryID: Int,
+        name:String,
         categoryName: String,
         accountFromID: Int,
         accountFromName: String,
@@ -23,6 +24,7 @@ class CreateTransactionUseCase @Inject constructor(private val transactionReposi
 
         val transaction = Transaction(
             transactionID = 0,
+            name = name,
             categoryID = categoryID,
             categoryName = categoryName,
             accountFromID = accountFromID,
