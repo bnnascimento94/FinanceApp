@@ -3,4 +3,9 @@
     <string name="application_menu">Application Menu</string>
     <string name="profile_image">Profile Image</string>
     <string name="add_new_account">Add new Account</string>
+    <string name="back_screen">Back Screen</string>
+    <string name="edit_profile">Edit Profile</string>
+    <string name="camera_icon">Camera Icon</string>
+    <string name="arrow_foward">Arrow Foward</string>
+    <string name="show_password">Show Password</string>
 </resources>

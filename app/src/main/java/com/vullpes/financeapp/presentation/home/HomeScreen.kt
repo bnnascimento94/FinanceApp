@@ -1,4 +1,4 @@
-package com.vullpes.financeapp.ui.home
+package com.vullpes.financeapp.presentation.home
 
 import android.content.res.Configuration
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
@@ -29,9 +29,9 @@ import androidx.compose.ui.unit.dp
 import com.vullpes.financeapp.R
 import com.vullpes.financeapp.domain.model.Account
 import com.vullpes.financeapp.domain.model.Transaction
-import com.vullpes.financeapp.ui.home.components.AccountsComponent
-import com.vullpes.financeapp.ui.home.components.TopAppBar
-import com.vullpes.financeapp.ui.home.components.TransactionItem
+import com.vullpes.financeapp.presentation.home.components.AccountsComponent
+import com.vullpes.financeapp.presentation.home.components.TopAppBar
+import com.vullpes.financeapp.presentation.home.components.TransactionItem
 import com.vullpes.financeapp.ui.theme.Purple40
 import java.util.Date
 

@@ -1,4 +1,4 @@
-package com.vullpes.financeapp.ui.home.components
+package com.vullpes.financeapp.presentation.home.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable

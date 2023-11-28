@@ -1,4 +1,4 @@
-package com.vullpes.financeapp.ui.home.components
+package com.vullpes.financeapp.presentation.home.components
 
 
 import androidx.compose.foundation.background
@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vullpes.financeapp.R
 import com.vullpes.financeapp.domain.model.Account
+import com.vullpes.financeapp.domain.util.toCurrencyFormat
 import com.vullpes.financeapp.ui.theme.Purple40
 import java.util.Date
 
@@ -130,7 +131,7 @@ fun ItemAccount(account: Account, onAccountSelected: (Int) -> Unit) {
 
 
         Row(verticalAlignment = Alignment.CenterVertically){
-            Text(text = if(moneyVisibility.value) "$${account.accountBalance}" else "$ ******" ,
+            Text(text = if(moneyVisibility.value) "$${account.accountBalance.toCurrencyFormat()}" else "$ ******" ,
                 fontSize = 16.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
