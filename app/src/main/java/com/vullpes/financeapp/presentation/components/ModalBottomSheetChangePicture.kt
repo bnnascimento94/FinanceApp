@@ -1,4 +1,4 @@
-package com.vullpes.financeapp.presentation.profile
+package com.vullpes.financeapp.presentation.components
 
 import android.Manifest
 import android.content.pm.PackageManager

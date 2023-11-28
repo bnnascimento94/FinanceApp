@@ -1,4 +1,4 @@
-package com.vullpes.financeapp.presentation.profile
+package com.vullpes.financeapp.presentation.profile.components
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

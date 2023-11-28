@@ -34,6 +34,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.vullpes.financeapp.R
+import com.vullpes.financeapp.presentation.profile.components.ProfileTopAppBar
 
 
 @Composable
@@ -121,7 +122,7 @@ fun ProfileScreen(
 
             Button(modifier = Modifier
                 .fillMaxWidth()
-                .padding(8.dp),onClick = { /*TODO*/ }) {
+                .padding(8.dp),onClick = { onSave()}) {
                 Text(text = "Save")
             }
         }
