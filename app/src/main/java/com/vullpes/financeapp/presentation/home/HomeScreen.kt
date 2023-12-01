@@ -1,9 +1,10 @@
 package com.vullpes.financeapp.presentation.home
 
 import android.content.res.Configuration
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -12,11 +13,20 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Category
+import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material3.DrawerState
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -24,6 +34,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vullpes.financeapp.R
@@ -38,283 +49,233 @@ import java.util.Date
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    accounts: List<Account>,
-    transactions: List<Transaction>,
+    uiState: UiStateHome,
+    drawerState: DrawerState,
     onProfileClick: () -> Unit,
     onMenuClick: () -> Unit,
-    onAddAccount: () -> Unit,
+    onCreateAccount: () -> Unit,
     onAccountSelected: (Int) -> Unit,
-    onDeposit: () -> Unit,
-    onWithdraw: () -> Unit,
-    onTransference: () -> Unit
+    onDeposit: (Int) -> Unit,
+    onWithdraw: (Int) -> Unit,
+    onTransference: (Int) -> Unit,
+    onChart: (Int) -> Unit,
+    onCategoryClicked: () -> Unit,
+    onExitAppClicked: () -> Unit
 ) {
 
-    Scaffold(modifier = Modifier.fillMaxSize(),
-        topBar = {
-            TopAppBar(onMenuClick = onMenuClick, onProfileClick = onProfileClick)
-        }
-    ) { padingValues ->
-
-        Column(
-            modifier = Modifier
-                .padding(padingValues)
-                .padding(6.dp)
-        ) {
-            Text(modifier = Modifier.padding(start= 6.dp),text = "My Accounts", style = MaterialTheme.typography.titleMedium)
-            Spacer(modifier = Modifier.height(10.dp))
-            AccountsComponent(
-                accounts = accounts,
-                onAddAccount = onAddAccount,
-                onAccountSelected = onAccountSelected
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(6.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                Column(
-                    modifier = Modifier
-                        .padding(6.dp)
-                        .clickable {
-                            onDeposit()
-                        },
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        painterResource(id = R.drawable.deposit),
-                        modifier = Modifier.size(30.dp),
-                        tint = Purple40,
-                        contentDescription = null
-                    )
-                    Spacer(Modifier.height(4.dp))
-                    Text(text = "Deposit", style = MaterialTheme.typography.bodyMedium)
-                }
-
-
-                Column(
-                    modifier = Modifier
-                        .padding(6.dp)
-                        .clickable {
-                            onWithdraw()
-                        },
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        painterResource(id = R.drawable.withdraw),
-                        modifier = Modifier.size(30.dp),
-                        tint = Purple40,
-                        contentDescription = null
-                    )
-                    Spacer(Modifier.height(4.dp))
-                    Text(text = "Withdraw", style = MaterialTheme.typography.bodyMedium)
-                }
-
-
-                Column(
-                    modifier = Modifier
-                        .padding(6.dp)
-                        .clickable {
-                            onTransference()
-                        },
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        painterResource(id = R.drawable.transference),
-                        modifier = Modifier.size(30.dp),
-                        tint = Purple40,
-                        contentDescription = null
-                    )
-                    Spacer(Modifier.height(4.dp))
-                    Text(text = "Transference", style = MaterialTheme.typography.bodyMedium)
-                }
-
-                Column(
-                    modifier = Modifier
-                        .padding(6.dp)
-                        .clickable {
-                            onTransference()
-                        },
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    Icon(
-                        painterResource(id = R.drawable.chart),
-                        modifier = Modifier.size(30.dp),
-                        tint = Purple40,
-                        contentDescription = null
-                    )
-                    Spacer(Modifier.height(4.dp))
-                    Text(text = "Chart", style = MaterialTheme.typography.bodyMedium)
-                }
+    NavigationDrawer(
+        drawerState = drawerState,
+        onCategoryClicked = onCategoryClicked,
+        onExitAppClicked = onExitAppClicked
+    ) {
+        Scaffold(modifier = Modifier.fillMaxSize(),
+            topBar = {
+                TopAppBar(accountName =uiState.accountSelected?.accountName,onMenuClick = onMenuClick, onProfileClick = onProfileClick)
             }
+        ) { padingValues ->
 
             Column(
                 modifier = Modifier
+                    .padding(padingValues)
                     .padding(6.dp)
-                    .fillMaxWidth()
             ) {
+                Text(
+                    modifier = Modifier.padding(start = 6.dp),
+                    text = "My Accounts",
+                    style = MaterialTheme.typography.titleMedium
+                )
+                Spacer(modifier = Modifier.height(10.dp))
+                AccountsComponent(
+                    accounts = uiState.accounts,
+                    onAddAccount = onCreateAccount,
+                    onAccountSelected = onAccountSelected
+                )
                 Row(
                     modifier = Modifier
-                        .padding(6.dp)
-                        .fillMaxWidth(),
+                        .fillMaxWidth()
+                        .padding(6.dp),
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
-                ){
-                    Text(text = "Last transactions",style = MaterialTheme.typography.titleMedium)
+                ) {
+                    Column(
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .clickable {
+                                uiState.accountSelected?.accountID?.let{
+                                    onDeposit(it)
+                                }
+                            },
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            painterResource(id = R.drawable.deposit),
+                            modifier = Modifier.size(30.dp),
+                            tint = Purple40,
+                            contentDescription = null
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        Text(text = "Deposit", style = MaterialTheme.typography.bodyMedium)
+                    }
 
-                    TextButton(onClick = { /*TODO*/ }) {
-                        Text(text = "List All",style = MaterialTheme.typography.titleMedium)
+
+                    Column(
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .clickable {
+                                uiState.accountSelected?.accountID?.let{
+                                    onWithdraw(it)
+                                }
+                            },
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            painterResource(id = R.drawable.withdraw),
+                            modifier = Modifier.size(30.dp),
+                            tint = Purple40,
+                            contentDescription = null
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        Text(text = "Withdraw", style = MaterialTheme.typography.bodyMedium)
+                    }
+
+
+                    Column(
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .clickable {
+                                uiState.accountSelected?.accountID?.let{
+                                    onTransference(it)
+                                }
+                            },
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            painterResource(id = R.drawable.transference),
+                            modifier = Modifier.size(30.dp),
+                            tint = Purple40,
+                            contentDescription = null
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        Text(text = "Transference", style = MaterialTheme.typography.bodyMedium)
+                    }
+
+                    Column(
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .clickable {
+                                uiState.accountSelected?.accountID?.let{
+                                    onChart(it)
+                                }
+                            },
+                        verticalArrangement = Arrangement.Center,
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Icon(
+                            painterResource(id = R.drawable.chart),
+                            modifier = Modifier.size(30.dp),
+                            tint = Purple40,
+                            contentDescription = null
+                        )
+                        Spacer(Modifier.height(4.dp))
+                        Text(text = "Chart", style = MaterialTheme.typography.bodyMedium)
                     }
                 }
 
+                Column(
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .fillMaxWidth()
+                ) {
+                    Row(
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Text(
+                            text = "Last transactions",
+                            style = MaterialTheme.typography.titleMedium
+                        )
 
-                LazyColumn() {
-                    items(transactions) {
-                        TransactionItem(transaction = it)
+                        TextButton(onClick = { /*TODO*/ }) {
+                            Text(text = "List All", style = MaterialTheme.typography.titleMedium)
+                        }
                     }
+                    LazyColumn() {
+                        items(uiState.transactions) {
+                            TransactionItem(transaction = it)
+                        }
+                    }
+
                 }
+            }
+
+        }
+    }
+}
+
+
+@Composable
+fun NavigationDrawer(
+    drawerState: DrawerState,
+    onCategoryClicked: () -> Unit,
+    onExitAppClicked: () -> Unit,
+    content: @Composable () -> Unit
+) {
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet() {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(250.dp),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Image(
+                        modifier = Modifier.size(250.dp),
+                        painter = painterResource(id = R.drawable.deposit),
+                        contentDescription = "Logo Image"
+                    )
+                }
+                NavigationDrawerItem(
+                    label = {
+                        Row(modifier = Modifier.padding(horizontal = 12.dp)) {
+                            Icon(Icons.Default.Category, contentDescription = stringResource(R.string.transaction_category) )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(text = stringResource(R.string.transaction_category), color = MaterialTheme.colorScheme.onSurface)
+                        }
+                    },
+                    selected = false,
+                    onClick = onCategoryClicked
+                )
+                NavigationDrawerItem(
+                    label = {
+                        Row(modifier = Modifier.padding(horizontal = 12.dp)) {
+                            Icon(Icons.Default.ExitToApp, contentDescription = stringResource(R.string.logout_icon) )
+                            Spacer(modifier = Modifier.width(12.dp))
+                            Text(
+                                text = stringResource(R.string.logout),
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
+                        }
+                    },
+                    selected = false,
+                    onClick = onExitAppClicked
+                )
 
             }
-        }
+        },
+        content = content
+    )
 
-    }
 }
 
-@Preview
-@Preview(uiMode = UI_MODE_NIGHT_YES)
-@Composable
-fun prevHomeScreen() {
-    HomeScreen(
-        accounts = listOf(
-            Account(
-                1,
-                "Minha conta pessoal",
-                accountBalance = 1500.00,
-                activeAccount = true,
-                dataCreationAccount = Date()
-            ),
-            Account(
-                2,
-                "Minha conta pessoal",
-                accountBalance = 1400.00,
-                activeAccount = true,
-                dataCreationAccount = Date()
-            ),
-            Account(
-                3,
-                "Minha conta pessoal",
-                accountBalance = 1300.00,
-                activeAccount = false,
-                dataCreationAccount = Date()
-            )
-        ),
-        transactions = listOf(
-            Transaction(
-                transactionID = 1,
-                categoryID = 1,
-                name = "Transaction 1",
-                categoryName = "Scholarchip",
-                accountFromID = 1,
-                accountFromName = "Personal Account",
-                deposit = false,
-                withdrawal = false,
-                transference = true,
-                value = 150.00,
-                dateTransaction = Date()
-            ),
-            Transaction(
-                transactionID = 1,
-                name = "Transaction 2",
-                categoryID = 1,
-                categoryName = "Deposit",
-                accountFromID = 1,
-                accountFromName = "Personal Account",
-                deposit = false,
-                withdrawal = true,
-                transference = false,
-                value = 150.00,
-                dateTransaction = Date()
-            ),
-            Transaction(
-                transactionID = 1,
-                name = "Transaction 3",
-                categoryID = 1,
-                categoryName = "Deposit",
-                accountFromID = 1,
-                accountFromName = "Personal Account",
-                deposit = false,
-                withdrawal = true,
-                transference = false,
-                value = 150.00,
-                dateTransaction = Date()
-            ),
-            Transaction(
-                transactionID = 1,
-                name = "Transaction 4",
-                categoryID = 1,
-                categoryName = "Deposit",
-                accountFromID = 1,
-                accountFromName = "Personal Account",
-                deposit = true,
-                withdrawal = false,
-                transference = false,
-                value = 150.00,
-                dateTransaction = Date()
-            ),
-            Transaction(
-                transactionID = 1,
-                name = "Transaction 5",
-                categoryID = 1,
-                categoryName = "Deposit",
-                accountFromID = 1,
-                accountFromName = "Personal Account",
-                deposit = false,
-                withdrawal = false,
-                transference = true,
-                value = 150.00,
-                dateTransaction = Date()
-            ),
-            Transaction(
-                transactionID = 1,
-                name = "Transaction 6",
-                categoryID = 1,
-                categoryName = "Deposit",
-                accountFromID = 1,
-                accountFromName = "Personal Account",
-                deposit = false,
-                withdrawal = true,
-                transference = false,
-                value = 150.00,
-                dateTransaction = Date()
-            ),
-            Transaction(
-                transactionID = 1,
-                name = "Transaction 7",
-                categoryID = 1,
-                categoryName = "Deposit",
-                accountFromID = 1,
-                accountFromName = "Personal Account",
-                deposit = true,
-                withdrawal = false,
-                transference = false,
-                value = 150.00,
-                dateTransaction = Date()
-            ),
-        ),
-        onProfileClick = {  },
-        onMenuClick = { },
-        onAddAccount = { },
-        onAccountSelected = {},
-        onDeposit = {  },
-        onWithdraw = {  }) {
 
-    }
-}
 
 
 @Preview(uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
@@ -323,128 +284,141 @@ fun prevHomeScreen() {
 @Composable
 fun prevHomeScreeNight() {
     HomeScreen(
-        accounts = listOf(
-            Account(
+        uiState =  UiStateHome(
+            accountSelected = Account(
                 1,
-                "Minha conta pessoal",
+                "Casa",
                 accountBalance = 1500.00,
                 activeAccount = true,
                 dataCreationAccount = Date()
             ),
-            Account(
-                2,
-                "Minha conta pessoal",
-                accountBalance = 1400.00,
-                activeAccount = true,
-                dataCreationAccount = Date()
+            accounts = listOf(
+                Account(
+                    1,
+                    "Casa",
+                    accountBalance = 1500.00,
+                    activeAccount = true,
+                    dataCreationAccount = Date()
+                ),
+                Account(
+                    2,
+                    "Minha conta pessoal",
+                    accountBalance = 1400.00,
+                    activeAccount = true,
+                    dataCreationAccount = Date()
+                ),
+                Account(
+                    3,
+                    "Minha conta pessoal",
+                    accountBalance = 1300.00,
+                    activeAccount = false,
+                    dataCreationAccount = Date()
+                )
             ),
-            Account(
-                3,
-                "Minha conta pessoal",
-                accountBalance = 1300.00,
-                activeAccount = false,
-                dataCreationAccount = Date()
+            transactions = listOf(
+                Transaction(
+                    transactionID = 1,
+                    categoryID = 1,
+                    name = "Transaction 1",
+                    categoryName = "Scholarchip",
+                    accountFromID = 1,
+                    accountFromName = "Personal Account",
+                    deposit = false,
+                    withdrawal = false,
+                    transference = true,
+                    value = 150.00,
+                    dateTransaction = Date()
+                ),
+                Transaction(
+                    transactionID = 1,
+                    name = "Transaction 2",
+                    categoryID = 1,
+                    categoryName = "Deposit",
+                    accountFromID = 1,
+                    accountFromName = "Personal Account",
+                    deposit = false,
+                    withdrawal = true,
+                    transference = false,
+                    value = 150.00,
+                    dateTransaction = Date()
+                ),
+                Transaction(
+                    transactionID = 1,
+                    name = "Transaction 3",
+                    categoryID = 1,
+                    categoryName = "Deposit",
+                    accountFromID = 1,
+                    accountFromName = "Personal Account",
+                    deposit = false,
+                    withdrawal = true,
+                    transference = false,
+                    value = 150.00,
+                    dateTransaction = Date()
+                ),
+                Transaction(
+                    transactionID = 1,
+                    name = "Transaction 4",
+                    categoryID = 1,
+                    categoryName = "Deposit",
+                    accountFromID = 1,
+                    accountFromName = "Personal Account",
+                    deposit = true,
+                    withdrawal = false,
+                    transference = false,
+                    value = 150.00,
+                    dateTransaction = Date()
+                ),
+                Transaction(
+                    transactionID = 1,
+                    name = "Transaction 5",
+                    categoryID = 1,
+                    categoryName = "Deposit",
+                    accountFromID = 1,
+                    accountFromName = "Personal Account",
+                    deposit = false,
+                    withdrawal = false,
+                    transference = true,
+                    value = 150.00,
+                    dateTransaction = Date()
+                ),
+                Transaction(
+                    transactionID = 1,
+                    name = "Transaction 6",
+                    categoryID = 1,
+                    categoryName = "Deposit",
+                    accountFromID = 1,
+                    accountFromName = "Personal Account",
+                    deposit = false,
+                    withdrawal = true,
+                    transference = false,
+                    value = 150.00,
+                    dateTransaction = Date()
+                ),
+                Transaction(
+                    transactionID = 1,
+                    name = "Transaction 7",
+                    categoryID = 1,
+                    categoryName = "Deposit",
+                    accountFromID = 1,
+                    accountFromName = "Personal Account",
+                    deposit = true,
+                    withdrawal = false,
+                    transference = false,
+                    value = 150.00,
+                    dateTransaction = Date()
+                ),
             )
         ),
-        transactions = listOf(
-            Transaction(
-                transactionID = 1,
-                categoryID = 1,
-                name = "Transaction 1",
-                categoryName = "Scholarchip",
-                accountFromID = 1,
-                accountFromName = "Personal Account",
-                deposit = false,
-                withdrawal = false,
-                transference = true,
-                value = 150.00,
-                dateTransaction = Date()
-            ),
-            Transaction(
-                transactionID = 1,
-                name = "Transaction 2",
-                categoryID = 1,
-                categoryName = "Deposit",
-                accountFromID = 1,
-                accountFromName = "Personal Account",
-                deposit = false,
-                withdrawal = true,
-                transference = false,
-                value = 150.00,
-                dateTransaction = Date()
-            ),
-            Transaction(
-                transactionID = 1,
-                name = "Transaction 3",
-                categoryID = 1,
-                categoryName = "Deposit",
-                accountFromID = 1,
-                accountFromName = "Personal Account",
-                deposit = false,
-                withdrawal = true,
-                transference = false,
-                value = 150.00,
-                dateTransaction = Date()
-            ),
-            Transaction(
-                transactionID = 1,
-                name = "Transaction 4",
-                categoryID = 1,
-                categoryName = "Deposit",
-                accountFromID = 1,
-                accountFromName = "Personal Account",
-                deposit = true,
-                withdrawal = false,
-                transference = false,
-                value = 150.00,
-                dateTransaction = Date()
-            ),
-            Transaction(
-                transactionID = 1,
-                name = "Transaction 5",
-                categoryID = 1,
-                categoryName = "Deposit",
-                accountFromID = 1,
-                accountFromName = "Personal Account",
-                deposit = false,
-                withdrawal = false,
-                transference = true,
-                value = 150.00,
-                dateTransaction = Date()
-            ),
-            Transaction(
-                transactionID = 1,
-                name = "Transaction 6",
-                categoryID = 1,
-                categoryName = "Deposit",
-                accountFromID = 1,
-                accountFromName = "Personal Account",
-                deposit = false,
-                withdrawal = true,
-                transference = false,
-                value = 150.00,
-                dateTransaction = Date()
-            ),
-            Transaction(
-                transactionID = 1,
-                name = "Transaction 7",
-                categoryID = 1,
-                categoryName = "Deposit",
-                accountFromID = 1,
-                accountFromName = "Personal Account",
-                deposit = true,
-                withdrawal = false,
-                transference = false,
-                value = 150.00,
-                dateTransaction = Date()
-            ),
-        ),
+        drawerState = DrawerState(initialValue = DrawerValue.Closed),
         onProfileClick = {  },
         onMenuClick = { },
-        onAddAccount = { },
+        onCreateAccount = { },
         onAccountSelected = {},
         onDeposit = {  },
-        onWithdraw = {  }) {
-
-    }
+        onWithdraw = {  },
+        onCategoryClicked = {},
+        onTransference = {},
+        onChart = {},
+        onExitAppClicked = {}
+        )
 }

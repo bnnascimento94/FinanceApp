@@ -16,4 +16,7 @@
     <string name="confirm_password">Confirm Password</string>
     <string name="register">Register</string>
     <string name="register_button">Don\'t you have an account? Register for free</string>
+    <string name="transaction_category">Transaction Category</string>
+    <string name="logout_icon">Logout Icon</string>
+    <string name="logout">Logout</string>
 </resources>

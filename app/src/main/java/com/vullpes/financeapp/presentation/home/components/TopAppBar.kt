@@ -20,6 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
@@ -27,6 +28,7 @@ import com.vullpes.financeapp.R
 
 @Composable
 fun TopAppBar(
+    accountName:String? = null,
     onProfileClick:() ->Unit,
     onMenuClick:() ->Unit
 ) {
@@ -40,7 +42,7 @@ fun TopAppBar(
         IconButton(onClick = { onMenuClick() }, modifier = Modifier.padding(6.dp)) {
             Icon(Icons.Default.Menu, contentDescription = stringResource(R.string.application_menu))
         }
-        Text(text = "Finance App", style = MaterialTheme.typography.titleLarge)
+        Text(text = accountName?:"Finance App", style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
         AsyncImage(
             model = "",
             placeholder = painterResource(R.drawable.no_user),

@@ -36,6 +36,7 @@ import com.vullpes.financeapp.R
 @Composable
 fun RegisterScreen(
     uiState: UiStateRegister,
+    onBackPressed: () -> Unit,
     onUsernameChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
     onConfirmPassword:(String) -> Unit,
@@ -150,11 +151,7 @@ fun RegisterScreen(
             {
                 Text(text = stringResource(R.string.register),fontFamily = FontFamily.Default, color = Color.White)
             }
-
-
         }
-
-
     }
 }
 
@@ -162,5 +159,5 @@ fun RegisterScreen(
 @Composable
 fun PrevRegister() {
     RegisterScreen( uiState = UiStateRegister(),
-        {},{},{},{})
+        {},{},{},{},{})
 }
