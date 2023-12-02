@@ -42,7 +42,7 @@ import com.vullpes.financeapp.domain.model.Account
 import com.vullpes.financeapp.domain.model.Transaction
 import com.vullpes.financeapp.presentation.home.components.AccountsComponent
 import com.vullpes.financeapp.presentation.home.components.TopAppBar
-import com.vullpes.financeapp.presentation.home.components.TransactionItem
+import com.vullpes.financeapp.presentation.components.TransactionItem
 import com.vullpes.financeapp.ui.theme.Purple40
 import java.util.Date
 
@@ -70,7 +70,12 @@ fun HomeScreen(
     ) {
         Scaffold(modifier = Modifier.fillMaxSize(),
             topBar = {
-                TopAppBar(accountName =uiState.accountSelected?.accountName,onMenuClick = onMenuClick, onProfileClick = onProfileClick)
+                TopAppBar(
+                    accountName = uiState.accountSelected?.accountName,
+                    user = uiState.user,
+                    onMenuClick = onMenuClick,
+                    onProfileClick = onProfileClick
+                )
             }
         ) { padingValues ->
 
@@ -101,7 +106,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .padding(6.dp)
                             .clickable {
-                                uiState.accountSelected?.accountID?.let{
+                                uiState.accountSelected?.accountID?.let {
                                     onDeposit(it)
                                 }
                             },
@@ -123,7 +128,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .padding(6.dp)
                             .clickable {
-                                uiState.accountSelected?.accountID?.let{
+                                uiState.accountSelected?.accountID?.let {
                                     onWithdraw(it)
                                 }
                             },
@@ -145,7 +150,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .padding(6.dp)
                             .clickable {
-                                uiState.accountSelected?.accountID?.let{
+                                uiState.accountSelected?.accountID?.let {
                                     onTransference(it)
                                 }
                             },
@@ -166,7 +171,7 @@ fun HomeScreen(
                         modifier = Modifier
                             .padding(6.dp)
                             .clickable {
-                                uiState.accountSelected?.accountID?.let{
+                                uiState.accountSelected?.accountID?.let {
                                     onChart(it)
                                 }
                             },
@@ -245,9 +250,15 @@ fun NavigationDrawer(
                 NavigationDrawerItem(
                     label = {
                         Row(modifier = Modifier.padding(horizontal = 12.dp)) {
-                            Icon(Icons.Default.Category, contentDescription = stringResource(R.string.transaction_category) )
+                            Icon(
+                                Icons.Default.Category,
+                                contentDescription = stringResource(R.string.transaction_category)
+                            )
                             Spacer(modifier = Modifier.width(12.dp))
-                            Text(text = stringResource(R.string.transaction_category), color = MaterialTheme.colorScheme.onSurface)
+                            Text(
+                                text = stringResource(R.string.transaction_category),
+                                color = MaterialTheme.colorScheme.onSurface
+                            )
                         }
                     },
                     selected = false,
@@ -256,7 +267,10 @@ fun NavigationDrawer(
                 NavigationDrawerItem(
                     label = {
                         Row(modifier = Modifier.padding(horizontal = 12.dp)) {
-                            Icon(Icons.Default.ExitToApp, contentDescription = stringResource(R.string.logout_icon) )
+                            Icon(
+                                Icons.Default.ExitToApp,
+                                contentDescription = stringResource(R.string.logout_icon)
+                            )
                             Spacer(modifier = Modifier.width(12.dp))
                             Text(
                                 text = stringResource(R.string.logout),
@@ -276,15 +290,14 @@ fun NavigationDrawer(
 }
 
 
-
-
-@Preview(uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
+@Preview(
+    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
     showBackground = true, showSystemUi = false
 )
 @Composable
 fun prevHomeScreeNight() {
     HomeScreen(
-        uiState =  UiStateHome(
+        uiState = UiStateHome(
             accountSelected = Account(
                 1,
                 "Casa",
@@ -410,15 +423,15 @@ fun prevHomeScreeNight() {
             )
         ),
         drawerState = DrawerState(initialValue = DrawerValue.Closed),
-        onProfileClick = {  },
+        onProfileClick = { },
         onMenuClick = { },
         onCreateAccount = { },
         onAccountSelected = {},
-        onDeposit = {  },
-        onWithdraw = {  },
+        onDeposit = { },
+        onWithdraw = { },
         onCategoryClicked = {},
         onTransference = {},
         onChart = {},
         onExitAppClicked = {}
-        )
+    )
 }

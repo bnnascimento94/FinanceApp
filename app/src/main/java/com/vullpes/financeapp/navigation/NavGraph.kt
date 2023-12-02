@@ -7,12 +7,16 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.vullpes.financeapp.navigation.Constants.ACCOUNTID
 import com.vullpes.financeapp.presentation.authentication.login.LoginScreen
 import com.vullpes.financeapp.presentation.authentication.login.LoginViewModel
 import com.vullpes.financeapp.presentation.authentication.register.RegisterScreen
 import com.vullpes.financeapp.presentation.authentication.register.RegisterViewModel
+import com.vullpes.financeapp.presentation.charts.ChartViewModel
 import com.vullpes.financeapp.presentation.charts.ChartsScreen
 import com.vullpes.financeapp.presentation.home.HomeScreen
 import com.vullpes.financeapp.presentation.home.HomeViewModel
@@ -21,8 +25,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun SetupNavGraph(
     firstDestination: String,
-    navController: NavHostController,
-    onDataLoaded: () -> Unit
+    navController: NavHostController
 ) {
 
     NavHost(
@@ -30,16 +33,34 @@ fun SetupNavGraph(
         navController = navController
     ) {
 
-        loginRoute()
-        registerRoute(onBackPressed = {})
-        chartRoute(onBackPressed = {})
-        homeRoute(onExitAppClicked = {}, onProfileClick = {})
+        loginRoute(onSignIn = {
+            navController.popBackStack()
+            navController.navigate(Screen.Home.route)
+        })
+        registerRoute(onBackPressed = {
+            navController.popBackStack()
+        })
+        chartRoute(onBackPressed = {
+            navController.popBackStack()
+        })
+        homeRoute(onExitAppClicked = {
+            navController.popBackStack()
+            navController.navigate(Screen.Login.route)
+        },
+        onProfileClick = {
+            navController.navigate(Screen.Login.route)
+        },
+        onChart = {
+            navController.navigate(Screen.Chart.route)
+        })
 
     }
 }
 
 
-fun NavGraphBuilder.loginRoute() {
+fun NavGraphBuilder.loginRoute(
+    onSignIn:()-> Unit
+) {
     composable(route = Screen.Login.route) {
         val viewModel: LoginViewModel = hiltViewModel()
 
@@ -47,7 +68,9 @@ fun NavGraphBuilder.loginRoute() {
             uiStateLogin = viewModel.uiState,
             onUsernameChanged = {},
             onPasswordChanged = {},
-            onSignInClicked = {},
+            onSignInClicked = {
+               onSignIn()
+            },
             onForgotPassword = {}
         )
     }
@@ -73,10 +96,18 @@ fun NavGraphBuilder.registerRoute(
 fun NavGraphBuilder.chartRoute(
     onBackPressed: () -> Unit
 ) {
-    composable(route = Screen.Chart.route) {
-        val viewModel: RegisterViewModel = hiltViewModel()
+    composable(route = Screen.Chart.route,
+        arguments = listOf(navArgument(name = ACCOUNTID) {
+            type = NavType.IntType
+            nullable = false
+            defaultValue = 0
+        }
+        )
+    ) {
+        val viewModel: ChartViewModel = hiltViewModel()
 
         ChartsScreen(
+            uiState =viewModel.uiState,
             onBackPressed = onBackPressed
         )
     }
@@ -84,7 +115,8 @@ fun NavGraphBuilder.chartRoute(
 
 fun NavGraphBuilder.homeRoute(
     onProfileClick: () -> Unit,
-    onExitAppClicked: () -> Unit
+    onExitAppClicked: () -> Unit,
+    onChart:(Int) -> Unit
 ) {
     composable(route = Screen.Login.route) {
         val viewModel: HomeViewModel = hiltViewModel()
@@ -101,15 +133,13 @@ fun NavGraphBuilder.homeRoute(
                 }
             },
             onCreateAccount = {},
-            onAccountSelected = { accountID ->
-
-            },
+            onAccountSelected = { accountID -> },
             onDeposit = {accountID ->},
             onWithdraw = {accountID ->},
             onTransference = {accountID ->},
             onCategoryClicked = {},
             onExitAppClicked = onExitAppClicked,
-            onChart = {}
+            onChart = onChart
         )
     }
 }

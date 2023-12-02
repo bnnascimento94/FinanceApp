@@ -25,12 +25,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.vullpes.financeapp.R
+import com.vullpes.financeapp.domain.model.User
 
 @Composable
 fun TopAppBar(
-    accountName:String? = null,
-    onProfileClick:() ->Unit,
-    onMenuClick:() ->Unit
+    accountName: String? = null,
+    user: User?,
+    onProfileClick: () -> Unit,
+    onMenuClick: () -> Unit
 ) {
 
     Row(
@@ -42,9 +44,14 @@ fun TopAppBar(
         IconButton(onClick = { onMenuClick() }, modifier = Modifier.padding(6.dp)) {
             Icon(Icons.Default.Menu, contentDescription = stringResource(R.string.application_menu))
         }
-        Text(text = accountName?:"Finance App", style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
+        Text(
+            text = accountName ?: stringResource(R.string.app_name),
+            style = MaterialTheme.typography.titleLarge,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
+        )
         AsyncImage(
-            model = "",
+            model = user?.imgSrc?: "",
             placeholder = painterResource(R.drawable.no_user),
             modifier = Modifier
                 .padding(6.dp)
@@ -61,5 +68,8 @@ fun TopAppBar(
 @Preview(showBackground = true)
 @Composable
 fun PrevTopBar() {
-    TopAppBar(onMenuClick = {}, onProfileClick = {})
+    TopAppBar(
+        onMenuClick = {},
+        user = User(id = 1, name = "", email = "", password = "", imgSrc = ""),
+        onProfileClick = {})
 }

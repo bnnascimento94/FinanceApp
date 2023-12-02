@@ -14,7 +14,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.OutlinedTextField
-import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
@@ -26,15 +25,30 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.vullpes.financeapp.R
+import com.vullpes.financeapp.domain.model.Account
+import com.vullpes.financeapp.domain.model.Category
+import com.vullpes.financeapp.domain.model.Transaction
 import com.vullpes.financeapp.domain.util.CurrencyAmountInputVisualTransformation
+import com.vullpes.financeapp.domain.util.KindOfTransaction
+import java.util.Date
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModalBottomSheetTransactions(
+    transaction: Transaction,
+    listCategory: List<Category>,
+    listAccounts: List<Account>,
+    onKindOfTransactionSelected: (KindOfTransaction) -> Unit,
+    onTransactionNameChanged: (String) -> Unit,
+    onCategorySelected: (String) -> Unit,
+    onAccountSelected: (Int) -> Unit,
+    onValueTransaction: (String) -> Unit,
     onDismiss: (SheetState) -> Unit
 ) {
     val modalBottomSheetState = rememberModalBottomSheetState()
@@ -45,7 +59,16 @@ fun ModalBottomSheetTransactions(
         dragHandle = { BottomSheetDefaults.DragHandle() },
 
         ) {
-        Transaction()
+        TransactionScreen(
+            transaction = transaction,
+            listCategory = listCategory,
+            listAccounts = listAccounts,
+            onKindOfTransactionSelected = onKindOfTransactionSelected,
+            onTransactionNameChanged= onTransactionNameChanged,
+            onCategorySelected = onCategorySelected,
+            onAccountSelected = onAccountSelected,
+            onValueTransaction = onValueTransaction
+        )
     }
 
 
@@ -54,21 +77,32 @@ fun ModalBottomSheetTransactions(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Transaction() {
+fun TransactionScreen(
+    transaction: Transaction,
+    listCategory: List<Category>,
+    listAccounts: List<Account>,
+    onKindOfTransactionSelected: (KindOfTransaction) -> Unit,
+    onTransactionNameChanged: (String) -> Unit,
+    onCategorySelected: (String) -> Unit,
+    onAccountSelected: (Int) -> Unit,
+    onValueTransaction: (String) -> Unit
+) {
 
     var selectedOption by remember { mutableStateOf("Option1") }
 
-    Column(modifier = Modifier
-        .fillMaxWidth()
-        .padding(6.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(6.dp)
+    ) {
         Text(
-            text = "Transaction",
+            text = stringResource(R.string.transaction),
             style = MaterialTheme.typography.titleLarge,
             modifier = Modifier.align(alignment = Alignment.CenterHorizontally)
         )
         Spacer(modifier = Modifier.height(10.dp))
 
-        Text(modifier = Modifier.padding(6.dp),text = "Kind of Transaction")
+        Text(modifier = Modifier.padding(6.dp), text = stringResource(R.string.kind_of_transaction))
         Row(
             modifier = Modifier
                 .padding(6.dp)
@@ -77,25 +111,25 @@ fun Transaction() {
             verticalAlignment = Alignment.CenterVertically
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
-                RadioButton(selected = selectedOption == "Withdraw", onClick = {
-                    selectedOption = "Withdraw"
+                RadioButton(selected = transaction.withdrawal, onClick = {
+                    onKindOfTransactionSelected(KindOfTransaction.WITHDRAW)
                 }
                 )
-                Text(text= "Withdraw")
+                Text(text = stringResource(R.string.withdraw))
             }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                RadioButton(selected = selectedOption == "Deposit", onClick = {
-                    selectedOption = "Deposit"
+                RadioButton(selected = transaction.deposit, onClick = {
+                    onKindOfTransactionSelected(KindOfTransaction.DEPOSIT)
                 })
-                Text(text= "Deposit")
+                Text(text = stringResource(R.string.deposit))
             }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
-                RadioButton(selected = selectedOption == "Transference", onClick = {
-                    selectedOption = "Transference"
+                RadioButton(selected = transaction.transference, onClick = {
+                    onKindOfTransactionSelected(KindOfTransaction.TRANSFERENCE)
                 })
-                Text(text= "Transference")
+                Text(text = stringResource(R.string.transference))
             }
         }
 
@@ -104,26 +138,35 @@ fun Transaction() {
             modifier = Modifier
                 .padding(8.dp)
                 .fillMaxWidth(),
-            label = { Text("Transaction Name") },
-            value = "",
-            onValueChange = { },
+            label = { Text(stringResource(R.string.transaction_name)) },
+            value = transaction.name,
+            onValueChange = onTransactionNameChanged,
         )
 
-        DropDownMenu(modifier = Modifier.padding(8.dp), label = "Category", onItemSelected = {})
+        DropDownMenu(
+            listItems = listCategory.map { it.nameCategory },
+            modifier = Modifier.padding(8.dp),
+            label = stringResource(R.string.category),
+            onItemSelected = onCategorySelected)
 
-        if(selectedOption == "Transference"){
-            DropDownMenu(modifier = Modifier.padding(8.dp), label = "Account", onItemSelected = {})
+        if (transaction.transference) {
+            DropDownMenu(
+                listItems = listAccounts.map { it.accountName },
+                modifier = Modifier.padding(8.dp),
+                label = stringResource(R.string.account),
+                onItemSelected = { accountSelected ->
+                    val account = listAccounts.first { it.accountName == accountSelected }
+                    onAccountSelected(account.accountID)
+                })
         }
 
         OutlinedTextField(
             modifier = Modifier
                 .padding(8.dp)
                 .fillMaxWidth(),
-            label = { Text(text = "Value") },
-            value = "",
-            onValueChange = {
-
-            },
+            label = { Text(text = stringResource(R.string.value)) },
+            value = transaction.value.toString(),
+            onValueChange = onValueTransaction,
             prefix = { Text(text = "$") },
             visualTransformation = CurrencyAmountInputVisualTransformation(),
             keyboardOptions = KeyboardOptions(
@@ -131,8 +174,10 @@ fun Transaction() {
             )
         )
 
-        Button(modifier = Modifier.fillMaxWidth().padding(8.dp),onClick = { /*TODO*/ }) {
-            Text(text = "Save")
+        Button(modifier = Modifier
+            .fillMaxWidth()
+            .padding(8.dp), onClick = { /*TODO*/ }) {
+            Text(text = stringResource(id = R.string.save))
         }
 
 
@@ -145,5 +190,49 @@ fun Transaction() {
 @Preview(showBackground = true)
 @Composable
 fun PreviewBottomSheetDialogImpressoras() {
-    Transaction()
+    TransactionScreen(
+        transaction = Transaction(
+            transactionID = 1,
+            name = "Transaction 2",
+            categoryID = 1,
+            categoryName = "Deposit",
+            accountFromID = 1,
+            accountFromName = "Personal Account",
+            deposit = false,
+            withdrawal = true,
+            transference = false,
+            value = 150.00,
+            dateTransaction = Date()
+        ),
+        listCategory = emptyList(),
+        listAccounts = listOf(
+            Account(
+                1,
+                "Casa",
+                accountBalance = 1500.00,
+                activeAccount = true,
+                dataCreationAccount = Date()
+            ),
+            Account(
+                2,
+                "Minha conta pessoal",
+                accountBalance = 1400.00,
+                activeAccount = true,
+                dataCreationAccount = Date()
+            ),
+            Account(
+                3,
+                "Minha conta pessoal",
+                accountBalance = 1300.00,
+                activeAccount = false,
+                dataCreationAccount = Date()
+            )
+        ),
+        onKindOfTransactionSelected = {},
+        onTransactionNameChanged = {},
+        onCategorySelected = {},
+        onAccountSelected = {},
+        onValueTransaction = {}
+
+    )
 }

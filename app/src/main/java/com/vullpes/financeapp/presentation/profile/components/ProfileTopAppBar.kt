@@ -17,6 +17,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vullpes.financeapp.R
+import com.vullpes.financeapp.domain.model.User
 import com.vullpes.financeapp.presentation.home.components.TopAppBar
 
 @Composable
@@ -32,7 +33,7 @@ fun ProfileTopAppBar(
         IconButton(onClick = { onBackScreen() }, modifier = Modifier.padding(6.dp)) {
             Icon(Icons.Default.ArrowBack, contentDescription = stringResource(R.string.back_screen))
         }
-        Text(text = "Profile", style = MaterialTheme.typography.titleLarge)
+        Text(text = stringResource(R.string.profile), style = MaterialTheme.typography.titleLarge)
     }
 }
 
@@ -40,5 +41,5 @@ fun ProfileTopAppBar(
 @Preview(showBackground = true)
 @Composable
 fun PrevTopBar() {
-    TopAppBar(onMenuClick = {}, onProfileClick = {})
+    TopAppBar(onMenuClick = {}, onProfileClick = {}, user = User(id =1,name = "", email = "", password = "", imgSrc = ""))
 }

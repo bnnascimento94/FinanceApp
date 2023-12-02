@@ -43,6 +43,25 @@ class ChartsRoomDataSourceImpl @Inject constructor(private val financeAppDatabas
 
     }
 
+    override fun getAllCategoryBalanceByAccountAndDate(
+        accountId: Int,
+        date1: Date,
+        date2: Date
+    ): Flow<Resource<Map<String, Double>>> {
+         val transactionDao = financeAppDatabase.transactionDao()
+         val transactions = transactionDao.getTransactionsByAccountAndDate(accountID = accountId, date1 = date1, date2 = date2)
+
+        return transactions.map {
+           val mapCategory = it.groupBy {
+                   transactions -> transactions.categoryDb.nameCategory
+           }
+
+
+
+            Resource.Loading()
+        }
+    }
+
     private fun calculateFinalBalance(transactions:List<TransactionDb>):Double{
         var finalbalance = 0.0
         transactions.forEach { accountTransaction ->

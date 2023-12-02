@@ -31,6 +31,14 @@ class ChartRepositoryImpl @Inject constructor(private val chartsRoomDataSource: 
         return chartsRoomDataSource.getAllCategoryBalanceByDate(date1, date2)
     }
 
+    override fun getAllCategoryBalanceByAccountAndDate(
+        accountID: Int,
+        date1: Date,
+        date2: Date
+    ): Flow<Resource<Map<String, Double>>> {
+        TODO("Not yet implemented")
+    }
+
     override fun getAllCategoryBalanceByMonth(month: Months): Flow<Resource<Map<String, Map<String, Double>>>> {
         return chartsRoomDataSource.getAllCategoryBalanceByMonth(month)
     }
