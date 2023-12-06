@@ -73,7 +73,25 @@ fun RegisterScreen(
                     focusedBorderColor = Color.White,
                     unfocusedBorderColor = Color.White
                 )
+            )
 
+            OutlinedTextField(
+                value = uiState.user,
+                label = { Text(text = "E-mail", color = Color.White) },
+                onValueChange = onUsernameChanged,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(start = 8.dp, end = 8.dp, top = 30.dp, bottom = 8.dp),
+                leadingIcon = {
+                    Icon(Icons.Filled.Person, contentDescription = stringResource(R.string.password_icon), tint = Color.White )
+                },
+                colors = OutlinedTextFieldDefaults.colors(
+                    focusedTextColor = Color.White,
+                    unfocusedTextColor = Color.White,
+                    focusedLabelColor = Color.White,
+                    focusedBorderColor = Color.White,
+                    unfocusedBorderColor = Color.White
+                )
             )
 
             OutlinedTextField(

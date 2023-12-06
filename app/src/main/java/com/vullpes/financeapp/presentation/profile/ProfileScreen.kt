@@ -39,6 +39,7 @@ import com.vullpes.financeapp.presentation.profile.components.ProfileTopAppBar
 
 @Composable
 fun ProfileScreen(
+    uiStateProfile: UiStateProfile,
     onBackScreen: () -> Unit,
     onEditImage: () -> Unit,
     onSave:() -> Unit,
@@ -47,7 +48,7 @@ fun ProfileScreen(
     onPasswordChanged: (String) -> Unit,
 ) {
 
-    var passwordVisibility = remember{ mutableStateOf(false) }
+    val passwordVisibility = remember{ mutableStateOf(false) }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -67,7 +68,7 @@ fun ProfileScreen(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 AsyncImage(
-                    model = "",
+                    model = uiStateProfile.profile?.imgSrc,
                     placeholder = painterResource(R.drawable.no_user),
                     modifier = Modifier
                         .padding(6.dp)
@@ -88,7 +89,7 @@ fun ProfileScreen(
                         .padding(8.dp)
                         .fillMaxWidth(),
                     label = { Text("Name") },
-                    value = "",
+                    value = uiStateProfile.profile?.name?:"",
                     onValueChange = onNameChanged,
                 )
 
@@ -97,12 +98,12 @@ fun ProfileScreen(
                         .padding(8.dp)
                         .fillMaxWidth(),
                     label = { Text("Email Address") },
-                    value = "",
+                    value = uiStateProfile.profile?.email?:"",
                     onValueChange = onEmailChanged,
                 )
 
                 OutlinedTextField(
-                    value = "",
+                    value = uiStateProfile.profile?.password?:"",
                     label = { Text(text = "Password")},
                     onValueChange = onPasswordChanged,
                     modifier = Modifier
@@ -136,5 +137,5 @@ fun ProfileScreen(
 @Preview
 @Composable
 fun PreviewProfile() {
-    ProfileScreen(onBackScreen = {  }, onEditImage = {}, onSave = {}, {},{},{})
+    ProfileScreen(UiStateProfile(),onBackScreen = {  }, onEditImage = {}, onSave = {}, {},{},{})
 }

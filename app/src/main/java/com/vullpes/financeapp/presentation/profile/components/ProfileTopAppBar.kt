@@ -41,5 +41,5 @@ fun ProfileTopAppBar(
 @Preview(showBackground = true)
 @Composable
 fun PrevTopBar() {
-    TopAppBar(onMenuClick = {}, onProfileClick = {}, user = User(id =1,name = "", email = "", password = "", imgSrc = ""))
+    ProfileTopAppBar(onBackScreen = {})
 }

@@ -5,18 +5,72 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.vullpes.financeapp.domain.usecases.authentication.CreateUserUseCase
 import com.vullpes.financeapp.navigation.Constants.ACCOUNTID
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
 class RegisterViewModel @Inject constructor(
-    private val savedStateHandle: SavedStateHandle,
-): ViewModel() {
+    private val createUserUseCase: CreateUserUseCase
+) : ViewModel() {
     var uiState by mutableStateOf(UiStateRegister())
         private set
 
     init {
-        val accountID = savedStateHandle.get<Int>(ACCOUNTID)?:0
+
+    }
+
+    fun setUsername(username: String) {
+        uiState = uiState.copy(user = username)
+        //checkEnableLoginButton()
+    }
+
+    fun email(email: String) {
+        uiState = uiState.copy(email = email)
+        checkEnableRegisterButton()
+    }
+
+    fun setPassword(password: String) {
+        uiState = uiState.copy(password = password)
+        checkEnableRegisterButton()
+    }
+
+    fun confirmPassword(confirmPassword: String) {
+        uiState = uiState.copy(confirmPassword = confirmPassword)
+        if(uiState.password != confirmPassword){
+            uiState = uiState.copy(passwordsDoesntMatch = true)
+        }else{
+            uiState = uiState.copy(passwordsDoesntMatch = false)
+        }
+        checkEnableRegisterButton()
+    }
+
+    private fun checkEnableRegisterButton() {
+        uiState = uiState.copy(
+            loginButtonEnabled = uiState.user.isNotBlank() &&
+                    uiState.password.isNotBlank() &&
+                    uiState.confirmPassword.isNotBlank() &&
+                    uiState.password == uiState.confirmPassword
+        )
+    }
+
+    fun save(onSuccess: () -> Unit, onError: (String) -> Unit) = viewModelScope.launch(Dispatchers.IO) {
+        try {
+            createUserUseCase.execute(
+                username = uiState.user,
+                email = uiState.email,
+                password = uiState.password
+            )
+            withContext(Dispatchers.Main) {
+                onSuccess()
+            }
+        } catch (e: Exception) {
+            e.message?.let { onError(it) }
+        }
     }
 }
