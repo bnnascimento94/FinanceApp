@@ -36,6 +36,7 @@ import java.util.Date
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModalBottomSheetAccount(
+    activateSaveAccount: Boolean,
     account: Account,
     onChangeAccountStatus: (Boolean) -> Unit,
     onChangeAccountName: (String) -> Unit,
@@ -52,6 +53,7 @@ fun ModalBottomSheetAccount(
 
         ) {
         CreateAccount(
+            activateSaveAccount = activateSaveAccount,
             account = account,
             onChangeAccountStatus = onChangeAccountStatus,
             onChangeAccountName = onChangeAccountName,
@@ -67,6 +69,7 @@ fun ModalBottomSheetAccount(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateAccount(
+    activateSaveAccount: Boolean,
     account: Account,
     onChangeAccountStatus: (Boolean) -> Unit,
     onChangeAccountName: (String) -> Unit,
@@ -105,7 +108,7 @@ fun CreateAccount(
                 .padding(8.dp)
                 .fillMaxWidth(),
             label = { Text(stringResource(R.string.account_name)) },
-            value = account.accountName,
+            value = account.accountName?:"",
             onValueChange = onChangeAccountName,
         )
 
@@ -126,6 +129,7 @@ fun CreateAccount(
         )
 
         Button(
+            enabled = activateSaveAccount,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp), onClick = onSave
@@ -144,6 +148,7 @@ fun CreateAccount(
 @Composable
 fun PreviewCreateAccount() {
     CreateAccount(
+        activateSaveAccount = true,
         account = Account(
             accountID = 1,
             accountName = "Conta Pessoal",

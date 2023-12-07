@@ -60,7 +60,8 @@ fun HomeScreen(
     onTransference: (Int) -> Unit,
     onChart: (Int) -> Unit,
     onCategoryClicked: () -> Unit,
-    onExitAppClicked: () -> Unit
+    onExitAppClicked: () -> Unit,
+    onEditAccount: (Account) -> Unit
 ) {
 
     NavigationDrawer(
@@ -71,10 +72,11 @@ fun HomeScreen(
         Scaffold(modifier = Modifier.fillMaxSize(),
             topBar = {
                 TopAppBar(
-                    accountName = uiState.accountSelected?.accountName,
+                    account = uiState.accountSelected,
                     user = uiState.user,
                     onMenuClick = onMenuClick,
-                    onProfileClick = onProfileClick
+                    onProfileClick = onProfileClick,
+                    onEditAccount = onEditAccount
                 )
             }
         ) { padingValues ->
@@ -432,6 +434,7 @@ fun prevHomeScreeNight() {
         onCategoryClicked = {},
         onTransference = {},
         onChart = {},
-        onExitAppClicked = {}
+        onExitAppClicked = {},
+        onEditAccount = {}
     )
 }

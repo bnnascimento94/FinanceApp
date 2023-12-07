@@ -5,8 +5,10 @@ import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.repository.transaction.TransactionRoomDataSource
 import com.vullpes.financeapp.data.dataSource.room.repository.transaction.TransactionRoomDataSourceImpl
 import com.vullpes.financeapp.domain.TransactionRepository
+import com.vullpes.financeapp.domain.usecases.transaction.ButtonSaveTransactionEnabledUseCase
 import com.vullpes.financeapp.domain.usecases.transaction.CreateTransactionUseCase
 import com.vullpes.financeapp.domain.usecases.transaction.DeleteTransactionUseCase
+import com.vullpes.financeapp.domain.usecases.transaction.GetLastTransactionsByAccountUseCase
 import com.vullpes.financeapp.domain.usecases.transaction.ListTransactionUseCase
 import dagger.Module
 import dagger.Provides
@@ -46,6 +48,18 @@ object TransactionModule {
     @Singleton
     fun providesListTransactionUsecase(transactionRepository: TransactionRepository): ListTransactionUseCase {
         return ListTransactionUseCase(transactionRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun providesButtonSaveTransactionEnabledUseCase(): ButtonSaveTransactionEnabledUseCase {
+        return ButtonSaveTransactionEnabledUseCase()
+    }
+
+    @Provides
+    @Singleton
+    fun providesGetLastTransactionsByAccountUseCase(transactionRepository: TransactionRepository): GetLastTransactionsByAccountUseCase {
+        return GetLastTransactionsByAccountUseCase(transactionRepository)
     }
 
 }

@@ -10,6 +10,7 @@ import com.vullpes.financeapp.domain.UserRepository
 import com.vullpes.financeapp.domain.usecases.authentication.CreateUserUseCase
 import com.vullpes.financeapp.domain.usecases.authentication.GetCurrentUserUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.LoginUsecase
+import com.vullpes.financeapp.domain.usecases.authentication.LogoutUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.UpdatePhotoImageUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.UpdateUserUsercase
 import dagger.Module
@@ -62,6 +63,12 @@ object UserModule {
     @Singleton
     fun providesUpdateUserUseCase(userRepository: UserRepository): UpdateUserUsercase {
         return UpdateUserUsercase(userRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun providesLogoutUserUseCase(userRepository: UserRepository): LogoutUsecase {
+        return LogoutUsecase(userRepository)
     }
 
 }

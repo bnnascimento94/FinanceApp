@@ -14,6 +14,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.vullpes.financeapp.domain.util.KindOfTransaction
 import com.vullpes.financeapp.navigation.Constants.ACCOUNTID
 import com.vullpes.financeapp.presentation.authentication.login.LoginScreen
 import com.vullpes.financeapp.presentation.authentication.login.LoginViewModel
@@ -21,7 +22,9 @@ import com.vullpes.financeapp.presentation.authentication.register.RegisterScree
 import com.vullpes.financeapp.presentation.authentication.register.RegisterViewModel
 import com.vullpes.financeapp.presentation.charts.ChartViewModel
 import com.vullpes.financeapp.presentation.charts.ChartsScreen
+import com.vullpes.financeapp.presentation.components.ModalBottomSheetAccount
 import com.vullpes.financeapp.presentation.components.ModalBottomSheetChangePicture
+import com.vullpes.financeapp.presentation.components.ModalBottomSheetTransactions
 import com.vullpes.financeapp.presentation.home.HomeScreen
 import com.vullpes.financeapp.presentation.home.HomeViewModel
 import com.vullpes.financeapp.presentation.profile.ProfileScreen
@@ -53,16 +56,28 @@ fun SetupNavGraph(
         chartRoute(onBackPressed = {
             navController.popBackStack()
         })
-        homeRoute(onExitAppClicked = {
+        homeRoute(
+            onExitAppClicked = {
             navController.popBackStack()
             navController.navigate(Screen.Login.route)
-        },
-        onProfileClick = {
-            navController.navigate(Screen.Login.route)
-        },
-        onChart = {
-            navController.navigate(Screen.Chart.route)
-        })
+            },
+            onProfileClick = {
+                navController.navigate(Screen.Profile.route)
+            },
+            onChart = {
+                navController.navigate(Screen.Chart.route)
+            },
+            onCategory = {
+                navController.navigate(Screen.Category.route)
+            }
+
+        )
+
+        profileRoute (
+            onBackPressed = {
+                navController.popBackStack()
+            }
+        )
 
     }
 }
@@ -154,10 +169,12 @@ fun NavGraphBuilder.chartRoute(
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.homeRoute(
     onProfileClick: () -> Unit,
     onExitAppClicked: () -> Unit,
-    onChart:(Int) -> Unit
+    onChart:(Int) -> Unit,
+    onCategory: () -> Unit,
 ) {
     composable(route = Screen.Login.route) {
         val viewModel: HomeViewModel = hiltViewModel()
@@ -173,15 +190,56 @@ fun NavGraphBuilder.homeRoute(
                     drawerState.open()
                 }
             },
-            onCreateAccount = {},
-            onAccountSelected = { accountID -> },
-            onDeposit = {accountID ->},
-            onWithdraw = {accountID ->},
-            onTransference = {accountID ->},
-            onCategoryClicked = {},
-            onExitAppClicked = onExitAppClicked,
+            onCreateAccount = {
+                viewModel.onOpenAccountModal()
+            },
+            onEditAccount = {
+                viewModel.onOpenAccountModal(it)
+            },
+            onAccountSelected = { accountID -> 
+                viewModel.getAccountSelected(accountID)
+            },
+            onDeposit = {accountID -> viewModel.onOpenModalTransacton(accountID, KindOfTransaction.DEPOSIT)},
+            onWithdraw = {accountID -> viewModel.onOpenModalTransacton(accountID, KindOfTransaction.WITHDRAW)},
+            onTransference = {accountID -> viewModel.onOpenModalTransacton(accountID, KindOfTransaction.TRANSFERENCE)},
+            onCategoryClicked = onCategory,
+            onExitAppClicked = {
+                viewModel.logoutUser(onSuccess = {
+                    onExitAppClicked()
+                })
+            },
             onChart = onChart
         )
+        
+        if(viewModel.uiState.openTransactionModal){
+            ModalBottomSheetTransactions(
+                buttonSaveEnabled = viewModel.uiState.buttonSaveTransactionEnabled,
+                transaction = viewModel.uiState.transaction,
+                listCategory = viewModel.uiState.categories,
+                listAccounts = viewModel.uiState.accounts,
+                onKindOfTransactionSelected = { viewModel.onTransaction(it) },
+                onTransactionNameChanged = { viewModel.onTransactionName(it) },
+                onCategorySelected = { viewModel.onTransactionCategory(it) },
+                onAccountSelected = { viewModel.onTransactionAccountTo(it) },
+                onValueTransaction = { viewModel.onValueSelected(it) },
+                onDismiss = {},
+                onSave = {
+                    viewModel.onSave()
+                }
+            )
+        }
+
+        if(viewModel.uiState.openAccountModal){
+            ModalBottomSheetAccount(
+                activateSaveAccount = viewModel.uiState.buttonSaveAccountEnabled,
+                account = viewModel.uiState.accountSelected!!,
+                onChangeAccountStatus = {status -> viewModel.statusAccountChanged(status)},
+                onChangeAccountName = {accountName -> viewModel.statusAccountNameChanged(accountName)},
+                onChangeAccountValue = {accountValue -> viewModel.statusAccountValueChanged(accountValue)},
+                onSave = { viewModel.onSaveAccount() },
+                onDismiss = {viewModel.onCloseAccountModal()}
+            )
+        }
     }
 }
 

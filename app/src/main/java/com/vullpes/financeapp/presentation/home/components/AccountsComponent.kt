@@ -107,7 +107,7 @@ fun ItemAccount(account: Account, onAccountSelected: (Int) -> Unit) {
             .padding(6.dp)
             .fillMaxWidth()) {
             Text(
-                text = account.accountName,
+                text = account.accountName?:"",
                 style = MaterialTheme.typography.titleMedium,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,
@@ -131,7 +131,7 @@ fun ItemAccount(account: Account, onAccountSelected: (Int) -> Unit) {
 
 
         Row(verticalAlignment = Alignment.CenterVertically){
-            Text(text = if(moneyVisibility.value) "$${account.accountBalance.toCurrencyFormat()}" else "$ ******" ,
+            Text(text = if(moneyVisibility.value) "$${account.accountBalance?.toCurrencyFormat()}" else "$ ******" ,
                 fontSize = 16.sp,
                 maxLines = 1,
                 overflow = TextOverflow.Ellipsis,

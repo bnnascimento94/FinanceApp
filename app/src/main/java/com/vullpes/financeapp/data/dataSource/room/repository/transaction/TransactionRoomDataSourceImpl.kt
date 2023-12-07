@@ -69,18 +69,30 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
     override fun listTransactions(accountID: Int, date: Date): Flow<List<Transaction>> {
         return try {
             val transactionDao = financeAppDatabase.transactionDao()
-            return transactionDao.getTransactionByID(accountID = accountID, data = date).map { listAccountTransaction ->
+            transactionDao.getTransactionByID(accountID = accountID, data = date).map { listAccountTransaction ->
                 listAccountTransaction.map { it.toTransaction() }
             }
         }catch (e:Exception){
             throw e
         }
     }
-    override suspend fun deleteTransaction(transactrionID: Int) {
+
+    override fun getLastTransactionsByAccount(accountID: Int): Flow<List<Transaction>> {
+        return try {
+            val transactionDao = financeAppDatabase.transactionDao()
+            transactionDao.getLastTransactionsByAccount(accountID = accountID).map { listAccountTransaction ->
+                listAccountTransaction.map { it.toTransaction() }
+            }
+        }catch (e:Exception){
+            throw e
+        }
+    }
+
+    override suspend fun deleteTransaction(transactionID: Int) {
         try {
             val transactionDao = financeAppDatabase.transactionDao()
             val accountDao = financeAppDatabase.accountDao()
-            val transaction = transactionDao.getTransactionByID(transactrionID)
+            val transaction = transactionDao.getTransactionByID(transactionID)
             transaction?.let { accountTransaction ->
                 val currentTransaction = accountTransaction.transactionDb
                 val transactionValue = currentTransaction.value

@@ -16,11 +16,15 @@ class TransactionRepositoryImpl @Inject constructor(private val transactionRoomD
         return transactionRoomDataSource.listTransactions(accountID = accountID,date = date)
     }
 
-    override suspend fun deleteTransaction(transactrionID: Int) {
-        return transactionRoomDataSource.deleteTransaction(transactrionID)
+    override suspend fun deleteTransaction(transactionID: Int) {
+        return transactionRoomDataSource.deleteTransaction(transactionID)
     }
 
     override suspend fun updateTransaction(transaction: Transaction) {
         transactionRoomDataSource.updateTransaction(transaction)
+    }
+
+    override  fun getLastTransactionsByAccount(accountID: Int): Flow<List<Transaction>> {
+       return transactionRoomDataSource.getLastTransactionsByAccount(accountID)
     }
 }

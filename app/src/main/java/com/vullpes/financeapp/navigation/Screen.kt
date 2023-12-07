@@ -11,4 +11,6 @@ sealed class Screen(val route:String) {
         fun passAccountId(accountID: Int) = "chart_screen/$accountID"
     }
     object Profile : Screen("profile_screen")
+
+    object Category : Screen("category_screen")
 }

@@ -8,37 +8,8 @@ import javax.inject.Inject
 class CreateTransactionUseCase @Inject constructor(private val transactionRepository: TransactionRepository) {
 
     suspend operator fun invoke(
-        categoryID: Int,
-        name:String,
-        categoryName: String,
-        accountFromID: Int,
-        accountFromName: String,
-        accountToID: Int? = null,
-        accountToName: String? = null,
-        deposit: Boolean,
-        withdrawal: Boolean,
-        transference:Boolean,
-        value: Double,
-        dateTransaction: Date
+        transaction: Transaction
     ) {
-
-        val transaction = Transaction(
-            transactionID = 0,
-            name = name,
-            categoryID = categoryID,
-            categoryName = categoryName,
-            accountFromID = accountFromID,
-            accountFromName = accountFromName,
-            accountTo = accountToID,
-            accountToName = accountToName,
-            deposit = deposit,
-            withdrawal = withdrawal,
-            transference = transference,
-            value = value,
-            dateTransaction = dateTransaction
-        )
-
-
         transactionRepository.createTransaction(transaction = transaction)
     }
 }

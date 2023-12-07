@@ -3,17 +3,17 @@ package com.vullpes.financeapp.domain.model
 import java.util.Date
 
 data class Transaction(
-    val transactionID: Int,
-    val name:String,
-    val categoryID:Int,
-    val categoryName:String,
-    val accountFromID: Int,
-    val accountFromName:String,
+    val transactionID: Int = 0,
+    val name:String = "",
+    val categoryID:Int = 0,
+    val categoryName:String = "",
+    val accountFromID: Int = 0,
+    val accountFromName:String = "",
     val accountTo: Int? = null,
     val accountToName:String? = null,
-    val deposit: Boolean,
-    val withdrawal:Boolean,
-    val transference:Boolean,
-    val value:Double,
-    val dateTransaction: Date
+    val deposit: Boolean = false,
+    val withdrawal:Boolean = false,
+    val transference:Boolean = false,
+    val value:Double = 0.0,
+    val dateTransaction: Date = Date()
 )

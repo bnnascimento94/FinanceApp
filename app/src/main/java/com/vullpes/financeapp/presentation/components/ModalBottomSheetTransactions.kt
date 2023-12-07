@@ -41,6 +41,7 @@ import java.util.Date
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModalBottomSheetTransactions(
+    buttonSaveEnabled: Boolean,
     transaction: Transaction,
     listCategory: List<Category>,
     listAccounts: List<Account>,
@@ -49,7 +50,8 @@ fun ModalBottomSheetTransactions(
     onCategorySelected: (String) -> Unit,
     onAccountSelected: (Int) -> Unit,
     onValueTransaction: (String) -> Unit,
-    onDismiss: (SheetState) -> Unit
+    onDismiss: (SheetState) -> Unit,
+    onSave: () -> Unit
 ) {
     val modalBottomSheetState = rememberModalBottomSheetState()
 
@@ -67,7 +69,10 @@ fun ModalBottomSheetTransactions(
             onTransactionNameChanged= onTransactionNameChanged,
             onCategorySelected = onCategorySelected,
             onAccountSelected = onAccountSelected,
-            onValueTransaction = onValueTransaction
+            onValueTransaction = onValueTransaction,
+            onSave = onSave,
+            buttonSaveEnabled = buttonSaveEnabled
+
         )
     }
 
@@ -78,6 +83,7 @@ fun ModalBottomSheetTransactions(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TransactionScreen(
+    buttonSaveEnabled: Boolean,
     transaction: Transaction,
     listCategory: List<Category>,
     listAccounts: List<Account>,
@@ -85,7 +91,8 @@ fun TransactionScreen(
     onTransactionNameChanged: (String) -> Unit,
     onCategorySelected: (String) -> Unit,
     onAccountSelected: (Int) -> Unit,
-    onValueTransaction: (String) -> Unit
+    onValueTransaction: (String) -> Unit,
+    onSave: () -> Unit
 ) {
 
     var selectedOption by remember { mutableStateOf("Option1") }
@@ -151,7 +158,7 @@ fun TransactionScreen(
 
         if (transaction.transference) {
             DropDownMenu(
-                listItems = listAccounts.map { it.accountName },
+                listItems = listAccounts.map { it.accountName?:"" },
                 modifier = Modifier.padding(8.dp),
                 label = stringResource(R.string.account),
                 onItemSelected = { accountSelected ->
@@ -174,9 +181,11 @@ fun TransactionScreen(
             )
         )
 
-        Button(modifier = Modifier
+        Button(
+            enabled = buttonSaveEnabled,
+            modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp), onClick = { /*TODO*/ }) {
+            .padding(8.dp), onClick = onSave) {
             Text(text = stringResource(id = R.string.save))
         }
 
@@ -232,7 +241,9 @@ fun PreviewBottomSheetDialogImpressoras() {
         onTransactionNameChanged = {},
         onCategorySelected = {},
         onAccountSelected = {},
-        onValueTransaction = {}
+        onValueTransaction = {},
+        onSave = {},
+        buttonSaveEnabled = true
 
     )
 }

@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.Menu
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -25,14 +26,16 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.vullpes.financeapp.R
+import com.vullpes.financeapp.domain.model.Account
 import com.vullpes.financeapp.domain.model.User
 
 @Composable
 fun TopAppBar(
-    accountName: String? = null,
+    account: Account? = null,
     user: User?,
     onProfileClick: () -> Unit,
-    onMenuClick: () -> Unit
+    onMenuClick: () -> Unit,
+    onEditAccount:(Account) -> Unit
 ) {
 
     Row(
@@ -45,22 +48,31 @@ fun TopAppBar(
             Icon(Icons.Default.Menu, contentDescription = stringResource(R.string.application_menu))
         }
         Text(
-            text = accountName ?: stringResource(R.string.app_name),
+            text = account?.accountName ?: stringResource(R.string.app_name),
             style = MaterialTheme.typography.titleLarge,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
-        AsyncImage(
-            model = user?.imgSrc?: "",
-            placeholder = painterResource(R.drawable.no_user),
-            modifier = Modifier
-                .padding(6.dp)
-                .clip(CircleShape)
-                .size(30.dp)
-                .clickable { onProfileClick() },
-            contentScale = ContentScale.Crop,
-            contentDescription = stringResource(R.string.profile_image)
-        )
+        Row{
+            account?.let {account ->
+                IconButton(onClick = { onEditAccount(account)}) {
+                    Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.edit_account))
+                }
+            }
+            AsyncImage(
+                model = user?.imgSrc?: "",
+                placeholder = painterResource(R.drawable.no_user),
+                modifier = Modifier
+                    .padding(6.dp)
+                    .clip(CircleShape)
+                    .size(30.dp)
+                    .clickable { onProfileClick() },
+                contentScale = ContentScale.Crop,
+                contentDescription = stringResource(R.string.profile_image)
+            )
+
+        }
+
     }
 }
 
@@ -71,5 +83,5 @@ fun PrevTopBar() {
     TopAppBar(
         onMenuClick = {},
         user = User(id = 1, name = "", email = "", password = "", imgSrc = ""),
-        onProfileClick = {})
+        onProfileClick = {}, onEditAccount = {})
 }

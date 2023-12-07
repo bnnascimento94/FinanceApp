@@ -35,4 +35,5 @@
     <string name="category_active">Category Active</string>
     <string name="category_name">Category Name</string>
     <string name="profile">Profile</string>
+    <string name="edit_account">Edit Account</string>
 </resources>

@@ -6,6 +6,8 @@ import com.vullpes.financeapp.data.dataSource.room.repository.account.AccountRoo
 import com.vullpes.financeapp.data.dataSource.room.repository.account.AccountRoomDataSourceImpl
 import com.vullpes.financeapp.domain.AccountRepository
 import com.vullpes.financeapp.domain.usecases.account.ActivateAccountUseCase
+import com.vullpes.financeapp.domain.usecases.account.ButtonSaveAccountEnabledUsecase
+import com.vullpes.financeapp.domain.usecases.account.CheckIfAccountNameIsDifferentUsecase
 import com.vullpes.financeapp.domain.usecases.account.CreateAccountUseCase
 import com.vullpes.financeapp.domain.usecases.account.DeactivateAccountUseCase
 import com.vullpes.financeapp.domain.usecases.account.ListAccountUseCase
@@ -60,6 +62,18 @@ object AccountModule {
     @Singleton
     fun providesUpdateAccountUsecase(accountRepository: AccountRepository): UpdateAccountUseCase {
         return UpdateAccountUseCase(accountRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun providesButtonSaveAccountEnabledUsecase(): ButtonSaveAccountEnabledUsecase {
+        return ButtonSaveAccountEnabledUsecase()
+    }
+
+    @Provides
+    @Singleton
+    fun providesCheckIfAccountNameIsDifferentUsecase(): CheckIfAccountNameIsDifferentUsecase {
+        return CheckIfAccountNameIsDifferentUsecase()
     }
 
 }
