@@ -4,12 +4,8 @@ import com.vullpes.financeapp.data.CategoryRepositoryImpl
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.repository.category.CategoryRoomDataSource
 import com.vullpes.financeapp.data.dataSource.room.repository.category.CategoryRoomDataSourceImpl
-import com.vullpes.financeapp.domain.AccountRepository
 import com.vullpes.financeapp.domain.CategoryRepository
-import com.vullpes.financeapp.domain.usecases.account.ActivateAccountUseCase
-import com.vullpes.financeapp.domain.usecases.account.CreateAccountUseCase
-import com.vullpes.financeapp.domain.usecases.account.DeactivateAccountUseCase
-import com.vullpes.financeapp.domain.usecases.category.ActivateCategoryUseCase
+import com.vullpes.financeapp.domain.usecases.category.UpdateCategoryUseCase
 import com.vullpes.financeapp.domain.usecases.category.CreateCategoryUseCase
 import com.vullpes.financeapp.domain.usecases.category.DeactivateCategoryUseCase
 import com.vullpes.financeapp.domain.usecases.category.ListCategoryUseCase
@@ -38,8 +34,8 @@ object CategoryModule {
 
     @Provides
     @Singleton
-    fun providesActivateCategoryUsecase(categoryRepository: CategoryRepository): ActivateCategoryUseCase {
-        return ActivateCategoryUseCase(categoryRepository)
+    fun providesActivateCategoryUsecase(categoryRepository: CategoryRepository): UpdateCategoryUseCase {
+        return UpdateCategoryUseCase(categoryRepository)
     }
 
     @Provides

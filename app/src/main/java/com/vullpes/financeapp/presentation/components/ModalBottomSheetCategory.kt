@@ -29,6 +29,7 @@ import java.util.Date
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ModalBottomSheetCategory(
+    buttonSaveEnabled: Boolean,
     category: Category,
     onChangeCategoryName: (String) -> Unit,
     onChangeCategoryStatus: (Boolean) -> Unit,
@@ -44,6 +45,7 @@ fun ModalBottomSheetCategory(
 
         ) {
         CreateCategory(
+            buttonSaveEnabled= buttonSaveEnabled,
             category = category,
             onChangeCategoryName = onChangeCategoryName,
             onChangeCategoryStatus = onChangeCategoryStatus,
@@ -58,6 +60,7 @@ fun ModalBottomSheetCategory(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CreateCategory(
+    buttonSaveEnabled: Boolean,
     category: Category,
     onChangeCategoryName: (String) -> Unit,
     onChangeCategoryStatus: (Boolean) -> Unit,
@@ -98,19 +101,18 @@ fun CreateCategory(
                 .padding(8.dp)
                 .fillMaxWidth(),
             label = { Text(stringResource(R.string.category_name)) },
-            value = category.nameCategory,
+            value = category.nameCategory?:"",
             onValueChange = onChangeCategoryName,
         )
 
         Button(
+            enabled = buttonSaveEnabled,
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp), onClick = onSave
         ) {
             Text(text = stringResource(R.string.save))
         }
-
-
     }
 
 }
@@ -121,6 +123,7 @@ fun CreateCategory(
 @Composable
 fun PreviewCreateCategory() {
     CreateCategory(
+        buttonSaveEnabled = true,
         category = Category(
             categoryID = 1,
             nameCategory = "Despesas de Casa",

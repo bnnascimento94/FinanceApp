@@ -20,9 +20,12 @@ import com.vullpes.financeapp.presentation.authentication.login.LoginScreen
 import com.vullpes.financeapp.presentation.authentication.login.LoginViewModel
 import com.vullpes.financeapp.presentation.authentication.register.RegisterScreen
 import com.vullpes.financeapp.presentation.authentication.register.RegisterViewModel
+import com.vullpes.financeapp.presentation.category.CategoryScreen
+import com.vullpes.financeapp.presentation.category.CategoryViewmodel
 import com.vullpes.financeapp.presentation.charts.ChartViewModel
 import com.vullpes.financeapp.presentation.charts.ChartsScreen
 import com.vullpes.financeapp.presentation.components.ModalBottomSheetAccount
+import com.vullpes.financeapp.presentation.components.ModalBottomSheetCategory
 import com.vullpes.financeapp.presentation.components.ModalBottomSheetChangePicture
 import com.vullpes.financeapp.presentation.components.ModalBottomSheetTransactions
 import com.vullpes.financeapp.presentation.home.HomeScreen
@@ -49,17 +52,17 @@ fun SetupNavGraph(
         registerRoute(onBackPressed = {
             navController.popBackStack()
         },
-        onSignIn = {
-            navController.popBackStack()
-             navController.navigate(Screen.Home.route)
-        })
+            onSignIn = {
+                navController.popBackStack()
+                navController.navigate(Screen.Home.route)
+            })
         chartRoute(onBackPressed = {
             navController.popBackStack()
         })
         homeRoute(
             onExitAppClicked = {
-            navController.popBackStack()
-            navController.navigate(Screen.Login.route)
+                navController.popBackStack()
+                navController.navigate(Screen.Login.route)
             },
             onProfileClick = {
                 navController.navigate(Screen.Profile.route)
@@ -70,10 +73,15 @@ fun SetupNavGraph(
             onCategory = {
                 navController.navigate(Screen.Category.route)
             }
-
         )
 
-        profileRoute (
+        profileRoute(
+            onBackPressed = {
+                navController.popBackStack()
+            }
+        )
+
+        categoryRoute(
             onBackPressed = {
                 navController.popBackStack()
             }
@@ -84,7 +92,7 @@ fun SetupNavGraph(
 
 
 fun NavGraphBuilder.loginRoute(
-    onSignIn:()-> Unit
+    onSignIn: () -> Unit
 ) {
     composable(route = Screen.Login.route) {
         val viewModel: LoginViewModel = hiltViewModel()
@@ -93,10 +101,10 @@ fun NavGraphBuilder.loginRoute(
         LoginScreen(
             uiStateLogin = viewModel.uiState,
             onUsernameChanged = {
-                  viewModel.setUsername(it)
+                viewModel.setUsername(it)
             },
             onPasswordChanged = {
-                 viewModel.setPassword(it)
+                viewModel.setPassword(it)
             },
             onSignInClicked = {
                 viewModel.save(
@@ -104,7 +112,7 @@ fun NavGraphBuilder.loginRoute(
                         onSignIn()
                     },
                     onError = {
-                        Toast.makeText(context,it,Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                     }
                 )
             },
@@ -127,13 +135,13 @@ fun NavGraphBuilder.registerRoute(
             uiState = viewModel.uiState,
             onBackPressed = onBackPressed,
             onUsernameChanged = {
-                  viewModel.setUsername(it)
+                viewModel.setUsername(it)
             },
             onPasswordChanged = {
-                  viewModel.confirmPassword(it)
+                viewModel.confirmPassword(it)
             },
             onConfirmPassword = {
-                  viewModel.confirmPassword(it)
+                viewModel.confirmPassword(it)
             },
             onRegisterClicked = {
                 viewModel.save(
@@ -141,7 +149,7 @@ fun NavGraphBuilder.registerRoute(
                         onSignIn()
                     },
                     onError = {
-                        Toast.makeText(context,it,Toast.LENGTH_SHORT).show()
+                        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
                     }
                 )
             }
@@ -154,18 +162,47 @@ fun NavGraphBuilder.chartRoute(
 ) {
     composable(route = Screen.Chart.route,
         arguments = listOf(navArgument(name = ACCOUNTID) {
-                type = NavType.IntType
-                nullable = false
-                defaultValue = 0
-            }
+            type = NavType.IntType
+            nullable = false
+            defaultValue = 0
+        }
         )
     ) {
         val viewModel: ChartViewModel = hiltViewModel()
 
         ChartsScreen(
-            uiState =viewModel.uiState,
+            uiState = viewModel.uiState,
             onBackPressed = onBackPressed
         )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+fun NavGraphBuilder.categoryRoute(
+    onBackPressed: () -> Unit
+) {
+    composable(route = Screen.Category.route) {
+        val viewModel: CategoryViewmodel = hiltViewModel()
+
+        CategoryScreen(
+            uiStateCategory =viewModel.uiState,
+            onBackPressed = onBackPressed,
+            openCategoryModal ={
+                viewModel.openModalCategory(it)
+            }
+        )
+
+        if (viewModel.uiState.openModalCategory) {
+            ModalBottomSheetCategory(
+                buttonSaveEnabled = viewModel.uiState.loading,
+                category = viewModel.uiState.categorySelected!!,
+                onChangeCategoryName = {viewModel.nameCategory(it)},
+                onChangeCategoryStatus = {viewModel.statusCategory(it)},
+                onSave = {viewModel.onSaveCategory()},
+                onDismiss = {viewModel.closeModalCategory()}
+            )
+        }
+
     }
 }
 
@@ -173,7 +210,7 @@ fun NavGraphBuilder.chartRoute(
 fun NavGraphBuilder.homeRoute(
     onProfileClick: () -> Unit,
     onExitAppClicked: () -> Unit,
-    onChart:(Int) -> Unit,
+    onChart: (Int) -> Unit,
     onCategory: () -> Unit,
 ) {
     composable(route = Screen.Login.route) {
@@ -196,12 +233,27 @@ fun NavGraphBuilder.homeRoute(
             onEditAccount = {
                 viewModel.onOpenAccountModal(it)
             },
-            onAccountSelected = { accountID -> 
+            onAccountSelected = { accountID ->
                 viewModel.getAccountSelected(accountID)
             },
-            onDeposit = {accountID -> viewModel.onOpenModalTransacton(accountID, KindOfTransaction.DEPOSIT)},
-            onWithdraw = {accountID -> viewModel.onOpenModalTransacton(accountID, KindOfTransaction.WITHDRAW)},
-            onTransference = {accountID -> viewModel.onOpenModalTransacton(accountID, KindOfTransaction.TRANSFERENCE)},
+            onDeposit = { accountID ->
+                viewModel.onOpenModalTransacton(
+                    accountID,
+                    KindOfTransaction.DEPOSIT
+                )
+            },
+            onWithdraw = { accountID ->
+                viewModel.onOpenModalTransacton(
+                    accountID,
+                    KindOfTransaction.WITHDRAW
+                )
+            },
+            onTransference = { accountID ->
+                viewModel.onOpenModalTransacton(
+                    accountID,
+                    KindOfTransaction.TRANSFERENCE
+                )
+            },
             onCategoryClicked = onCategory,
             onExitAppClicked = {
                 viewModel.logoutUser(onSuccess = {
@@ -210,8 +262,8 @@ fun NavGraphBuilder.homeRoute(
             },
             onChart = onChart
         )
-        
-        if(viewModel.uiState.openTransactionModal){
+
+        if (viewModel.uiState.openTransactionModal) {
             ModalBottomSheetTransactions(
                 buttonSaveEnabled = viewModel.uiState.buttonSaveTransactionEnabled,
                 transaction = viewModel.uiState.transaction,
@@ -229,15 +281,23 @@ fun NavGraphBuilder.homeRoute(
             )
         }
 
-        if(viewModel.uiState.openAccountModal){
+        if (viewModel.uiState.openAccountModal) {
             ModalBottomSheetAccount(
                 activateSaveAccount = viewModel.uiState.buttonSaveAccountEnabled,
                 account = viewModel.uiState.accountSelected!!,
-                onChangeAccountStatus = {status -> viewModel.statusAccountChanged(status)},
-                onChangeAccountName = {accountName -> viewModel.statusAccountNameChanged(accountName)},
-                onChangeAccountValue = {accountValue -> viewModel.statusAccountValueChanged(accountValue)},
+                onChangeAccountStatus = { status -> viewModel.statusAccountChanged(status) },
+                onChangeAccountName = { accountName ->
+                    viewModel.statusAccountNameChanged(
+                        accountName
+                    )
+                },
+                onChangeAccountValue = { accountValue ->
+                    viewModel.statusAccountValueChanged(
+                        accountValue
+                    )
+                },
                 onSave = { viewModel.onSaveAccount() },
-                onDismiss = {viewModel.onCloseAccountModal()}
+                onDismiss = { viewModel.onCloseAccountModal() }
             )
         }
     }
@@ -245,7 +305,7 @@ fun NavGraphBuilder.homeRoute(
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.profileRoute(
-onBackPressed: () -> Unit
+    onBackPressed: () -> Unit
 ) {
     composable(route = Screen.Profile.route) {
         val viewModel: ProfileViewModel = hiltViewModel()
@@ -257,25 +317,25 @@ onBackPressed: () -> Unit
             onBackScreen = onBackPressed,
             onEditImage = { viewModel.dialogImageOpen() },
             onSave = { viewModel.onSave() },
-            onNameChanged = {viewModel.setName(it)},
-            onEmailChanged = {viewModel.setEmail(it)},
-            onPasswordChanged = {viewModel.setPassword(it)}
+            onNameChanged = { viewModel.setName(it) },
+            onEmailChanged = { viewModel.setEmail(it) },
+            onPasswordChanged = { viewModel.setPassword(it) }
         )
 
-        if(viewModel.uiState.openImageDialog){
+        if (viewModel.uiState.openImageDialog) {
             ModalBottomSheetChangePicture(
-                onDismiss ={
+                onDismiss = {
                     scope.launch {
                         it.hide()
                     }
-                } ,
+                },
                 onAddImageFromGallery = {
                     viewModel.setImageBitmap(it)
                 },
                 onAddImage = {
                     viewModel.setImageBitmap()
                 },
-                createUri = {viewModel.createImageUri()}
+                createUri = { viewModel.createImageUri() }
             )
         }
 
