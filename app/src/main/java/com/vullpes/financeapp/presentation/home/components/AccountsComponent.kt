@@ -2,6 +2,7 @@ package com.vullpes.financeapp.presentation.home.components
 
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -98,7 +99,7 @@ fun ItemAccount(account: Account, onAccountSelected: (Int) -> Unit) {
             .width(250.dp)
             .height(200.dp)
             .clip(RoundedCornerShape(6.dp))
-            .background(color = Purple40),
+            .background(color = Purple40).clickable { onAccountSelected(account.accountID) },
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

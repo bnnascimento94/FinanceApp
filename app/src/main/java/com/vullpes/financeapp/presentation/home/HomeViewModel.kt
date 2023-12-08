@@ -73,27 +73,27 @@ class HomeViewModel @Inject constructor(
             }
         }
         withContext(Dispatchers.Main){
-            val accountCreateUpDate = uiState.accountCreateUpdate
+           // val accountCreateUpDate = uiState.accountCreateUpdate
             uiState = uiState.copy(
-                loading = false, openAccountModal = false, accountCreateUpdate = null, accountSelected = uiState.accounts.first { it.accountName == accountCreateUpDate?.accountName }
+                loading = false, openAccountModal = false, accountCreateUpdate = null
             )
         }
     }
     fun statusAccountValueChanged(accountValue:String){
-        uiState = uiState.copy(accountCreateUpdate = uiState.accountSelected?.copy(accountBalance = accountValue.toDouble()))
+        uiState = uiState.copy(accountCreateUpdate = uiState.accountCreateUpdate?.copy(accountBalance = accountValue.replace(",","").toDouble()))
         enableSaveAccountButton()
     }
 
     fun statusAccountNameChanged(accountName:String){
         uiState = if(checkIfAccountNameIsDifferentUsecase.execute(accountName, uiState.accounts)){
-            uiState.copy(accountCreateUpdate = uiState.accountSelected?.copy(accountName = accountName))
+            uiState.copy(accountCreateUpdate = uiState.accountCreateUpdate?.copy(accountName = accountName))
         }else{
-            uiState.copy(accountCreateUpdate = uiState.accountSelected?.copy(accountName = ""))
+            uiState.copy(accountCreateUpdate = uiState.accountCreateUpdate?.copy(accountName = ""))
         }
         enableSaveAccountButton()
     }
     fun statusAccountChanged(status:Boolean){
-        uiState = uiState.copy(accountCreateUpdate = uiState.accountSelected?.copy(activeAccount = status))
+        uiState = uiState.copy(accountCreateUpdate = uiState.accountCreateUpdate?.copy(activeAccount = status))
         enableSaveAccountButton()
     }
 
@@ -105,6 +105,10 @@ class HomeViewModel @Inject constructor(
         }
 
     }
+    fun closeAccountModal(){
+        uiState.copy(openAccountModal = false)
+    }
+
 
     fun onCloseAccountModal(){
        uiState= uiState.copy(openAccountModal = false)

@@ -85,7 +85,11 @@ fun CreateAccount(
             .padding(6.dp)
     ) {
 
-        Text(modifier = Modifier.align(Alignment.CenterHorizontally),text = stringResource(R.string.account), style = MaterialTheme.typography.titleLarge)
+        Text(
+            modifier = Modifier.align(Alignment.CenterHorizontally),
+            text = stringResource(R.string.account),
+            style = MaterialTheme.typography.titleLarge
+        )
 
         Row(
             modifier = Modifier
@@ -97,7 +101,7 @@ fun CreateAccount(
 
             Text(text = stringResource(R.string.account_active))
             Switch(
-                checked = account?.activeAccount?:true,
+                checked = account?.activeAccount ?: true,
                 onCheckedChange = onChangeAccountStatus
             )
         }
@@ -108,7 +112,7 @@ fun CreateAccount(
                 .padding(8.dp)
                 .fillMaxWidth(),
             label = { Text(stringResource(R.string.account_name)) },
-            value = account?.accountName?:"",
+            value = account?.accountName ?: "",
             onValueChange = onChangeAccountName,
         )
 
@@ -119,7 +123,7 @@ fun CreateAccount(
                 .padding(8.dp)
                 .fillMaxWidth(),
             label = { Text(text = stringResource(R.string.total_balance)) },
-            value = account?.accountBalance?.toString()?:"00",
+            value = account?.accountBalance?.toString()?.replace(",", "")?.replace(".", "") ?: "0",
             onValueChange = onChangeAccountValue,
             prefix = { Text(text = "$") },
             visualTransformation = CurrencyAmountInputVisualTransformation(),

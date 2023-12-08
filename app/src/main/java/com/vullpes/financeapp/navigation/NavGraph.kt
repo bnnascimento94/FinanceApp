@@ -352,7 +352,7 @@ fun NavGraphBuilder.homeRoute(
                     )
                 },
                 onSave = { viewModel.onSaveAccount() },
-                onDismiss = { }
+                onDismiss = { viewModel.closeAccountModal()}
             )
         }
     }
