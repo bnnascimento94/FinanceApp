@@ -13,4 +13,8 @@ sealed class Screen(val route:String) {
     object Profile : Screen("profile_screen")
 
     object Category : Screen("category_screen")
+
+    object Transactions : Screen("transaction_screen/$ACCOUNTID") {
+        fun passAccountId(accountID: Int) = "transaction_screen/$accountID"
+    }
 }

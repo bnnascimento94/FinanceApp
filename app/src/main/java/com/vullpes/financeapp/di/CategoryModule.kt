@@ -5,6 +5,7 @@ import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.repository.category.CategoryRoomDataSource
 import com.vullpes.financeapp.data.dataSource.room.repository.category.CategoryRoomDataSourceImpl
 import com.vullpes.financeapp.domain.CategoryRepository
+import com.vullpes.financeapp.domain.usecases.category.ButtonSaveCategoryEnabledUsecase
 import com.vullpes.financeapp.domain.usecases.category.UpdateCategoryUseCase
 import com.vullpes.financeapp.domain.usecases.category.CreateCategoryUseCase
 import com.vullpes.financeapp.domain.usecases.category.DeactivateCategoryUseCase
@@ -54,6 +55,12 @@ object CategoryModule {
     @Singleton
     fun providesListCategoryUsecase(categoryRepository: CategoryRepository): ListCategoryUseCase {
         return ListCategoryUseCase(categoryRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun providesButtonSaveCategoryEnabledUsecase(): ButtonSaveCategoryEnabledUsecase {
+        return ButtonSaveCategoryEnabledUsecase()
     }
 
 }

@@ -36,4 +36,8 @@
     <string name="category_name">Category Name</string>
     <string name="profile">Profile</string>
     <string name="edit_account">Edit Account</string>
+    <string name="transactions">Transactions</string>
+    <string name="there_are_no_records">There are no records</string>
+    <string name="calendar">Calendar</string>
+    <string name="search_transactions">Search Transactions</string>
 </resources>

@@ -32,6 +32,8 @@ import com.vullpes.financeapp.presentation.home.HomeScreen
 import com.vullpes.financeapp.presentation.home.HomeViewModel
 import com.vullpes.financeapp.presentation.profile.ProfileScreen
 import com.vullpes.financeapp.presentation.profile.ProfileViewModel
+import com.vullpes.financeapp.presentation.transactions.TransactionsListScreen
+import com.vullpes.financeapp.presentation.transactions.TransactionsListViewModel
 import kotlinx.coroutines.launch
 
 @Composable
@@ -72,6 +74,9 @@ fun SetupNavGraph(
             },
             onCategory = {
                 navController.navigate(Screen.Category.route)
+            },
+            onTransactions = {
+                navController.navigate(Screen.Transactions.passAccountId(it))
             }
         )
 
@@ -82,6 +87,12 @@ fun SetupNavGraph(
         )
 
         categoryRoute(
+            onBackPressed = {
+                navController.popBackStack()
+            }
+        )
+
+        transactionsRoute(
             onBackPressed = {
                 navController.popBackStack()
             }
@@ -177,6 +188,32 @@ fun NavGraphBuilder.chartRoute(
     }
 }
 
+fun NavGraphBuilder.transactionsRoute(
+    onBackPressed: () -> Unit
+) {
+    composable(
+        route = Screen.Transactions.route,
+        arguments = listOf(navArgument(name = ACCOUNTID) {
+            type = NavType.IntType
+            nullable = false
+            defaultValue = 0
+        }
+        )
+    ) {
+        val viewModel: TransactionsListViewModel = hiltViewModel()
+
+        TransactionsListScreen(
+            uiState = viewModel.uiState,
+            onBackScreen = onBackPressed,
+            onSearchItem = { viewModel.onSearchItem() },
+            onActiveSearchChange = { viewModel.onChangeStatus(it) },
+            onSearchTextChange = { viewModel.itemPesquisa(it)  },
+            onSelectedDate = {viewModel.getSearchByDate(it)}
+        )
+
+    }
+}
+
 @OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.categoryRoute(
     onBackPressed: () -> Unit
@@ -194,7 +231,7 @@ fun NavGraphBuilder.categoryRoute(
 
         if (viewModel.uiState.openModalCategory) {
             ModalBottomSheetCategory(
-                buttonSaveEnabled = viewModel.uiState.loading,
+                buttonSaveEnabled = viewModel.uiState.buttonCategoryEnabled,
                 category = viewModel.uiState.categorySelected!!,
                 onChangeCategoryName = {viewModel.nameCategory(it)},
                 onChangeCategoryStatus = {viewModel.statusCategory(it)},
@@ -212,6 +249,7 @@ fun NavGraphBuilder.homeRoute(
     onExitAppClicked: () -> Unit,
     onChart: (Int) -> Unit,
     onCategory: () -> Unit,
+    onTransactions: (Int) -> Unit,
 ) {
     composable(route = Screen.Login.route) {
         val viewModel: HomeViewModel = hiltViewModel()
@@ -260,7 +298,8 @@ fun NavGraphBuilder.homeRoute(
                     onExitAppClicked()
                 })
             },
-            onChart = onChart
+            onChart = onChart,
+            allTransactions = { accountID -> onTransactions(accountID)}
         )
 
         if (viewModel.uiState.openTransactionModal) {

@@ -15,7 +15,7 @@ data class CategoryDb(
 )
 
 fun Category.toCategoryDb() = CategoryDb(
-    categoryID, nameCategory, active, dataCreation
+    categoryID, nameCategory?:"", active, dataCreation
 )
 
 fun CategoryDb.toCategory() = Category(

@@ -9,7 +9,9 @@ import com.vullpes.financeapp.domain.usecases.transaction.ButtonSaveTransactionE
 import com.vullpes.financeapp.domain.usecases.transaction.CreateTransactionUseCase
 import com.vullpes.financeapp.domain.usecases.transaction.DeleteTransactionUseCase
 import com.vullpes.financeapp.domain.usecases.transaction.GetLastTransactionsByAccountUseCase
-import com.vullpes.financeapp.domain.usecases.transaction.ListTransactionUseCase
+import com.vullpes.financeapp.domain.usecases.transaction.ListAllTransactionsByAccountUsecase
+import com.vullpes.financeapp.domain.usecases.transaction.ListAllTransactionsByNameUsecase
+import com.vullpes.financeapp.domain.usecases.transaction.ListTransactionByAccountDateUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -46,8 +48,8 @@ object TransactionModule {
 
     @Provides
     @Singleton
-    fun providesListTransactionUsecase(transactionRepository: TransactionRepository): ListTransactionUseCase {
-        return ListTransactionUseCase(transactionRepository)
+    fun providesListTransactionUsecase(transactionRepository: TransactionRepository): ListTransactionByAccountDateUseCase {
+        return ListTransactionByAccountDateUseCase(transactionRepository)
     }
 
     @Provides
@@ -60,6 +62,18 @@ object TransactionModule {
     @Singleton
     fun providesGetLastTransactionsByAccountUseCase(transactionRepository: TransactionRepository): GetLastTransactionsByAccountUseCase {
         return GetLastTransactionsByAccountUseCase(transactionRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun providesListAllTransactionsByAccountUsecase(transactionRepository: TransactionRepository): ListAllTransactionsByAccountUsecase {
+        return ListAllTransactionsByAccountUsecase(transactionRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun providesListAllTransactionsByNameUsecase(transactionRepository: TransactionRepository): ListAllTransactionsByNameUsecase {
+        return ListAllTransactionsByNameUsecase(transactionRepository)
     }
 
 }

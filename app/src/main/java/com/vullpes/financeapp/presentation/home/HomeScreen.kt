@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,7 +22,6 @@ import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalDrawerSheet
@@ -40,13 +40,13 @@ import androidx.compose.ui.unit.dp
 import com.vullpes.financeapp.R
 import com.vullpes.financeapp.domain.model.Account
 import com.vullpes.financeapp.domain.model.Transaction
+import com.vullpes.financeapp.presentation.components.TransactionItem
 import com.vullpes.financeapp.presentation.home.components.AccountsComponent
 import com.vullpes.financeapp.presentation.home.components.TopAppBar
-import com.vullpes.financeapp.presentation.components.TransactionItem
 import com.vullpes.financeapp.ui.theme.Purple40
 import java.util.Date
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun HomeScreen(
     uiState: UiStateHome,
@@ -61,7 +61,8 @@ fun HomeScreen(
     onChart: (Int) -> Unit,
     onCategoryClicked: () -> Unit,
     onExitAppClicked: () -> Unit,
-    onEditAccount: (Account) -> Unit
+    onEditAccount: (Account) -> Unit,
+    allTransactions:(Int) -> Unit
 ) {
 
     NavigationDrawer(
@@ -86,6 +87,7 @@ fun HomeScreen(
                     .padding(padingValues)
                     .padding(6.dp)
             ) {
+
                 Text(
                     modifier = Modifier.padding(start = 6.dp),
                     text = "My Accounts",
@@ -97,6 +99,8 @@ fun HomeScreen(
                     onAddAccount = onCreateAccount,
                     onAccountSelected = onAccountSelected
                 )
+
+
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -190,34 +194,46 @@ fun HomeScreen(
                         Text(text = "Chart", style = MaterialTheme.typography.bodyMedium)
                     }
                 }
+                Row(
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .fillMaxWidth(),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = "Last transactions",
+                        style = MaterialTheme.typography.titleMedium
+                    )
+
+                    TextButton(onClick = { uiState.accountSelected?.accountID?.let { allTransactions(it) }  }) {
+                        Text(text = "List All", style = MaterialTheme.typography.titleMedium)
+                    }
+                }
 
                 Column(
                     modifier = Modifier
                         .padding(6.dp)
-                        .fillMaxWidth()
+                        .fillMaxWidth().fillMaxHeight(),
+                    verticalArrangement = Arrangement.Center,
+                    horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-                    Row(
-                        modifier = Modifier
-                            .padding(6.dp)
-                            .fillMaxWidth(),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
+                    if (uiState.transactions.isNotEmpty()) {
+                        LazyColumn(modifier = Modifier.fillMaxSize()) {
+                            items(uiState.transactions) {
+                                TransactionItem(transaction = it)
+                            }
+                        }
+                    } else {
                         Text(
-                            text = "Last transactions",
+                            text = stringResource(R.string.transactions),
                             style = MaterialTheme.typography.titleMedium
                         )
-
-                        TextButton(onClick = { /*TODO*/ }) {
-                            Text(text = "List All", style = MaterialTheme.typography.titleMedium)
-                        }
+                        Text(
+                            text = stringResource(R.string.there_are_no_records),
+                            style = MaterialTheme.typography.titleSmall
+                        )
                     }
-                    LazyColumn() {
-                        items(uiState.transactions) {
-                            TransactionItem(transaction = it)
-                        }
-                    }
-
                 }
             }
 
@@ -298,6 +314,11 @@ fun NavigationDrawer(
 )
 @Composable
 fun prevHomeScreeNight() {
+
+    /**
+
+     */
+
     HomeScreen(
         uiState = UiStateHome(
             accountSelected = Account(
@@ -435,6 +456,7 @@ fun prevHomeScreeNight() {
         onTransference = {},
         onChart = {},
         onExitAppClicked = {},
-        onEditAccount = {}
+        onEditAccount = {},
+        allTransactions = {}
     )
 }

@@ -19,10 +19,6 @@ import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -80,7 +76,7 @@ fun ModalBottomSheetTransactions(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Composable
 fun TransactionScreen(
     buttonSaveEnabled: Boolean,
@@ -95,7 +91,7 @@ fun TransactionScreen(
     onSave: () -> Unit
 ) {
 
-    var selectedOption by remember { mutableStateOf("Option1") }
+
 
     Column(
         modifier = Modifier
@@ -151,7 +147,7 @@ fun TransactionScreen(
         )
 
         DropDownMenu(
-            listItems = listCategory.map { it.nameCategory },
+            listItems = listCategory.map { it.nameCategory?:"" },
             modifier = Modifier.padding(8.dp),
             label = stringResource(R.string.category),
             onItemSelected = onCategorySelected)
@@ -195,10 +191,10 @@ fun TransactionScreen(
 }
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+
 @Preview(showBackground = true)
 @Composable
-fun PreviewBottomSheetDialogImpressoras() {
+fun PreviewBottomSheetDialogTransactions() {
     TransactionScreen(
         transaction = Transaction(
             transactionID = 1,
@@ -224,14 +220,14 @@ fun PreviewBottomSheetDialogImpressoras() {
             ),
             Account(
                 2,
-                "Minha conta pessoal",
+                "Personal account",
                 accountBalance = 1400.00,
                 activeAccount = true,
                 dataCreationAccount = Date()
             ),
             Account(
                 3,
-                "Minha conta pessoal",
+                "Personal account",
                 accountBalance = 1300.00,
                 activeAccount = false,
                 dataCreationAccount = Date()

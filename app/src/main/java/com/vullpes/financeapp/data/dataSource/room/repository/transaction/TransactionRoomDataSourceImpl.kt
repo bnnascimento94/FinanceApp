@@ -1,7 +1,9 @@
 package com.vullpes.financeapp.data.dataSource.room.repository.transaction
 
+import androidx.paging.PagingSource
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.entities.AccountDb
+import com.vullpes.financeapp.data.dataSource.room.entities.AccountTransaction
 import com.vullpes.financeapp.data.dataSource.room.entities.DayBalanceDb
 import com.vullpes.financeapp.data.dataSource.room.entities.toTransaction
 import com.vullpes.financeapp.data.dataSource.room.entities.toTransactionDb
@@ -70,6 +72,29 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
         return try {
             val transactionDao = financeAppDatabase.transactionDao()
             transactionDao.getTransactionByID(accountID = accountID, data = date).map { listAccountTransaction ->
+                listAccountTransaction.map { it.toTransaction() }
+            }
+        }catch (e:Exception){
+            throw e
+        }
+    }
+
+    override fun listAllTransactionsByAccountName(transactionName: String): Flow<List<Transaction>> {
+        return try {
+            val transactionDao = financeAppDatabase.transactionDao()
+
+            transactionDao.getAllTransactionsByName(transactionName).map { listAccountTransaction ->
+                listAccountTransaction.map { it.toTransaction() }
+            }
+        }catch (e:Exception){
+            throw e
+        }
+    }
+
+    override fun listAllTransactionsByAccount(accountID: Int): Flow<List<Transaction>> {
+        return try {
+            val transactionDao = financeAppDatabase.transactionDao()
+            transactionDao.getAllTransactionsByAccount(accountID = accountID).map { listAccountTransaction ->
                 listAccountTransaction.map { it.toTransaction() }
             }
         }catch (e:Exception){
@@ -169,6 +194,8 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
             throw e
         }
     }
+
+
 
 
 }

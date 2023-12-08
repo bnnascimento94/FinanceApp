@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vullpes.financeapp.domain.model.Category
+import com.vullpes.financeapp.domain.usecases.category.ButtonSaveCategoryEnabledUsecase
 import com.vullpes.financeapp.domain.usecases.category.CreateCategoryUseCase
 import com.vullpes.financeapp.domain.usecases.category.ListCategoryUseCase
 import com.vullpes.financeapp.domain.usecases.category.UpdateCategoryUseCase
@@ -19,7 +20,8 @@ import javax.inject.Inject
 class CategoryViewmodel @Inject constructor(
     private val listCategoryUseCase: ListCategoryUseCase,
     private val createCategoryUseCase: CreateCategoryUseCase,
-    private val updateCategoryUseCase: UpdateCategoryUseCase
+    private val updateCategoryUseCase: UpdateCategoryUseCase,
+    private val buttonSaveCategoryEnabledUsecase: ButtonSaveCategoryEnabledUsecase
 ) : ViewModel() {
 
     init {
@@ -47,10 +49,15 @@ class CategoryViewmodel @Inject constructor(
 
     fun nameCategory(nameCategory: String) {
         uiState = uiState.copy(categorySelected = uiState.categorySelected?.copy(nameCategory = nameCategory))
+        checkCategorySaveButtonEnabled()
     }
 
     fun statusCategory(statusCategory: Boolean) {
         uiState = uiState.copy(categorySelected = uiState.categorySelected?.copy(active = statusCategory))
+    }
+
+    private fun checkCategorySaveButtonEnabled(){
+        uiState = uiState.copy(buttonCategoryEnabled = buttonSaveCategoryEnabledUsecase.execute(uiState.categorySelected!!))
     }
 
     fun onSaveCategory() = viewModelScope.launch(Dispatchers.IO){

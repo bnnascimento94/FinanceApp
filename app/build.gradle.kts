@@ -92,9 +92,17 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.5.0")
 
     //Room persistence
-    implementation ("androidx.room:room-runtime:2.6.0")
-    kapt ("androidx.room:room-compiler:2.6.0")
+    implementation ("androidx.room:room-runtime:2.6.1")
+    kapt ("androidx.room:room-compiler:2.6.1")
     // Kotlin Extensions and Coroutines support for Room
-    implementation ("androidx.room:room-ktx:2.6.0")
+    implementation ("androidx.room:room-ktx:2.6.1")
+    implementation ("androidx.room:room-paging:2.6.1")
+
+    // Paging 3.0
+    implementation ("androidx.paging:paging-compose:3.3.0-alpha02")
+
+    // CALENDAR
+    implementation ("com.maxkeppeler.sheets-compose-dialogs:calendar:1.0.2")
+
 
 }

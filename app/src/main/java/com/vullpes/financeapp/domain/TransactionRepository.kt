@@ -11,4 +11,8 @@ interface TransactionRepository {
     suspend fun deleteTransaction(transactionID: Int)
     suspend fun updateTransaction(transaction: Transaction)
     fun getLastTransactionsByAccount(accountID: Int): Flow<List<Transaction>>
+    fun getAllTransactionsByAccount(accountID: Int): Flow<List<Transaction>>
+    fun listAllTransactionsByAccountName(transactionName:String): Flow<List<Transaction>>
+
+
 }

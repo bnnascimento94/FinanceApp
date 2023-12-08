@@ -1,5 +1,6 @@
 package com.vullpes.financeapp.data.dataSource.room.entities
 
+import androidx.paging.PagingSource
 import androidx.room.Dao
 import androidx.room.Delete
 import androidx.room.Insert
@@ -35,12 +36,24 @@ interface TransactionDao {
     fun getLastTransactionsByAccount(accountID: Int): Flow<List<AccountTransaction>>
 
     @Transaction
+    @Query("select * from transactiondb where accountFromID = :accountID ")
+    fun getAllTransactionsByAccount(accountID: Int): Flow<List<AccountTransaction>>
+
+    @Transaction
+    @Query("select * from transactiondb where name = :nameAccount ")
+    fun getAllTransactionsByName(nameAccount: String): Flow<List<AccountTransaction>>
+
+    @Transaction
     @Query("select * from transactiondb where transactionID = :transactionID ")
     fun getTransactionByID(transactionID:Int): AccountTransaction?
 
     @Transaction
     @Query("select * from transactiondb where categoryID = :categoryID and dateTransaction between :date1 and :date2")
     fun getTransactionsByCategoryAndDate(categoryID:Int,date1:Date, date2: Date): Flow<List<AccountTransaction>>
+
+    @Transaction
+    @Query("select * from transactiondb where accountFromID = :accountID")
+    fun getListTransactionsByAccount(accountID: Int): PagingSource<Int, AccountTransaction>
 
 
 
