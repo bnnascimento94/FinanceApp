@@ -49,7 +49,9 @@ fun LoginScreen(
     onUsernameChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
     onSignInClicked: () -> Unit,
-    onForgotPassword:() -> Unit
+    onForgotPassword:() -> Unit,
+    onRegisterUser:() -> Unit,
+
 ) {
     Box(modifier = Modifier
         .background(color = Color.Blue.copy(alpha = 0.5f))
@@ -145,9 +147,13 @@ fun LoginScreen(
                 }
             }
 
+
+
             ClickableText(
                 text = AnnotatedString(stringResource(R.string.forgot_password)),
-                onClick = {onForgotPassword()},
+                onClick = {
+                    onForgotPassword()
+                          },
                 style = TextStyle(
                     fontSize = 14.sp,
                     fontFamily = FontFamily.Default,
@@ -161,7 +167,9 @@ fun LoginScreen(
 
         ClickableText(
             text = AnnotatedString(stringResource(R.string.register_button)),
-            onClick = {onForgotPassword()},
+            onClick = {
+                onRegisterUser()
+                },
             style = TextStyle(
                 fontSize = 14.sp,
                 fontFamily = FontFamily.Default,
@@ -181,8 +189,9 @@ fun PrevLogin() {
         uiStateLogin = UiStateLogin(),
         onUsernameChanged = {},
         onPasswordChanged = {},
-        onSignInClicked = { /*TODO*/ }) {
-
-    }
+        onSignInClicked = { /*TODO*/ },
+        onRegisterUser = {},
+        onForgotPassword = {}
+        )
 }
 

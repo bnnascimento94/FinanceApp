@@ -3,6 +3,9 @@ package com.vullpes.financeapp.presentation.profile
 import android.content.Context
 import android.graphics.ImageDecoder
 import android.net.Uri
+import android.os.Build
+import android.util.Log
+import androidx.annotation.RequiresApi
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -68,6 +71,7 @@ class ProfileViewModel @Inject constructor(
         uiState = uiState.copy(profile = uiState.profile?.copy(password = password))
     }
 
+    @RequiresApi(Build.VERSION_CODES.P)
     fun setImageBitmap(uriImage: Uri? = null) = viewModelScope.launch(Dispatchers.IO) {
         withContext(Dispatchers.Main){
             uiState = uiState.copy(loading = true)
@@ -83,10 +87,11 @@ class ProfileViewModel @Inject constructor(
         }
 
         if (bitmap != null) {
-            updatePhotoImageUsecase.execute(photo = bitmap)
+            updatePhotoImageUsecase.execute(photo = bitmap, oldImage = uiState.profile?.imgSrc)
+            loadLoggedUser()
         }
         withContext(Dispatchers.Main){
-            uiState = uiState.copy(loading = false)
+            uiState = uiState.copy(loading = false, openImageDialog = false)
         }
     }
 
@@ -106,7 +111,9 @@ class ProfileViewModel @Inject constructor(
             uiState = uiState.copy(loading = true)
         }
         uiState.profile?.let {
+
             updateUserUsecase.execute(
+                userID = it.id,
                 username = it.name,
                 email = it.email,
                 password = it.password

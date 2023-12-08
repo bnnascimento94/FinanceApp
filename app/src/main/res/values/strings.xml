@@ -40,4 +40,5 @@
     <string name="there_are_no_records">There are no records</string>
     <string name="calendar">Calendar</string>
     <string name="search_transactions">Search Transactions</string>
+    <string name="passwords_doesn_t_match">Passwords doesn\'t match</string>
 </resources>

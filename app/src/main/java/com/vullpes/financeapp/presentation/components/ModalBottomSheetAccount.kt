@@ -37,7 +37,7 @@ import java.util.Date
 @Composable
 fun ModalBottomSheetAccount(
     activateSaveAccount: Boolean,
-    account: Account,
+    account: Account?,
     onChangeAccountStatus: (Boolean) -> Unit,
     onChangeAccountName: (String) -> Unit,
     onChangeAccountValue: (String) -> Unit,
@@ -70,7 +70,7 @@ fun ModalBottomSheetAccount(
 @Composable
 fun CreateAccount(
     activateSaveAccount: Boolean,
-    account: Account,
+    account: Account?,
     onChangeAccountStatus: (Boolean) -> Unit,
     onChangeAccountName: (String) -> Unit,
     onChangeAccountValue: (String) -> Unit,
@@ -97,7 +97,7 @@ fun CreateAccount(
 
             Text(text = stringResource(R.string.account_active))
             Switch(
-                checked = account.activeAccount,
+                checked = account?.activeAccount?:true,
                 onCheckedChange = onChangeAccountStatus
             )
         }
@@ -108,7 +108,7 @@ fun CreateAccount(
                 .padding(8.dp)
                 .fillMaxWidth(),
             label = { Text(stringResource(R.string.account_name)) },
-            value = account.accountName?:"",
+            value = account?.accountName?:"",
             onValueChange = onChangeAccountName,
         )
 
@@ -119,7 +119,7 @@ fun CreateAccount(
                 .padding(8.dp)
                 .fillMaxWidth(),
             label = { Text(text = stringResource(R.string.total_balance)) },
-            value = account.accountBalance.toString(),
+            value = account?.accountBalance?.toString()?:"00",
             onValueChange = onChangeAccountValue,
             prefix = { Text(text = "$") },
             visualTransformation = CurrencyAmountInputVisualTransformation(),

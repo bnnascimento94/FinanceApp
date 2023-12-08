@@ -9,6 +9,7 @@ import com.vullpes.financeapp.data.sharedPreferences.PreferenciasRepository
 import com.vullpes.financeapp.domain.UserRepository
 import com.vullpes.financeapp.domain.usecases.authentication.CreateUserUseCase
 import com.vullpes.financeapp.domain.usecases.authentication.GetCurrentUserUsecase
+import com.vullpes.financeapp.domain.usecases.authentication.GetFlowUserUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.LoginUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.LogoutUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.UpdatePhotoImageUsecase
@@ -71,4 +72,10 @@ object UserModule {
         return LogoutUsecase(userRepository)
     }
 
+
+    @Provides
+    @Singleton
+    fun providesGetFlowUserUseCase(userRepository: UserRepository): GetFlowUserUsecase {
+        return GetFlowUserUsecase(userRepository)
+    }
 }

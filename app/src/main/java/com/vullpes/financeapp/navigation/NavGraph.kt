@@ -1,6 +1,9 @@
 package com.vullpes.financeapp.navigation
 
+import android.os.Build
+import android.util.Log
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.rememberDrawerState
@@ -24,6 +27,7 @@ import com.vullpes.financeapp.presentation.category.CategoryScreen
 import com.vullpes.financeapp.presentation.category.CategoryViewmodel
 import com.vullpes.financeapp.presentation.charts.ChartViewModel
 import com.vullpes.financeapp.presentation.charts.ChartsScreen
+import com.vullpes.financeapp.presentation.components.LoadingDialog
 import com.vullpes.financeapp.presentation.components.ModalBottomSheetAccount
 import com.vullpes.financeapp.presentation.components.ModalBottomSheetCategory
 import com.vullpes.financeapp.presentation.components.ModalBottomSheetChangePicture
@@ -36,6 +40,7 @@ import com.vullpes.financeapp.presentation.transactions.TransactionsListScreen
 import com.vullpes.financeapp.presentation.transactions.TransactionsListViewModel
 import kotlinx.coroutines.launch
 
+@RequiresApi(Build.VERSION_CODES.P)
 @Composable
 fun SetupNavGraph(
     firstDestination: String,
@@ -47,10 +52,16 @@ fun SetupNavGraph(
         navController = navController
     ) {
 
-        loginRoute(onSignIn = {
-            navController.popBackStack()
-            navController.navigate(Screen.Home.route)
-        })
+        loginRoute(
+            onSignIn = {
+                navController.popBackStack()
+                navController.navigate(Screen.Home.route)
+            },
+            onRegisterUser = {
+                navController.navigate(Screen.Register.route)
+            }
+
+        )
         registerRoute(onBackPressed = {
             navController.popBackStack()
         },
@@ -103,7 +114,8 @@ fun SetupNavGraph(
 
 
 fun NavGraphBuilder.loginRoute(
-    onSignIn: () -> Unit
+    onSignIn: () -> Unit,
+    onRegisterUser:() -> Unit
 ) {
     composable(route = Screen.Login.route) {
         val viewModel: LoginViewModel = hiltViewModel()
@@ -129,7 +141,8 @@ fun NavGraphBuilder.loginRoute(
             },
             onForgotPassword = {
 
-            }
+            },
+            onRegisterUser = onRegisterUser
         )
     }
 }
@@ -148,8 +161,11 @@ fun NavGraphBuilder.registerRoute(
             onUsernameChanged = {
                 viewModel.setUsername(it)
             },
+            onEmailChanged = {
+                viewModel.email(it)
+            },
             onPasswordChanged = {
-                viewModel.confirmPassword(it)
+                viewModel.setPassword(it)
             },
             onConfirmPassword = {
                 viewModel.confirmPassword(it)
@@ -251,7 +267,7 @@ fun NavGraphBuilder.homeRoute(
     onCategory: () -> Unit,
     onTransactions: (Int) -> Unit,
 ) {
-    composable(route = Screen.Login.route) {
+    composable(route = Screen.Home.route) {
         val viewModel: HomeViewModel = hiltViewModel()
         val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
         val scope = rememberCoroutineScope()
@@ -323,7 +339,7 @@ fun NavGraphBuilder.homeRoute(
         if (viewModel.uiState.openAccountModal) {
             ModalBottomSheetAccount(
                 activateSaveAccount = viewModel.uiState.buttonSaveAccountEnabled,
-                account = viewModel.uiState.accountSelected!!,
+                account = viewModel.uiState.accountCreateUpdate,
                 onChangeAccountStatus = { status -> viewModel.statusAccountChanged(status) },
                 onChangeAccountName = { accountName ->
                     viewModel.statusAccountNameChanged(
@@ -336,12 +352,13 @@ fun NavGraphBuilder.homeRoute(
                     )
                 },
                 onSave = { viewModel.onSaveAccount() },
-                onDismiss = { viewModel.onCloseAccountModal() }
+                onDismiss = { }
             )
         }
     }
 }
 
+@RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.profileRoute(
     onBackPressed: () -> Unit
@@ -364,18 +381,26 @@ fun NavGraphBuilder.profileRoute(
         if (viewModel.uiState.openImageDialog) {
             ModalBottomSheetChangePicture(
                 onDismiss = {
+                    viewModel.dialogImageOpen()
+                },
+                onAddImageFromGallery = { sheetStatus,uri ->
+                    scope.launch {
+                        sheetStatus.hide()
+                    }
+                    viewModel.setImageBitmap(uri)
+                },
+                onAddImage = {
                     scope.launch {
                         it.hide()
                     }
-                },
-                onAddImageFromGallery = {
-                    viewModel.setImageBitmap(it)
-                },
-                onAddImage = {
                     viewModel.setImageBitmap()
                 },
                 createUri = { viewModel.createImageUri() }
             )
+        }
+
+        if(viewModel.uiState.loading){
+            LoadingDialog {}
         }
 
     }

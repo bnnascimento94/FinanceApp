@@ -1,5 +1,6 @@
 package com.vullpes.financeapp.presentation.home.components
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -59,17 +60,31 @@ fun TopAppBar(
                     Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.edit_account))
                 }
             }
-            AsyncImage(
-                model = user?.imgSrc?: "",
-                placeholder = painterResource(R.drawable.no_user),
-                modifier = Modifier
-                    .padding(6.dp)
-                    .clip(CircleShape)
-                    .size(30.dp)
-                    .clickable { onProfileClick() },
-                contentScale = ContentScale.Crop,
-                contentDescription = stringResource(R.string.profile_image)
-            )
+            user?.imgSrc?.let {
+                AsyncImage(
+                    model = it,
+                    placeholder = painterResource(R.drawable.no_user),
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .clip(CircleShape)
+                        .size(30.dp)
+                        .clickable { onProfileClick() },
+                    contentScale = ContentScale.Crop,
+                    contentDescription = stringResource(R.string.profile_image)
+                )
+            }?: kotlin.run {
+                Image(
+                    painterResource(id = R.drawable.no_user),
+                    modifier = Modifier
+                        .padding(6.dp)
+                        .clip(CircleShape)
+                        .size(30.dp)
+                        .clickable { onProfileClick() },
+                    contentScale = ContentScale.Crop,
+                    contentDescription = stringResource(R.string.profile_image)
+                )
+            }
+
 
         }
 

@@ -1,5 +1,6 @@
 package com.vullpes.financeapp.presentation.home
 
+import android.util.Log
 import androidx.compose.animation.core.updateTransition
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -12,6 +13,7 @@ import com.vullpes.financeapp.domain.usecases.account.CheckIfAccountNameIsDiffer
 import com.vullpes.financeapp.domain.usecases.account.CreateAccountUseCase
 import com.vullpes.financeapp.domain.usecases.account.ListAccountUseCase
 import com.vullpes.financeapp.domain.usecases.account.UpdateAccountUseCase
+import com.vullpes.financeapp.domain.usecases.authentication.GetFlowUserUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.LogoutUsecase
 import com.vullpes.financeapp.domain.usecases.category.ListCategoryUseCase
 import com.vullpes.financeapp.domain.usecases.transaction.ButtonSaveTransactionEnabledUseCase
@@ -26,6 +28,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class HomeViewModel @Inject constructor(
+    private val getFlowUserUsecase: GetFlowUserUsecase,
     private val logoutUsecase: LogoutUsecase,
     private val createTransactionUseCase: CreateTransactionUseCase,
     private val buttonSaveTransactionEnabledUseCase: ButtonSaveTransactionEnabledUseCase,
@@ -42,9 +45,18 @@ class HomeViewModel @Inject constructor(
     init {
         listAccount()
         listCategories()
+        getCurrentUser()
     }
 
 
+    private fun getCurrentUser() = viewModelScope.launch{
+        getFlowUserUsecase.execute().collect{
+            Log.e("user_e", it.toString())
+            uiState = uiState.copy(
+                user = it
+            )
+        }
+    }
     fun onSaveAccount() = viewModelScope.launch(Dispatchers.IO){
         withContext(Dispatchers.Main){
             uiState = uiState.copy(

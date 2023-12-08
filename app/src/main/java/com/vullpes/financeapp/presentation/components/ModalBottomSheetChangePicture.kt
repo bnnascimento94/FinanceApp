@@ -42,8 +42,8 @@ import com.vullpes.financeapp.R
 @Composable
 fun ModalBottomSheetChangePicture(
     onDismiss: (SheetState) -> Unit,
-    onAddImageFromGallery:(Uri) -> Unit,
-    onAddImage: () -> Unit,
+    onAddImageFromGallery:(SheetState,Uri) -> Unit,
+    onAddImage: (SheetState) -> Unit,
     createUri:() -> Uri
 ) {
 
@@ -54,7 +54,7 @@ fun ModalBottomSheetChangePicture(
         sheetState = modalBottomSheetState,
         dragHandle = { BottomSheetDefaults.DragHandle() },
     ) {
-        SelectPicture(onAddImage = onAddImage, createUri = createUri, onAddImageFromGallery = onAddImageFromGallery)
+        SelectPicture(onAddImage = {onAddImage(modalBottomSheetState)}, createUri = createUri, onAddImageFromGallery = {onAddImageFromGallery(modalBottomSheetState, it)})
     }
 
 }

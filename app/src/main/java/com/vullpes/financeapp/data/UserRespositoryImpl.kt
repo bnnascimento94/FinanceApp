@@ -1,5 +1,6 @@
 package com.vullpes.financeapp.data
 
+import android.util.Log
 import com.vullpes.financeapp.data.dataSource.room.repository.user.UserRoomDataSource
 import com.vullpes.financeapp.data.sharedPreferences.PreferenciasRepository
 import com.vullpes.financeapp.domain.UserRepository
@@ -17,6 +18,7 @@ class UserRespositoryImpl @Inject constructor(
 
     override suspend fun updateUser(user: User) {
         var userSaved = userRoomDataSource.getUserById(user.id)
+        Log.e("user","got here ${userSaved?.name}")
 
         userSaved = userSaved?.copy(
             name= user.name,
@@ -24,7 +26,9 @@ class UserRespositoryImpl @Inject constructor(
             password = user.password,
             active = user.active
         )
-        userSaved?.let { userRoomDataSource.updateUser(it) }
+        userSaved?.let {
+            userRoomDataSource.updateUser(it)
+        }
     }
 
     override suspend fun updatePhoto(imageSrc: String) {

@@ -38,6 +38,7 @@ fun RegisterScreen(
     uiState: UiStateRegister,
     onBackPressed: () -> Unit,
     onUsernameChanged: (String) -> Unit,
+    onEmailChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
     onConfirmPassword:(String) -> Unit,
     onRegisterClicked: () -> Unit,
@@ -56,13 +57,14 @@ fun RegisterScreen(
         ) {
 
             var passwordVisibility = remember{ mutableStateOf(false) }
+            var confirmPasswordVisibility = remember{ mutableStateOf(false) }
             OutlinedTextField(
                 value = uiState.user,
                 label = { Text(text = stringResource(R.string.user), color = Color.White) },
                 onValueChange = onUsernameChanged,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 8.dp, end = 8.dp, top = 30.dp, bottom = 8.dp),
+                    .padding(all = 8.dp),
                 leadingIcon = {
                     Icon(Icons.Filled.Person, contentDescription = stringResource(R.string.password_icon), tint = Color.White )
                 },
@@ -76,12 +78,12 @@ fun RegisterScreen(
             )
 
             OutlinedTextField(
-                value = uiState.user,
+                value = uiState.email,
                 label = { Text(text = "E-mail", color = Color.White) },
-                onValueChange = onUsernameChanged,
+                onValueChange = onEmailChanged,
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(start = 8.dp, end = 8.dp, top = 30.dp, bottom = 8.dp),
+                    .padding(all = 8.dp),
                 leadingIcon = {
                     Icon(Icons.Filled.Person, contentDescription = stringResource(R.string.password_icon), tint = Color.White )
                 },
@@ -131,14 +133,19 @@ fun RegisterScreen(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(8.dp),
-                visualTransformation = if(passwordVisibility.value) VisualTransformation.None else PasswordVisualTransformation(),
+                visualTransformation = if(confirmPasswordVisibility.value) VisualTransformation.None else PasswordVisualTransformation(),
                 leadingIcon = {
                     Icon(Icons.Filled.Key, contentDescription = stringResource(R.string.password_icon), tint = Color.White )
                 },
+                supportingText = {
+                    if(uiState.passwordsDoesntMatch){
+                        Text(text = stringResource(R.string.passwords_doesn_t_match), color = Color.White)
+                    }
+                },
                 trailingIcon = {
-                    IconButton(onClick = {passwordVisibility.value = !passwordVisibility.value}){
+                    IconButton(onClick = {confirmPasswordVisibility.value = !confirmPasswordVisibility.value}){
                         Icon(
-                            imageVector = if(passwordVisibility.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                            imageVector = if(confirmPasswordVisibility.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
                             contentDescription = stringResource(R.string.show_password),
                             tint = Color.White
                         )
@@ -153,10 +160,6 @@ fun RegisterScreen(
                     unfocusedBorderColor = Color.White
                 )
             )
-
-
-
-
 
             Spacer(modifier = Modifier.height(10.dp))
 
@@ -176,6 +179,7 @@ fun RegisterScreen(
 @Preview(showBackground = true)
 @Composable
 fun PrevRegister() {
-    RegisterScreen( uiState = UiStateRegister(),
-        {},{},{},{},{})
+    RegisterScreen(uiState = UiStateRegister(),
+        {},{},{},{},{},{}
+    )
 }

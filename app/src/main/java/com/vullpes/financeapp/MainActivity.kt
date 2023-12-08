@@ -7,7 +7,9 @@ import androidx.navigation.compose.rememberNavController
 import com.vullpes.financeapp.navigation.Screen
 import com.vullpes.financeapp.navigation.SetupNavGraph
 import com.vullpes.financeapp.ui.theme.FinanceAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

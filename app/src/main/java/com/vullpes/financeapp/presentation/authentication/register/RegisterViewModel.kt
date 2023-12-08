@@ -27,8 +27,10 @@ class RegisterViewModel @Inject constructor(
 
     fun setUsername(username: String) {
         uiState = uiState.copy(user = username)
-        //checkEnableLoginButton()
+        checkEnableRegisterButton()
     }
+
+
 
     fun email(email: String) {
         uiState = uiState.copy(email = email)

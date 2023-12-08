@@ -11,7 +11,10 @@ class UpdatePhotoImageUsecase @Inject constructor(
     private val imageSaver: ImageSaver
 ) {
 
-    suspend fun execute(photo: Bitmap){
+    suspend fun execute(photo: Bitmap, oldImage:String?){
+        oldImage?.let {
+            deletePicture(it)
+        }
         val imageSrc = savePicture(photo,"profile_img")
         if (imageSrc != null) {
             userRepository.updatePhoto(imageSrc)
@@ -27,6 +30,10 @@ class UpdatePhotoImageUsecase @Inject constructor(
         }catch (e:Exception){
             throw e
         }
+    }
+
+    private fun deletePicture(imagePath:String){
+        imageSaver.deleteFileByPath(imagePath)
     }
 
 }
