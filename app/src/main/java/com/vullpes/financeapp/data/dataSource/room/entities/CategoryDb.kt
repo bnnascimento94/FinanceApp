@@ -7,7 +7,7 @@ import java.util.Date
 
 @Entity
 data class CategoryDb(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val categoryID: Int,
     val nameCategory:String,
     val active:Boolean,

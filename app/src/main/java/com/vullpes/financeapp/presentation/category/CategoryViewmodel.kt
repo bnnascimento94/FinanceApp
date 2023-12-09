@@ -36,10 +36,10 @@ class CategoryViewmodel @Inject constructor(
         private set
 
     fun openModalCategory(category: Category? = null) {
-        uiState = if (category != null) {
+        uiState = if(category != null){
             uiState.copy(categorySelected = category, openModalCategory = true)
-        } else {
-            uiState.copy(categorySelected = Category(), openModalCategory = false)
+        }else{
+            uiState.copy(categorySelected = Category(), openModalCategory = true)
         }
     }
 
@@ -54,6 +54,7 @@ class CategoryViewmodel @Inject constructor(
 
     fun statusCategory(statusCategory: Boolean) {
         uiState = uiState.copy(categorySelected = uiState.categorySelected?.copy(active = statusCategory))
+        checkCategorySaveButtonEnabled()
     }
 
     private fun checkCategorySaveButtonEnabled(){

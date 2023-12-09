@@ -6,7 +6,7 @@ import java.util.Date
 
 @Entity
 data class DayBalanceDb (
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val dayBalanceId:Int,
     val accountID: Int,
     val date: Date,

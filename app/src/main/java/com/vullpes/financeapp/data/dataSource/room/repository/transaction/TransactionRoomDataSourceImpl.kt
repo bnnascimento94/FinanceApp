@@ -1,9 +1,8 @@
 package com.vullpes.financeapp.data.dataSource.room.repository.transaction
 
-import androidx.paging.PagingSource
+import android.util.Log
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.entities.AccountDb
-import com.vullpes.financeapp.data.dataSource.room.entities.AccountTransaction
 import com.vullpes.financeapp.data.dataSource.room.entities.DayBalanceDb
 import com.vullpes.financeapp.data.dataSource.room.entities.toTransaction
 import com.vullpes.financeapp.data.dataSource.room.entities.toTransactionDb
@@ -11,8 +10,13 @@ import com.vullpes.financeapp.domain.model.Transaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.time.format.DateTimeFormatter
 import java.util.Date
 import javax.inject.Inject
+
 
 class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDatabase: FinanceAppDatabase): TransactionRoomDataSource {
     override suspend fun createTransaction(transaction: Transaction) {
@@ -41,8 +45,18 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
                 accountDao.update(account)
                 updateDayBalance(account)
                 if(transaction.transference){
-                    accountDao.update(accountTo!!)
-                    updateDayBalance(accountTo)
+                    accountTo?.let {
+                        val transactionDeposit = Transaction(
+                            name= "Transference From: ${account.accountName}",
+                            accountFromID = accountTo.accountID,
+                            accountFromName = accountTo.accountName,
+                            value = transaction.value
+                        )
+                        transactionDao.insert(transactionDeposit.toTransactionDb())
+                        accountDao.update(accountTo!!)
+                        updateDayBalance(accountTo)
+                    }
+
                 }
             }
         }catch (e:Exception){
@@ -71,7 +85,12 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
     override fun listTransactions(accountID: Int, date: Date): Flow<List<Transaction>> {
         return try {
             val transactionDao = financeAppDatabase.transactionDao()
-            transactionDao.getTransactionByID(accountID = accountID, data = date).map { listAccountTransaction ->
+            val localDate = Instant.ofEpochMilli(date.time)
+                .atZone(ZoneId.systemDefault())
+                .toLocalDate()
+            val date1 = Date.from(localDate.minusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant())
+            val date2 = Date.from(localDate.plusDays(1).atStartOfDay(ZoneId.systemDefault()).toInstant())
+            transactionDao.getTransactionByID(accountID = accountID, data1 = date1 , data2 = date2 ).map { listAccountTransaction ->
                 listAccountTransaction.map { it.toTransaction() }
             }
         }catch (e:Exception){
@@ -82,7 +101,6 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
     override fun listAllTransactionsByAccountName(transactionName: String): Flow<List<Transaction>> {
         return try {
             val transactionDao = financeAppDatabase.transactionDao()
-
             transactionDao.getAllTransactionsByName(transactionName).map { listAccountTransaction ->
                 listAccountTransaction.map { it.toTransaction() }
             }

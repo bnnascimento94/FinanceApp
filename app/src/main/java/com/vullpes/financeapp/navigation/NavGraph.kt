@@ -81,7 +81,7 @@ fun SetupNavGraph(
                 navController.navigate(Screen.Profile.route)
             },
             onChart = {
-                navController.navigate(Screen.Chart.route)
+                navController.navigate(Screen.Chart.passAccountId(it))
             },
             onCategory = {
                 navController.navigate(Screen.Category.route)
@@ -329,10 +329,11 @@ fun NavGraphBuilder.homeRoute(
                 onCategorySelected = { viewModel.onTransactionCategory(it) },
                 onAccountSelected = { viewModel.onTransactionAccountTo(it) },
                 onValueTransaction = { viewModel.onValueSelected(it) },
-                onDismiss = {},
+                onDismiss = {viewModel.onCloseModalTransaction()},
                 onSave = {
                     viewModel.onSave()
-                }
+                },
+                accountSelected = viewModel.uiState.accountSelected!!
             )
         }
 

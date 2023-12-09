@@ -115,15 +115,18 @@ fun TransactionsListScreen(
                 }
             ) {}
 
-            IconButton(
-                onClick = { dateDialog.show() }, modifier = Modifier
-                    .align(alignment = Alignment.CenterVertically)
-            ) {
-                Icon(
-                    Icons.Default.CalendarMonth,
-                    contentDescription = stringResource(R.string.calendar)
-                )
+            if(!uiState.searchBarActive){
+                IconButton(
+                    onClick = { dateDialog.show() }, modifier = Modifier
+                        .align(alignment = Alignment.CenterVertically)
+                ) {
+                    Icon(
+                        Icons.Default.CalendarMonth,
+                        contentDescription = stringResource(R.string.calendar)
+                    )
+                }
             }
+
         }
 
         if (uiState.transactions.isNotEmpty()) {

@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Icon
@@ -34,7 +35,7 @@ fun CategoryTopBar(
         }
         Text(text = "Categories", style = MaterialTheme.typography.titleLarge, maxLines = 1, overflow = TextOverflow.Ellipsis)
         IconButton(onClick = { openCategoryModal() }, modifier = Modifier.padding(6.dp)) {
-            Icon(Icons.Default.Edit, contentDescription = stringResource(R.string.back_screen))
+            Icon(Icons.Default.Add, contentDescription = stringResource(R.string.back_screen))
         }
     }
 }

@@ -7,7 +7,7 @@ import java.util.Date
 
 @Entity
 data class TransactionDb(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val transactionID: Int,
     val name:String,
     val categoryID:Int,

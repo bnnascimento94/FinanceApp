@@ -73,9 +73,12 @@ class HomeViewModel @Inject constructor(
             }
         }
         withContext(Dispatchers.Main){
-           // val accountCreateUpDate = uiState.accountCreateUpdate
+            val accountCreateUpDate = uiState.accountCreateUpdate
             uiState = uiState.copy(
-                loading = false, openAccountModal = false, accountCreateUpdate = null
+                loading = false,
+                openAccountModal = false,
+                accountCreateUpdate = null,
+                accountSelected = uiState.accounts.find { it.accountName == accountCreateUpDate?.accountName }
             )
         }
     }
@@ -106,17 +109,18 @@ class HomeViewModel @Inject constructor(
 
     }
     fun closeAccountModal(){
-        uiState.copy(openAccountModal = false)
+        uiState= uiState.copy(openAccountModal = false)
     }
 
 
-    fun onCloseAccountModal(){
-       uiState= uiState.copy(openAccountModal = false)
-    }
     private fun enableSaveAccountButton(){
         uiState.accountCreateUpdate?.let {
             uiState = uiState.copy(buttonSaveAccountEnabled = buttonSaveAccountEnabledUsecase.execute(account = it))
         }
+    }
+
+    fun onCloseModalTransaction(){
+        uiState = uiState.copy(openTransactionModal = false)
     }
     fun onOpenModalTransacton(accountID:Int,kindOfTransaction: KindOfTransaction ) {
         uiState = uiState.copy(
@@ -242,6 +246,12 @@ class HomeViewModel @Inject constructor(
     private fun listAccount() = viewModelScope.launch {
         listAccountUseCase.operator().collect{
             uiState = uiState.copy(accounts = it)
+            if(uiState.accountSelected == null && it.isNotEmpty()){
+                uiState = uiState.copy(accountSelected = it.first())
+                getLastTransactionsByAccountUseCase.execute(it.first().accountID).collect{ transactions ->
+                    uiState = uiState.copy(transactions = transactions)
+                }
+            }
         }
     }
     private fun listCategories() = viewModelScope.launch{

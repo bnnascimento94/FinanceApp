@@ -1,5 +1,6 @@
 package com.vullpes.financeapp.presentation.profile
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -67,16 +68,30 @@ fun ProfileScreen(
             Column(
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                AsyncImage(
-                    model = uiStateProfile.profile?.imgSrc,
-                    placeholder = painterResource(R.drawable.no_user),
-                    modifier = Modifier
-                        .padding(6.dp)
-                        .clip(CircleShape)
-                        .size(100.dp),
-                    contentScale = ContentScale.Crop,
-                    contentDescription = stringResource(R.string.profile_image)
-                )
+
+                uiStateProfile.profile?.imgSrc?.let {
+                    AsyncImage(
+                        model = uiStateProfile.profile?.imgSrc,
+                        placeholder = painterResource(R.drawable.no_user),
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .clip(CircleShape)
+                            .size(100.dp),
+                        contentScale = ContentScale.Crop,
+                        contentDescription = stringResource(R.string.profile_image)
+                    )
+                }?: kotlin.run {
+                    Image(
+                        painterResource(R.drawable.no_user),
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .clip(CircleShape)
+                            .size(100.dp),
+                        contentScale = ContentScale.Crop,
+                        contentDescription = stringResource(R.string.profile_image)
+                    )
+                }
+
 
                 OutlinedButton(onClick = onEditImage) {
                     Text(text = "Edit Image")

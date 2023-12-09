@@ -39,6 +39,7 @@ import java.util.Date
 fun ModalBottomSheetTransactions(
     buttonSaveEnabled: Boolean,
     transaction: Transaction,
+    accountSelected: Account,
     listCategory: List<Category>,
     listAccounts: List<Account>,
     onKindOfTransactionSelected: (KindOfTransaction) -> Unit,
@@ -67,7 +68,8 @@ fun ModalBottomSheetTransactions(
             onAccountSelected = onAccountSelected,
             onValueTransaction = onValueTransaction,
             onSave = onSave,
-            buttonSaveEnabled = buttonSaveEnabled
+            buttonSaveEnabled = buttonSaveEnabled,
+            accountSelected = accountSelected
 
         )
     }
@@ -81,6 +83,7 @@ fun ModalBottomSheetTransactions(
 fun TransactionScreen(
     buttonSaveEnabled: Boolean,
     transaction: Transaction,
+    accountSelected: Account,
     listCategory: List<Category>,
     listAccounts: List<Account>,
     onKindOfTransactionSelected: (KindOfTransaction) -> Unit,
@@ -154,7 +157,7 @@ fun TransactionScreen(
 
         if (transaction.transference) {
             DropDownMenu(
-                listItems = listAccounts.map { it.accountName?:"" },
+                listItems = listAccounts.map { it.accountName?:"" }.filter { it != accountSelected.accountName },
                 modifier = Modifier.padding(8.dp),
                 label = stringResource(R.string.account),
                 onItemSelected = { accountSelected ->
@@ -168,7 +171,7 @@ fun TransactionScreen(
                 .padding(8.dp)
                 .fillMaxWidth(),
             label = { Text(text = stringResource(R.string.value)) },
-            value = transaction.value.toString(),
+            value = transaction.value.toString().replace(".","").replace(",",""),
             onValueChange = onValueTransaction,
             prefix = { Text(text = "$") },
             visualTransformation = CurrencyAmountInputVisualTransformation(),
@@ -239,7 +242,8 @@ fun PreviewBottomSheetDialogTransactions() {
         onAccountSelected = {},
         onValueTransaction = {},
         onSave = {},
-        buttonSaveEnabled = true
+        buttonSaveEnabled = true,
+        accountSelected = Account()
 
     )
 }

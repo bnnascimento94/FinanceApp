@@ -7,7 +7,7 @@ import java.util.Date
 
 @Entity
 data class AccountDb(
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = true)
     val accountID: Int,
     val accountName:String,
     val accountBalance:Double,

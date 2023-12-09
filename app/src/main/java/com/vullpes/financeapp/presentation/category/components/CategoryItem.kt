@@ -36,10 +36,7 @@ fun CategoryItem(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
-        Column {
-            Text(category.nameCategory?:"", style = MaterialTheme.typography.titleMedium)
-            Text(text = category.dataCreation.tolongStringDate())
-        }
+        Text(category.nameCategory?:"", style = MaterialTheme.typography.titleMedium)
 
         Text(
             modifier = Modifier
