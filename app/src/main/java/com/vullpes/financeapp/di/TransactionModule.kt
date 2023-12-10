@@ -5,6 +5,7 @@ import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.repository.transaction.TransactionRoomDataSource
 import com.vullpes.financeapp.data.dataSource.room.repository.transaction.TransactionRoomDataSourceImpl
 import com.vullpes.financeapp.domain.TransactionRepository
+import com.vullpes.financeapp.domain.usecases.account.FindAccountByIdUsecase
 import com.vullpes.financeapp.domain.usecases.transaction.ButtonSaveTransactionEnabledUseCase
 import com.vullpes.financeapp.domain.usecases.transaction.CreateTransactionUseCase
 import com.vullpes.financeapp.domain.usecases.transaction.DeleteTransactionUseCase
@@ -36,8 +37,8 @@ object TransactionModule {
 
     @Provides
     @Singleton
-    fun providesCreateTransactionUsecase(transactionRepository: TransactionRepository): CreateTransactionUseCase {
-        return CreateTransactionUseCase(transactionRepository)
+    fun providesCreateTransactionUsecase(transactionRepository: TransactionRepository, findAccountByIdUsecase: FindAccountByIdUsecase): CreateTransactionUseCase {
+        return CreateTransactionUseCase(transactionRepository,findAccountByIdUsecase)
     }
 
     @Provides

@@ -1,5 +1,6 @@
 package com.vullpes.financeapp.data.dataSource.room.repository.account
 
+import android.util.Log
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.entities.toAccount
 import com.vullpes.financeapp.data.dataSource.room.entities.toAccountDb
@@ -12,6 +13,7 @@ class AccountRoomDataSourceImpl @Inject constructor(private val financeAppDataba
     override suspend fun createAccount(account: Account) {
         try {
             val accountDao = financeAppDatabase.accountDao()
+            Log.e("account_created", account.toString())
             accountDao.insert(account.toAccountDb())
         }catch (e:Exception){
             throw e
@@ -33,6 +35,15 @@ class AccountRoomDataSourceImpl @Inject constructor(private val financeAppDataba
             return accountDao.getAccountDb().map { accountList ->
                 accountList.map { account -> account.toAccount() }
             }
+        }catch (e:Exception){
+            throw e
+        }
+    }
+
+    override suspend fun findAccountById(accountID: Int): Account? {
+        try {
+            val accountDao = financeAppDatabase.accountDao()
+            return accountDao.findAccountById(accountID).toAccount()
         }catch (e:Exception){
             throw e
         }

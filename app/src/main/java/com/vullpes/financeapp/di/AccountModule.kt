@@ -10,6 +10,7 @@ import com.vullpes.financeapp.domain.usecases.account.ButtonSaveAccountEnabledUs
 import com.vullpes.financeapp.domain.usecases.account.CheckIfAccountNameIsDifferentUsecase
 import com.vullpes.financeapp.domain.usecases.account.CreateAccountUseCase
 import com.vullpes.financeapp.domain.usecases.account.DeactivateAccountUseCase
+import com.vullpes.financeapp.domain.usecases.account.FindAccountByIdUsecase
 import com.vullpes.financeapp.domain.usecases.account.ListAccountUseCase
 import com.vullpes.financeapp.domain.usecases.account.UpdateAccountUseCase
 import dagger.Module
@@ -74,6 +75,12 @@ object AccountModule {
     @Singleton
     fun providesCheckIfAccountNameIsDifferentUsecase(): CheckIfAccountNameIsDifferentUsecase {
         return CheckIfAccountNameIsDifferentUsecase()
+    }
+
+    @Provides
+    @Singleton
+    fun providesFindAccountByIdUsecase(accountRepository: AccountRepository): FindAccountByIdUsecase {
+        return FindAccountByIdUsecase(accountRepository)
     }
 
 }

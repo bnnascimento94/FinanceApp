@@ -9,4 +9,6 @@ interface AccountRepository {
     suspend fun createAccount(account: Account)
     suspend fun updateAccount(account: Account)
     fun getAccounts(): Flow<List<Account>>
+
+    suspend fun findAccountById(accountID: Int): Account?
 }

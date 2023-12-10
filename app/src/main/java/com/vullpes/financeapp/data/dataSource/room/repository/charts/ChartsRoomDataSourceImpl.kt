@@ -78,7 +78,7 @@ class ChartsRoomDataSourceImpl @Inject constructor(private val financeAppDatabas
     override fun getAllCategoryBalanceByDate(
         date1: Date,
         date2: Date
-    ): Flow<Resource<Map<String, Map<String, Double>>>> {
+    ): Flow<Resource<Map<String, Map<String?, Double>>>> {
         val accountDao = financeAppDatabase.accountDao()
         val accountTransactions = accountDao.loadAccountTransactionsByDate(date1 = date1,date2 = date2)
 
@@ -95,7 +95,7 @@ class ChartsRoomDataSourceImpl @Inject constructor(private val financeAppDatabas
         }
     }
 
-    override fun getAllCategoryBalanceByMonth(month: Months): Flow<Resource<Map<String, Map<String, Double>>>> {
+    override fun getAllCategoryBalanceByMonth(month: Months): Flow<Resource<Map<String, Map<String?, Double>>>> {
         val dates = begginingAndEndOfMonth(month)
 
         val accountDao = financeAppDatabase.accountDao()

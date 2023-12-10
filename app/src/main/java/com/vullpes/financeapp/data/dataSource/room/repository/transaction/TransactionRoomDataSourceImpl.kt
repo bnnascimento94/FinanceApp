@@ -4,8 +4,10 @@ import android.util.Log
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.entities.AccountDb
 import com.vullpes.financeapp.data.dataSource.room.entities.DayBalanceDb
+import com.vullpes.financeapp.data.dataSource.room.entities.toAccountDb
 import com.vullpes.financeapp.data.dataSource.room.entities.toTransaction
 import com.vullpes.financeapp.data.dataSource.room.entities.toTransactionDb
+import com.vullpes.financeapp.domain.model.Account
 import com.vullpes.financeapp.domain.model.Transaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -19,42 +21,33 @@ import javax.inject.Inject
 
 
 class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDatabase: FinanceAppDatabase): TransactionRoomDataSource {
-    override suspend fun createTransaction(transaction: Transaction) {
+
+
+    override suspend fun createTransaction(
+        transaction: Transaction,
+        account: Account,
+        accountTo: Account?,
+        transactionTransference: Transaction?
+    ) {
         try {
-            val transactionDao = financeAppDatabase.transactionDao()
-            val accountDao = financeAppDatabase.accountDao()
-            var account = accountDao.findAccountById(accountID = transaction.accountFromID)
-            var currentValue = account.accountBalance
-
-            var accountTo: AccountDb? = transaction.accountTo?.let { accountDao.findAccountById(accountID = it) }
-            var accountToValue: Double? = accountTo?.accountBalance
-
-            if(transaction.deposit){
-                currentValue += transaction.value
-            }else if(transaction.withdrawal){
-                currentValue -= transaction.value
-            }else if(transaction.transference){
-                currentValue -= transaction.value
-                accountToValue = accountToValue?.plus(transaction.value)
-            }
-            account = account.copy(accountBalance = currentValue)
-            accountTo = accountTo?.copy(accountBalance = accountToValue!!)
             financeAppDatabase.runInTransaction{
+                val transactionDao = financeAppDatabase.transactionDao()
+                val accountDao = financeAppDatabase.accountDao()
                 val transactionDb = transaction.toTransactionDb()
                 transactionDao.insert(transactionDb)
-                accountDao.update(account)
-                updateDayBalance(account)
+                accountDao.update(account.toAccountDb())
+                updateDayBalance(account.toAccountDb())
                 if(transaction.transference){
                     accountTo?.let {
                         val transactionDeposit = Transaction(
                             name= "Transference From: ${account.accountName}",
                             accountFromID = accountTo.accountID,
-                            accountFromName = accountTo.accountName,
+                            accountFromName = accountTo.accountName?:"",
                             value = transaction.value
                         )
                         transactionDao.insert(transactionDeposit.toTransactionDb())
-                        accountDao.update(accountTo!!)
-                        updateDayBalance(accountTo)
+                        accountDao.update(accountTo.toAccountDb())
+                        updateDayBalance(accountTo.toAccountDb())
                     }
 
                 }
@@ -62,7 +55,9 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
         }catch (e:Exception){
             throw e
         }
+
     }
+
     private fun updateDayBalance(accountDb: AccountDb){
         val dateFormat = SimpleDateFormat("dd/MM/yyyy")
         val currentDate = dateFormat.parse(dateFormat.format(Date()))
@@ -213,7 +208,10 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
         }
     }
 
-
+    override suspend fun findTransactionById(transactionId: Int): Transaction? {
+        val transactionDao = financeAppDatabase.transactionDao()
+        return transactionDao.getTransactionByID(transactionID = transactionId)?.toTransaction()
+    }
 
 
 }

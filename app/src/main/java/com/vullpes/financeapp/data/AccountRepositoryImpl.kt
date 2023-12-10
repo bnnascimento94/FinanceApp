@@ -18,4 +18,8 @@ class AccountRepositoryImpl @Inject constructor(private val accountRoomDataSourc
     override fun getAccounts(): Flow<List<Account>> {
         return accountRoomDataSource.getAccounts()
     }
+
+    override suspend fun findAccountById(accountID: Int): Account? {
+        return accountRoomDataSource.findAccountById(accountID)
+    }
 }

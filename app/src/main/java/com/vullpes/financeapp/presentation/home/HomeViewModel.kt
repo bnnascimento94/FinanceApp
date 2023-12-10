@@ -8,6 +8,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vullpes.financeapp.domain.model.Account
+import com.vullpes.financeapp.domain.model.Transaction
 import com.vullpes.financeapp.domain.usecases.account.ButtonSaveAccountEnabledUsecase
 import com.vullpes.financeapp.domain.usecases.account.CheckIfAccountNameIsDifferentUsecase
 import com.vullpes.financeapp.domain.usecases.account.CreateAccountUseCase
@@ -109,7 +110,7 @@ class HomeViewModel @Inject constructor(
 
     }
     fun closeAccountModal(){
-        uiState= uiState.copy(openAccountModal = false)
+        uiState= uiState.copy(openAccountModal = false, accountCreateUpdate = null)
     }
 
 
@@ -120,7 +121,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onCloseModalTransaction(){
-        uiState = uiState.copy(openTransactionModal = false)
+        uiState = uiState.copy(openTransactionModal = false, transaction = Transaction())
     }
     fun onOpenModalTransacton(accountID:Int,kindOfTransaction: KindOfTransaction ) {
         uiState = uiState.copy(

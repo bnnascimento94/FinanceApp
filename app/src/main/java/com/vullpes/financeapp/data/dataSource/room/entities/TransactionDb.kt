@@ -10,8 +10,8 @@ data class TransactionDb(
     @PrimaryKey(autoGenerate = true)
     val transactionID: Int,
     val name:String,
-    val categoryID:Int,
-    val categoryName:String,
+    val categoryID:Int? = null,
+    val categoryName:String? = null,
     val accountFromID: Int,
     val accountFromName:String,
     val accountToID: Int? = null,
@@ -29,5 +29,5 @@ fun Transaction.toTransactionDb() = TransactionDb(
 )
 
 fun TransactionDb.toTransaction() = Transaction(
-    transactionID,name, categoryID, categoryName, accountFromID, accountFromName, accountToID, accountToName, deposit, withdrawal, transference, value, dateTransaction
+    transactionID,name, categoryID?: 0, categoryName?:"", accountFromID, accountFromName, accountToID, accountToName, deposit, withdrawal, transference, value, dateTransaction
 )

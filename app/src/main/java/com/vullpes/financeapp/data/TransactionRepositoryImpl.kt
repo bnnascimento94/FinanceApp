@@ -4,6 +4,7 @@ import androidx.paging.PagingSource
 import com.vullpes.financeapp.data.dataSource.room.entities.AccountTransaction
 import com.vullpes.financeapp.data.dataSource.room.repository.transaction.TransactionRoomDataSource
 import com.vullpes.financeapp.domain.TransactionRepository
+import com.vullpes.financeapp.domain.model.Account
 import com.vullpes.financeapp.domain.model.Transaction
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
@@ -12,8 +13,15 @@ import javax.inject.Inject
 class TransactionRepositoryImpl @Inject constructor(
     private val transactionRoomDataSource: TransactionRoomDataSource
 ) : TransactionRepository {
-    override suspend fun createTransaction(transaction: Transaction) {
-        transactionRoomDataSource.createTransaction(transaction)
+
+
+    override suspend fun createTransaction(
+        transaction: Transaction,
+        account: Account,
+        accountTo: Account?,
+        transactionTransference: Transaction?
+    ) {
+        transactionRoomDataSource.createTransaction(transaction, account, accountTo, transactionTransference)
     }
 
     override fun listTransactions(accountID: Int, date: Date): Flow<List<Transaction>> {
@@ -26,6 +34,10 @@ class TransactionRepositoryImpl @Inject constructor(
 
     override suspend fun updateTransaction(transaction: Transaction) {
         transactionRoomDataSource.updateTransaction(transaction)
+    }
+
+    override suspend fun findTransactionById(transactionID: Int): Transaction? {
+        return transactionRoomDataSource.findTransactionById(transactionID)
     }
 
     override fun getLastTransactionsByAccount(accountID: Int): Flow<List<Transaction>> {
