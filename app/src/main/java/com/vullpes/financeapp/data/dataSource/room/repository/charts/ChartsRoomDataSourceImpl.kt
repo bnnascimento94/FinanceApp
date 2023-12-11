@@ -53,7 +53,7 @@ class ChartsRoomDataSourceImpl @Inject constructor(private val financeAppDatabas
 
         return transactions.map {
            val mapCategory = it.groupBy {
-                   transactions -> transactions.categoryDb.nameCategory
+                   transactions -> transactions.categoryDb?.nameCategory
            }
 
 

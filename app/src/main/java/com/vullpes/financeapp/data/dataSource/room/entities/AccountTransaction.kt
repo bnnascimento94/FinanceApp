@@ -24,15 +24,15 @@ data class AccountTransaction(
         parentColumn = "categoryID",
         entityColumn = "categoryID"
     )
-    val categoryDb: CategoryDb
+    val categoryDb: CategoryDb?
 
 )
 
 fun AccountTransaction.toTransaction() = Transaction(
     transactionID = transactionDb.transactionID,
     name = transactionDb.name,
-    categoryID = categoryDb.categoryID,
-    categoryName = categoryDb.nameCategory,
+    categoryID = categoryDb?.categoryID,
+    categoryName = categoryDb?.nameCategory,
     accountFromID = accountFromDb.accountID,
     accountFromName = accountFromDb.accountName,
     accountTo = accountToDb?.accountID,

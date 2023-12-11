@@ -4,8 +4,8 @@ import java.util.Date
 
 data class Account(
     val accountID: Int = 0,
-    val accountName:String? = null,
-    val accountBalance:Double? = null,
+    val accountName:String = "",
+    val accountBalance:Double = 0.0,
     val dataCreationAccount: Date = Date(),
     val activeAccount:Boolean = true
 )

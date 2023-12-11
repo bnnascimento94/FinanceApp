@@ -247,6 +247,7 @@ class HomeViewModel @Inject constructor(
     private fun listAccount() = viewModelScope.launch {
         listAccountUseCase.operator().collect{
             uiState = uiState.copy(accounts = it)
+            Log.e("teste", it.toString())
             if(uiState.accountSelected == null && it.isNotEmpty()){
                 uiState = uiState.copy(accountSelected = it.first())
                 getLastTransactionsByAccountUseCase.execute(it.first().accountID).collect{ transactions ->

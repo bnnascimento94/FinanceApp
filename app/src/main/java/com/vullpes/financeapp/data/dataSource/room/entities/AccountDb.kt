@@ -21,5 +21,5 @@ fun AccountDb.toAccount() = Account(
 )
 
 fun Account.toAccountDb() = AccountDb(
-    accountID, accountName!!, accountBalance!!, dataCreationAccount, activeAccount
+    accountID, accountName, accountBalance, dataCreationAccount, activeAccount
 )

@@ -13,7 +13,7 @@ class AccountRoomDataSourceImpl @Inject constructor(private val financeAppDataba
     override suspend fun createAccount(account: Account) {
         try {
             val accountDao = financeAppDatabase.accountDao()
-            Log.e("account_created", account.toString())
+
             accountDao.insert(account.toAccountDb())
         }catch (e:Exception){
             throw e
@@ -23,6 +23,7 @@ class AccountRoomDataSourceImpl @Inject constructor(private val financeAppDataba
     override suspend fun updateAccount(account: Account) {
         try {
             val accountDao = financeAppDatabase.accountDao()
+            Log.e("account_updated", account.toAccountDb().toString())
             accountDao.update(account.toAccountDb())
         }catch (e:Exception){
             throw e

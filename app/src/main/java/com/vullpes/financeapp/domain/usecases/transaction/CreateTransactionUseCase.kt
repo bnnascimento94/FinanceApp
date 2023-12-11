@@ -34,6 +34,7 @@ class CreateTransactionUseCase @Inject constructor(
                         name = "Transference From: ${account?.accountName}",
                         accountFromID = accountTo!!.accountID,
                         accountFromName = accountTo.accountName ?: "",
+                        deposit = true,
                         categoryID = 0,
                         categoryName = "",
                         value = transaction.value
@@ -42,7 +43,7 @@ class CreateTransactionUseCase @Inject constructor(
                     accountToValue = accountToValue?.plus(transaction.value)
                 }
             }
-            account = account?.copy(accountBalance = currentValue)
+            account = account?.copy(accountBalance = currentValue?:0.0)
             accountTo = accountTo?.copy(accountBalance = accountToValue!!)
             transactionRepository.createTransaction(
                 transaction = transaction,
