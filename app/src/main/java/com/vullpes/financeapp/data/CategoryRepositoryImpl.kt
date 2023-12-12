@@ -15,6 +15,10 @@ class CategoryRepositoryImpl @Inject constructor(private val categoryRoomDataSou
         return categoryRoomDataSource.listCategories()
     }
 
+    override suspend fun categoriesSaved(): List<Category> {
+        return categoryRoomDataSource.listCategoriesSaved()
+    }
+
     override suspend fun updateCategory(category: Category) {
         categoryRoomDataSource.updateCategory(category)
     }

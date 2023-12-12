@@ -41,4 +41,5 @@
     <string name="calendar">Calendar</string>
     <string name="search_transactions">Search Transactions</string>
     <string name="passwords_doesn_t_match">Passwords doesn\'t match</string>
+    <string name="there_is_already_an_account_with_the_same_name">There is already an account with the same name</string>
 </resources>

@@ -23,7 +23,8 @@ class CategoryViewmodel @Inject constructor(
     private val updateCategoryUseCase: UpdateCategoryUseCase,
     private val buttonSaveCategoryEnabledUsecase: ButtonSaveCategoryEnabledUsecase
 ) : ViewModel() {
-
+    var uiState by mutableStateOf(UiStateCategory())
+        private set
     init {
         viewModelScope.launch {
             listCategoryUseCase.invoke().collect{
@@ -32,8 +33,7 @@ class CategoryViewmodel @Inject constructor(
         }
     }
 
-    var uiState by mutableStateOf(UiStateCategory())
-        private set
+
 
     fun openModalCategory(category: Category? = null) {
         uiState = if(category != null){

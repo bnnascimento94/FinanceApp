@@ -32,11 +32,11 @@ interface TransactionDao {
     fun getTransactionByID(accountID: Int, data1:Date, data2:Date): Flow<List<AccountTransaction>>
 
     @Transaction
-    @Query("select * from transactiondb where accountFromID = :accountID order by transactionID limit 20 ")
+    @Query("select * from transactiondb where accountFromID = :accountID order by dateTransaction desc limit 20 ")
     fun getLastTransactionsByAccount(accountID: Int): Flow<List<AccountTransaction>>
 
     @Transaction
-    @Query("select * from transactiondb where accountFromID = :accountID ")
+    @Query("select * from transactiondb where accountFromID = :accountID order by dateTransaction desc")
     fun getAllTransactionsByAccount(accountID: Int): Flow<List<AccountTransaction>>
 
     @Transaction

@@ -38,6 +38,7 @@ import java.util.Date
 @Composable
 fun ModalBottomSheetTransactions(
     buttonSaveEnabled: Boolean,
+    withdrawalBlocked:Boolean,
     transaction: Transaction,
     accountSelected: Account,
     listCategory: List<Category>,
@@ -50,7 +51,7 @@ fun ModalBottomSheetTransactions(
     onDismiss: (SheetState) -> Unit,
     onSave: () -> Unit
 ) {
-    val modalBottomSheetState = rememberModalBottomSheetState()
+    val modalBottomSheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 
     ModalBottomSheet(
         onDismissRequest = { onDismiss(modalBottomSheetState) },
@@ -69,7 +70,8 @@ fun ModalBottomSheetTransactions(
             onValueTransaction = onValueTransaction,
             onSave = onSave,
             buttonSaveEnabled = buttonSaveEnabled,
-            accountSelected = accountSelected
+            accountSelected = accountSelected,
+            withdrawalBlocked = withdrawalBlocked
 
         )
     }
@@ -82,6 +84,7 @@ fun ModalBottomSheetTransactions(
 @Composable
 fun TransactionScreen(
     buttonSaveEnabled: Boolean,
+    withdrawalBlocked:Boolean,
     transaction: Transaction,
     accountSelected: Account,
     listCategory: List<Category>,
@@ -140,25 +143,27 @@ fun TransactionScreen(
         }
 
 
-        OutlinedTextField(
-            modifier = Modifier
-                .padding(8.dp)
-                .fillMaxWidth(),
-            label = { Text(stringResource(R.string.transaction_name)) },
-            value = transaction.name,
-            onValueChange = onTransactionNameChanged,
-        )
+        if(!transaction.transference){
+            OutlinedTextField(
+                modifier = Modifier
+                    .padding(top = 8.dp, bottom = 0.dp, start = 8.dp, end = 8.dp)
+                    .fillMaxWidth(),
+                label = { Text(stringResource(R.string.transaction_name)) },
+                value = transaction.name,
+                onValueChange = onTransactionNameChanged,
+            )
 
-        DropDownMenu(
-            listItems = listCategory.map { it.nameCategory?:"" },
-            modifier = Modifier.padding(8.dp),
-            label = stringResource(R.string.category),
-            onItemSelected = onCategorySelected)
-
+            DropDownMenu(
+                listItems = listCategory.map { it.nameCategory?:"" },
+                modifier = Modifier.padding(top =8.dp, bottom = 0.dp, start = 8.dp, end = 8.dp),
+                label = stringResource(R.string.category),
+                onItemSelected = onCategorySelected)
+        }
+        
         if (transaction.transference) {
             DropDownMenu(
                 listItems = listAccounts.map { it.accountName?:"" }.filter { it != accountSelected.accountName },
-                modifier = Modifier.padding(8.dp),
+                modifier = Modifier.padding(top =8.dp, bottom = 0.dp, start = 8.dp, end = 8.dp),
                 label = stringResource(R.string.account),
                 onItemSelected = { accountSelected ->
                     val account = listAccounts.first { it.accountName == accountSelected }
@@ -174,6 +179,9 @@ fun TransactionScreen(
             value = transaction.value.toString().replace(".","").replace(",",""),
             onValueChange = onValueTransaction,
             prefix = { Text(text = "$") },
+            supportingText = {
+                 if(withdrawalBlocked){ Text(text = "You don't have sufficient amount") }
+            },
             visualTransformation = CurrencyAmountInputVisualTransformation(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Decimal
@@ -183,8 +191,8 @@ fun TransactionScreen(
         Button(
             enabled = buttonSaveEnabled,
             modifier = Modifier
-            .fillMaxWidth()
-            .padding(8.dp), onClick = onSave) {
+                .fillMaxWidth()
+                .padding(8.dp), onClick = onSave) {
             Text(text = stringResource(id = R.string.save))
         }
 
@@ -243,7 +251,8 @@ fun PreviewBottomSheetDialogTransactions() {
         onValueTransaction = {},
         onSave = {},
         buttonSaveEnabled = true,
-        accountSelected = Account()
+        accountSelected = Account(),
+        withdrawalBlocked = false
 
     )
 }

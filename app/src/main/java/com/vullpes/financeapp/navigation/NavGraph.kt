@@ -1,7 +1,6 @@
 package com.vullpes.financeapp.navigation
 
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.DrawerValue
@@ -139,9 +138,7 @@ fun NavGraphBuilder.loginRoute(
                     }
                 )
             },
-            onForgotPassword = {
-
-            },
+            onForgotPassword = {},
             onRegisterUser = onRegisterUser
         )
     }
@@ -322,8 +319,8 @@ fun NavGraphBuilder.homeRoute(
             ModalBottomSheetTransactions(
                 buttonSaveEnabled = viewModel.uiState.buttonSaveTransactionEnabled,
                 transaction = viewModel.uiState.transaction,
-                listCategory = viewModel.uiState.categories,
-                listAccounts = viewModel.uiState.accounts,
+                listCategory = viewModel.uiState.categories.filter { it.active },
+                listAccounts = viewModel.uiState.accounts.filter { it.activeAccount },
                 onKindOfTransactionSelected = { viewModel.onTransaction(it) },
                 onTransactionNameChanged = { viewModel.onTransactionName(it) },
                 onCategorySelected = { viewModel.onTransactionCategory(it) },
@@ -333,7 +330,8 @@ fun NavGraphBuilder.homeRoute(
                 onSave = {
                     viewModel.onSave()
                 },
-                accountSelected = viewModel.uiState.accountSelected!!
+                accountSelected = viewModel.uiState.accountSelected!!,
+                withdrawalBlocked = viewModel.uiState.withdrawalBlocked
             )
         }
 
@@ -341,6 +339,7 @@ fun NavGraphBuilder.homeRoute(
             ModalBottomSheetAccount(
                 activateSaveAccount = viewModel.uiState.buttonSaveAccountEnabled,
                 account = viewModel.uiState.accountCreateUpdate,
+                onAccountSaveBlocked = viewModel.uiState.accountNameInvalid,
                 onChangeAccountStatus = { status -> viewModel.statusAccountChanged(status) },
                 onChangeAccountName = { accountName ->
                     viewModel.statusAccountNameChanged(

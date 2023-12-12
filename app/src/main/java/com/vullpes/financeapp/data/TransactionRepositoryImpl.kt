@@ -5,6 +5,7 @@ import com.vullpes.financeapp.data.dataSource.room.entities.AccountTransaction
 import com.vullpes.financeapp.data.dataSource.room.repository.transaction.TransactionRoomDataSource
 import com.vullpes.financeapp.domain.TransactionRepository
 import com.vullpes.financeapp.domain.model.Account
+import com.vullpes.financeapp.domain.model.DayBalance
 import com.vullpes.financeapp.domain.model.Transaction
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
@@ -19,21 +20,22 @@ class TransactionRepositoryImpl @Inject constructor(
         transaction: Transaction,
         account: Account,
         accountTo: Account?,
-        transactionTransference: Transaction?
+        transactionTransference: Transaction?,
+        dayBalance: DayBalance,
+        dayBalanceAccountTo: DayBalance?
     ) {
-        transactionRoomDataSource.createTransaction(transaction, account, accountTo, transactionTransference)
+        transactionRoomDataSource.createTransaction(
+            transaction,
+            account,
+            accountTo,
+            transactionTransference,
+            dayBalance,
+            dayBalanceAccountTo
+        )
     }
 
     override fun listTransactions(accountID: Int, date: Date): Flow<List<Transaction>> {
         return transactionRoomDataSource.listTransactions(accountID = accountID, date = date)
-    }
-
-    override suspend fun deleteTransaction(transactionID: Int) {
-        return transactionRoomDataSource.deleteTransaction(transactionID)
-    }
-
-    override suspend fun updateTransaction(transaction: Transaction) {
-        transactionRoomDataSource.updateTransaction(transaction)
     }
 
     override suspend fun findTransactionById(transactionID: Int): Transaction? {

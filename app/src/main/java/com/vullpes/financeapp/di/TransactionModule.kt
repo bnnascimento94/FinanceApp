@@ -6,9 +6,9 @@ import com.vullpes.financeapp.data.dataSource.room.repository.transaction.Transa
 import com.vullpes.financeapp.data.dataSource.room.repository.transaction.TransactionRoomDataSourceImpl
 import com.vullpes.financeapp.domain.TransactionRepository
 import com.vullpes.financeapp.domain.usecases.account.FindAccountByIdUsecase
+import com.vullpes.financeapp.domain.usecases.dayBalance.SetDayBalanceAccountUsecase
 import com.vullpes.financeapp.domain.usecases.transaction.ButtonSaveTransactionEnabledUseCase
 import com.vullpes.financeapp.domain.usecases.transaction.CreateTransactionUseCase
-import com.vullpes.financeapp.domain.usecases.transaction.DeleteTransactionUseCase
 import com.vullpes.financeapp.domain.usecases.transaction.GetLastTransactionsByAccountUseCase
 import com.vullpes.financeapp.domain.usecases.transaction.ListAllTransactionsByAccountUsecase
 import com.vullpes.financeapp.domain.usecases.transaction.ListAllTransactionsByNameUsecase
@@ -37,14 +37,16 @@ object TransactionModule {
 
     @Provides
     @Singleton
-    fun providesCreateTransactionUsecase(transactionRepository: TransactionRepository, findAccountByIdUsecase: FindAccountByIdUsecase): CreateTransactionUseCase {
-        return CreateTransactionUseCase(transactionRepository,findAccountByIdUsecase)
-    }
-
-    @Provides
-    @Singleton
-    fun providesDeleteTransactionUsecase(transactionRepository: TransactionRepository): DeleteTransactionUseCase {
-        return DeleteTransactionUseCase(transactionRepository)
+    fun providesCreateTransactionUsecase(
+        transactionRepository: TransactionRepository,
+        findAccountByIdUsecase: FindAccountByIdUsecase,
+        setDayBalanceAccountUsecase: SetDayBalanceAccountUsecase
+    ): CreateTransactionUseCase {
+        return CreateTransactionUseCase(
+            transactionRepository,
+            findAccountByIdUsecase,
+            setDayBalanceAccountUsecase
+        )
     }
 
     @Provides

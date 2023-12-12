@@ -1,25 +1,27 @@
 package com.vullpes.financeapp.presentation.home
 
-import android.util.Log
-import androidx.compose.animation.core.updateTransition
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vullpes.financeapp.domain.model.Account
 import com.vullpes.financeapp.domain.model.Transaction
 import com.vullpes.financeapp.domain.usecases.account.ButtonSaveAccountEnabledUsecase
 import com.vullpes.financeapp.domain.usecases.account.CheckIfAccountNameIsDifferentUsecase
+import com.vullpes.financeapp.domain.usecases.account.CheckIfCanWithdrawUsecase
 import com.vullpes.financeapp.domain.usecases.account.CreateAccountUseCase
 import com.vullpes.financeapp.domain.usecases.account.ListAccountUseCase
 import com.vullpes.financeapp.domain.usecases.account.UpdateAccountUseCase
 import com.vullpes.financeapp.domain.usecases.authentication.GetFlowUserUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.LogoutUsecase
+import com.vullpes.financeapp.domain.usecases.category.CreateDefaultCategoriesUsecase
 import com.vullpes.financeapp.domain.usecases.category.ListCategoryUseCase
 import com.vullpes.financeapp.domain.usecases.transaction.ButtonSaveTransactionEnabledUseCase
 import com.vullpes.financeapp.domain.usecases.transaction.CreateTransactionUseCase
 import com.vullpes.financeapp.domain.usecases.transaction.GetLastTransactionsByAccountUseCase
+import com.vullpes.financeapp.domain.util.CurrencyAmountInputVisualTransformation
 import com.vullpes.financeapp.domain.util.KindOfTransaction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -31,6 +33,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getFlowUserUsecase: GetFlowUserUsecase,
     private val logoutUsecase: LogoutUsecase,
+    private val checkIfCanWithdrawUsecase: CheckIfCanWithdrawUsecase,
     private val createTransactionUseCase: CreateTransactionUseCase,
     private val buttonSaveTransactionEnabledUseCase: ButtonSaveTransactionEnabledUseCase,
     private val getLastTransactionsByAccountUseCase: GetLastTransactionsByAccountUseCase,
@@ -39,7 +42,8 @@ class HomeViewModel @Inject constructor(
     private val createAccountUseCase: CreateAccountUseCase,
     private val updateAccountUseCase: UpdateAccountUseCase,
     private val buttonSaveAccountEnabledUsecase: ButtonSaveAccountEnabledUsecase,
-    private val checkIfAccountNameIsDifferentUsecase: CheckIfAccountNameIsDifferentUsecase
+    private val checkIfAccountNameIsDifferentUsecase: CheckIfAccountNameIsDifferentUsecase,
+    private val createDefaultCategoriesUsecase: CreateDefaultCategoriesUsecase
 ) : ViewModel() {
     var uiState by mutableStateOf(UiStateHome())
 
@@ -47,98 +51,134 @@ class HomeViewModel @Inject constructor(
         listAccount()
         listCategories()
         getCurrentUser()
+        createDefault()
     }
 
+    private fun createDefault() = viewModelScope.launch(Dispatchers.IO) {
+        createDefaultCategoriesUsecase.execute()
+    }
 
-    private fun getCurrentUser() = viewModelScope.launch{
-        getFlowUserUsecase.execute().collect{
-            Log.e("user_e", it.toString())
+    private fun getCurrentUser() = viewModelScope.launch {
+        getFlowUserUsecase.execute().collect {
             uiState = uiState.copy(
                 user = it
             )
         }
     }
-    fun onSaveAccount() = viewModelScope.launch(Dispatchers.IO){
-        withContext(Dispatchers.Main){
-            uiState = uiState.copy(
-                loading = true
-            )
-        }
-        if(uiState.accountCreateUpdate?.accountID == 0){
-            uiState.accountCreateUpdate?.let {
-                createAccountUseCase.invoke(it)
+
+    fun onSaveAccount() = viewModelScope.launch(Dispatchers.IO) {
+        uiState.accountCreateUpdate?.let {account ->
+            withContext(Dispatchers.Main) {
+                uiState = uiState.copy(
+                    loading = true
+                )
             }
-        }else{
-            uiState.accountCreateUpdate?.let {
-                updateAccountUseCase.invoke(it)
+
+            if (checkIfAccountNameIsDifferentUsecase.execute(account, uiState.accounts)) {
+                if (account.accountID == 0) {
+                    createAccountUseCase.invoke(account)
+                } else {
+                    updateAccountUseCase.invoke(account)
+                }
+                withContext(Dispatchers.Main) {
+                    val accountCreateUpDate = uiState.accountCreateUpdate
+                    uiState = uiState.copy(
+                        loading = false,
+                        openAccountModal = false,
+                        accountCreateUpdate = null,
+                        buttonSaveAccountEnabled = false,
+                        accountNameInvalid = false,
+                        accountSelected = uiState.accounts.find { it.accountName == accountCreateUpDate?.accountName }
+                    )
+                }
+            } else{
+                withContext(Dispatchers.Main) {
+                    uiState = uiState.copy(
+                        loading = false,
+                        accountNameInvalid = true
+                    )
+                }
             }
         }
-        withContext(Dispatchers.Main){
-            val accountCreateUpDate = uiState.accountCreateUpdate
-            uiState = uiState.copy(
-                loading = false,
-                openAccountModal = false,
-                accountCreateUpdate = null,
-                accountSelected = uiState.accounts.find { it.accountName == accountCreateUpDate?.accountName }
-            )
-        }
+
+
     }
-    fun statusAccountValueChanged(accountValue:String){
-        uiState = uiState.copy(accountCreateUpdate = uiState.accountCreateUpdate?.copy(accountBalance = accountValue.replace(",","").toDouble()))
+
+    fun statusAccountValueChanged(accountValue: String) {
+        uiState = uiState.copy(
+            accountCreateUpdate = uiState.accountCreateUpdate?.copy(
+                accountBalance = accountValue.replace(
+                    ",",
+                    ""
+                ).toDouble()
+            )
+        )
         enableSaveAccountButton()
     }
 
-    fun statusAccountNameChanged(accountName:String){
-        uiState = if(checkIfAccountNameIsDifferentUsecase.execute(accountName, uiState.accounts)){
-            uiState.copy(accountCreateUpdate = uiState.accountCreateUpdate?.copy(accountName = accountName))
-        }else{
-            uiState.copy(accountCreateUpdate = uiState.accountCreateUpdate?.copy(accountName = ""))
-        }
-        enableSaveAccountButton()
-    }
-    fun statusAccountChanged(status:Boolean){
-        uiState = uiState.copy(accountCreateUpdate = uiState.accountCreateUpdate?.copy(activeAccount = status))
+    fun statusAccountNameChanged(accountName: String) {
+        uiState = uiState.copy(accountCreateUpdate = uiState.accountCreateUpdate?.copy(accountName = accountName))
         enableSaveAccountButton()
     }
 
-    fun onOpenAccountModal(account: Account? = null){
-        uiState = if(account != null){
+    fun statusAccountChanged(status: Boolean) {
+        uiState =
+            uiState.copy(accountCreateUpdate = uiState.accountCreateUpdate?.copy(activeAccount = status))
+        enableSaveAccountButton()
+    }
+
+    fun onOpenAccountModal(account: Account? = null) {
+        uiState = if (account != null) {
             uiState.copy(accountCreateUpdate = account, openAccountModal = true)
-        }else{
-            uiState.copy(accountCreateUpdate = Account(),openAccountModal = true)
+        } else {
+            uiState.copy(accountCreateUpdate = Account(), openAccountModal = true)
         }
 
     }
-    fun closeAccountModal(){
-        uiState= uiState.copy(openAccountModal = false, accountCreateUpdate = null)
+
+    fun closeAccountModal() {
+        uiState = uiState.copy(
+            openAccountModal = false,
+            accountNameInvalid = false,
+            accountCreateUpdate = null,
+            buttonSaveAccountEnabled = false
+        )
     }
 
 
-    private fun enableSaveAccountButton(){
+    private fun enableSaveAccountButton() {
         uiState.accountCreateUpdate?.let {
-            uiState = uiState.copy(buttonSaveAccountEnabled = buttonSaveAccountEnabledUsecase.execute(account = it))
+            uiState = uiState.copy(
+                buttonSaveAccountEnabled = buttonSaveAccountEnabledUsecase.execute(account = it)
+            )
         }
     }
 
-    fun onCloseModalTransaction(){
-        uiState = uiState.copy(openTransactionModal = false, transaction = Transaction())
+    fun onCloseModalTransaction() {
+        uiState = uiState.copy(
+            openTransactionModal = false,
+            transaction = Transaction(),
+            buttonSaveTransactionEnabled = false,
+            withdrawalBlocked = false,
+        )
     }
-    fun onOpenModalTransacton(accountID:Int,kindOfTransaction: KindOfTransaction ) {
+
+    fun onOpenModalTransacton(accountID: Int, kindOfTransaction: KindOfTransaction) {
         uiState = uiState.copy(
             openTransactionModal = true,
             transaction = uiState.transaction.copy(
                 accountFromID = accountID,
-                deposit = when(kindOfTransaction){
+                deposit = when (kindOfTransaction) {
                     KindOfTransaction.WITHDRAW -> false
                     KindOfTransaction.DEPOSIT -> true
                     KindOfTransaction.TRANSFERENCE -> false
                 },
-                withdrawal = when(kindOfTransaction){
+                withdrawal = when (kindOfTransaction) {
                     KindOfTransaction.WITHDRAW -> true
                     KindOfTransaction.DEPOSIT -> false
                     KindOfTransaction.TRANSFERENCE -> false
                 },
-                transference = when(kindOfTransaction){
+                transference = when (kindOfTransaction) {
                     KindOfTransaction.WITHDRAW -> false
                     KindOfTransaction.DEPOSIT -> false
                     KindOfTransaction.TRANSFERENCE -> true
@@ -146,15 +186,21 @@ class HomeViewModel @Inject constructor(
             )
         )
     }
-    fun onValueSelected(accountValue:String) {
+
+    fun onValueSelected(accountValue: String) {
+
         uiState = uiState.copy(
             transaction = uiState.transaction.copy(
-                value = accountValue.toDouble(),
-
+                value = CurrencyAmountInputVisualTransformation().filter(
+                    AnnotatedString(
+                        accountValue
+                    )
+                ).text.toString().replace(",", "").toDouble(),
             )
         )
         buttonSaveTransactionEnabled()
     }
+
     fun onTransactionAccountTo(accountID: Int) {
         uiState = uiState.copy(
             transaction = uiState.transaction.copy(
@@ -164,6 +210,7 @@ class HomeViewModel @Inject constructor(
         )
         buttonSaveTransactionEnabled()
     }
+
     fun onTransactionCategory(category: String) {
         uiState = uiState.copy(
             transaction = uiState.transaction.copy(
@@ -172,6 +219,7 @@ class HomeViewModel @Inject constructor(
         )
         buttonSaveTransactionEnabled()
     }
+
     fun onTransactionName(transactionName: String) {
         uiState = uiState.copy(
             transaction = uiState.transaction.copy(
@@ -180,20 +228,21 @@ class HomeViewModel @Inject constructor(
         )
         buttonSaveTransactionEnabled()
     }
+
     fun onTransaction(kindOfTransaction: KindOfTransaction) {
         uiState = uiState.copy(
             transaction = uiState.transaction.copy(
-                deposit = when(kindOfTransaction){
+                deposit = when (kindOfTransaction) {
                     KindOfTransaction.WITHDRAW -> false
                     KindOfTransaction.DEPOSIT -> true
                     KindOfTransaction.TRANSFERENCE -> false
                 },
-                withdrawal = when(kindOfTransaction){
+                withdrawal = when (kindOfTransaction) {
                     KindOfTransaction.WITHDRAW -> true
                     KindOfTransaction.DEPOSIT -> false
                     KindOfTransaction.TRANSFERENCE -> false
                 },
-                transference = when(kindOfTransaction){
+                transference = when (kindOfTransaction) {
                     KindOfTransaction.WITHDRAW -> false
                     KindOfTransaction.DEPOSIT -> false
                     KindOfTransaction.TRANSFERENCE -> true
@@ -203,34 +252,43 @@ class HomeViewModel @Inject constructor(
         buttonSaveTransactionEnabled()
     }
 
-    fun onSave() = viewModelScope.launch(Dispatchers.IO){
-        withContext(Dispatchers.Main){
+    fun onSave() = viewModelScope.launch(Dispatchers.IO) {
+        withContext(Dispatchers.Main) {
             uiState = uiState.copy(
                 loading = true
             )
         }
+        if (checkIfCanWithdrawUsecase.execute(uiState.accountSelected!!, uiState.transaction)) {
 
-        createTransactionUseCase.invoke(transaction = uiState.transaction)
+            createTransactionUseCase.invoke(transaction = uiState.transaction)
 
-        withContext(Dispatchers.Main){
+            withContext(Dispatchers.Main) {
+                uiState = uiState.copy(
+                    loading = false,
+                    openTransactionModal = false,
+                    buttonSaveTransactionEnabled = false,
+                    withdrawalBlocked = false,
+                    transaction = Transaction()
+                )
+            }
+        } else {
             uiState = uiState.copy(
                 loading = false,
-                openTransactionModal = false
+                withdrawalBlocked = true
             )
         }
     }
 
     private fun buttonSaveTransactionEnabled() {
-        uiState = uiState.copy(buttonSaveTransactionEnabled = buttonSaveTransactionEnabledUseCase.execute(uiState.transaction) )
+        uiState = uiState.copy(
+            buttonSaveTransactionEnabled = buttonSaveTransactionEnabledUseCase.execute(uiState.transaction)
+        )
     }
 
     fun getAccountSelected(accountID: Int) = viewModelScope.launch {
-        uiState = uiState.copy(accountSelected = uiState.accounts.first { it.accountID == accountID })
-
-        getLastTransactionsByAccountUseCase.execute(accountID).collect{
-            uiState = uiState.copy(transactions = it)
-        }
-
+        uiState =
+            uiState.copy(accountSelected = uiState.accounts.first { it.accountID == accountID })
+        listTransactions()
     }
 
     fun logoutUser(onSuccess: () -> Unit) = viewModelScope.launch(Dispatchers.IO) {
@@ -245,20 +303,26 @@ class HomeViewModel @Inject constructor(
     }
 
     private fun listAccount() = viewModelScope.launch {
-        listAccountUseCase.operator().collect{
+        listAccountUseCase.operator().collect {
             uiState = uiState.copy(accounts = it)
-            Log.e("teste", it.toString())
-            if(uiState.accountSelected == null && it.isNotEmpty()){
+            if (uiState.accountSelected == null && it.isNotEmpty()) {
                 uiState = uiState.copy(accountSelected = it.first())
-                getLastTransactionsByAccountUseCase.execute(it.first().accountID).collect{ transactions ->
-                    uiState = uiState.copy(transactions = transactions)
-                }
+                listTransactions()
             }
         }
     }
-    private fun listCategories() = viewModelScope.launch{
-        listCategoryUseCase.invoke().collect{
+
+    private fun listCategories() = viewModelScope.launch {
+        listCategoryUseCase.invoke().collect {
             uiState = uiState.copy(categories = it)
+        }
+    }
+
+    private fun listTransactions() = viewModelScope.launch {
+        uiState.accountSelected?.accountID?.let { accountID ->
+            getLastTransactionsByAccountUseCase.execute(accountID).collect { listTransactions ->
+                uiState = uiState.copy(transactions = listTransactions)
+            }
         }
     }
 }

@@ -9,6 +9,8 @@ data class UiStateHome(
     val accountSelected:Account? = null,
     val accountCreateUpdate:Account? = null,
     val buttonSaveTransactionEnabled: Boolean = false,
+    val withdrawalBlocked:Boolean = false,
+    val accountNameInvalid:Boolean = false,
     val buttonSaveAccountEnabled: Boolean = false,
     val loading:Boolean = false,
     val user: User? = null,

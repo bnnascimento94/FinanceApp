@@ -26,6 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vullpes.financeapp.R
 import com.vullpes.financeapp.domain.model.Transaction
+import com.vullpes.financeapp.domain.util.CurrencyAmountInputVisualTransformation
 import com.vullpes.financeapp.domain.util.tolongStringDate
 import com.vullpes.financeapp.domain.util.toCurrencyFormat
 import java.util.Date
@@ -41,7 +42,7 @@ fun TransactionItem(transaction: Transaction) {
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
 
-        Row(horizontalArrangement = Arrangement.Start) {
+        Row(horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically) {
             Image(
                 painter = when {
                     transaction.withdrawal -> painterResource(id = R.drawable.withdraw)
@@ -63,6 +64,12 @@ fun TransactionItem(transaction: Transaction) {
                     text = transaction.name,
                     style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.Bold)
                 )
+                transaction.categoryName?.let {
+                    Text(
+                        text = it,
+                        style = MaterialTheme.typography.titleSmall
+                    )
+                }
                 Text(text = transaction.dateTransaction.tolongStringDate())
             }
         }
@@ -82,6 +89,7 @@ fun TransactionItem(transaction: Transaction) {
             text = "$${transaction.value.toCurrencyFormat()}",
             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold, color = Color.White)
         )
+
 
     }
 }

@@ -260,7 +260,7 @@ fun NavigationDrawer(
                     contentAlignment = Alignment.Center
                 ) {
                     Image(
-                        modifier = Modifier.size(250.dp),
+                       // modifier = Modifier.size(250.dp),
                         painter = painterResource(id = R.drawable.deposit),
                         contentDescription = "Logo Image"
                     )

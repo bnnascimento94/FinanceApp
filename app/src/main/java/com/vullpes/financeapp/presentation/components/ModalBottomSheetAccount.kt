@@ -38,6 +38,7 @@ import java.util.Date
 fun ModalBottomSheetAccount(
     activateSaveAccount: Boolean,
     account: Account?,
+    onAccountSaveBlocked: Boolean = false,
     onChangeAccountStatus: (Boolean) -> Unit,
     onChangeAccountName: (String) -> Unit,
     onChangeAccountValue: (String) -> Unit,
@@ -55,6 +56,7 @@ fun ModalBottomSheetAccount(
         CreateAccount(
             activateSaveAccount = activateSaveAccount,
             account = account,
+            onAccountSaveBlocked = onAccountSaveBlocked,
             onChangeAccountStatus = onChangeAccountStatus,
             onChangeAccountName = onChangeAccountName,
             onChangeAccountValue = onChangeAccountValue,
@@ -71,13 +73,12 @@ fun ModalBottomSheetAccount(
 fun CreateAccount(
     activateSaveAccount: Boolean,
     account: Account?,
+    onAccountSaveBlocked: Boolean = false,
     onChangeAccountStatus: (Boolean) -> Unit,
     onChangeAccountName: (String) -> Unit,
     onChangeAccountValue: (String) -> Unit,
     onSave: () -> Unit
 ) {
-
-    var selectedOption by remember { mutableStateOf("Option1") }
 
     Column(
         modifier = Modifier
@@ -112,6 +113,11 @@ fun CreateAccount(
                 .padding(8.dp)
                 .fillMaxWidth(),
             label = { Text(stringResource(R.string.account_name)) },
+            supportingText = {
+                if(onAccountSaveBlocked){
+                    Text(text = stringResource(R.string.there_is_already_an_account_with_the_same_name))
+                }
+            },
             value = account?.accountName ?: "",
             onValueChange = onChangeAccountName,
         )

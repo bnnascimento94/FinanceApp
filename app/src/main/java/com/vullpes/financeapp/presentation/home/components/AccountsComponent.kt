@@ -81,6 +81,7 @@ fun AddAccount(onAddAccount: () -> Unit) {
                 )
             }
             .clip(RoundedCornerShape(6.dp))
+            .clickable { onAddAccount() }
             .background(color = MaterialTheme.colorScheme.surface),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally

@@ -1,6 +1,7 @@
 package com.vullpes.financeapp.data.dataSource.room.repository.account
 
 import android.util.Log
+import androidx.room.withTransaction
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.entities.toAccount
 import com.vullpes.financeapp.data.dataSource.room.entities.toAccountDb
@@ -12,18 +13,16 @@ import javax.inject.Inject
 class AccountRoomDataSourceImpl @Inject constructor(private val financeAppDatabase: FinanceAppDatabase): AccountRoomDataSource {
     override suspend fun createAccount(account: Account) {
         try {
-            val accountDao = financeAppDatabase.accountDao()
-
-            accountDao.insert(account.toAccountDb())
+             val accountDao = financeAppDatabase.accountDao()
+             accountDao.insert(account.toAccountDb())
         }catch (e:Exception){
             throw e
         }
     }
 
     override suspend fun updateAccount(account: Account) {
-        try {
+        try{
             val accountDao = financeAppDatabase.accountDao()
-            Log.e("account_updated", account.toAccountDb().toString())
             accountDao.update(account.toAccountDb())
         }catch (e:Exception){
             throw e

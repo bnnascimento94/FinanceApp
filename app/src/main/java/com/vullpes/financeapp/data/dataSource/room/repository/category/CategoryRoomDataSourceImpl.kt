@@ -29,6 +29,15 @@ class CategoryRoomDataSourceImpl @Inject constructor(private val financeAppDatab
         }
     }
 
+    override suspend fun listCategoriesSaved(): List<Category> {
+        try {
+            val categoryDao =  financeAppDatabase.categoryDao()
+            return categoryDao.getCategoriesSaved().map { it.toCategory() }
+        }catch (e:Exception){
+            throw e
+        }
+    }
+
     override suspend fun updateCategory(category: Category) {
         try {
             val categoryDao =  financeAppDatabase.categoryDao()

@@ -5,14 +5,17 @@ import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.repository.account.AccountRoomDataSource
 import com.vullpes.financeapp.data.dataSource.room.repository.account.AccountRoomDataSourceImpl
 import com.vullpes.financeapp.domain.AccountRepository
+import com.vullpes.financeapp.domain.TransactionRepository
 import com.vullpes.financeapp.domain.usecases.account.ActivateAccountUseCase
 import com.vullpes.financeapp.domain.usecases.account.ButtonSaveAccountEnabledUsecase
 import com.vullpes.financeapp.domain.usecases.account.CheckIfAccountNameIsDifferentUsecase
+import com.vullpes.financeapp.domain.usecases.account.CheckIfCanWithdrawUsecase
 import com.vullpes.financeapp.domain.usecases.account.CreateAccountUseCase
 import com.vullpes.financeapp.domain.usecases.account.DeactivateAccountUseCase
 import com.vullpes.financeapp.domain.usecases.account.FindAccountByIdUsecase
 import com.vullpes.financeapp.domain.usecases.account.ListAccountUseCase
 import com.vullpes.financeapp.domain.usecases.account.UpdateAccountUseCase
+import com.vullpes.financeapp.domain.usecases.dayBalance.SetDayBalanceAccountUsecase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -61,8 +64,8 @@ object AccountModule {
 
     @Provides
     @Singleton
-    fun providesUpdateAccountUsecase(accountRepository: AccountRepository): UpdateAccountUseCase {
-        return UpdateAccountUseCase(accountRepository)
+    fun providesUpdateAccountUsecase(accountRepository: AccountRepository, transactionRepository: TransactionRepository, setDayBalanceAccountUsecase: SetDayBalanceAccountUsecase): UpdateAccountUseCase {
+        return UpdateAccountUseCase(accountRepository,transactionRepository, setDayBalanceAccountUsecase)
     }
 
     @Provides
@@ -82,5 +85,12 @@ object AccountModule {
     fun providesFindAccountByIdUsecase(accountRepository: AccountRepository): FindAccountByIdUsecase {
         return FindAccountByIdUsecase(accountRepository)
     }
+
+    @Provides
+    @Singleton
+    fun providesCheckIfCanWithdrawUsecase(): CheckIfCanWithdrawUsecase {
+        return CheckIfCanWithdrawUsecase()
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.vullpes.financeapp.domain
 
 import com.vullpes.financeapp.domain.model.Account
+import com.vullpes.financeapp.domain.model.Transaction
 import com.vullpes.financeapp.util.Resource
 import kotlinx.coroutines.flow.Flow
 

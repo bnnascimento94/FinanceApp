@@ -20,6 +20,10 @@ interface DayBalanceDao {
     @Delete
     fun delete(dayBalanceDb: DayBalanceDb)
 
+
+    @Query("select * from daybalancedb where accountID = :accountID order by dayBalanceId desc limit 1")
+    fun getLastDayBalance(accountID:Int): DayBalanceDb?
+
     @Query("select * from daybalancedb where accountID = :accountID and date = :currentDate limit 1")
     fun getDayBalance(accountID:Int,currentDate: Date): DayBalanceDb?
 

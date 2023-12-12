@@ -8,6 +8,7 @@ import com.vullpes.financeapp.domain.CategoryRepository
 import com.vullpes.financeapp.domain.usecases.category.ButtonSaveCategoryEnabledUsecase
 import com.vullpes.financeapp.domain.usecases.category.UpdateCategoryUseCase
 import com.vullpes.financeapp.domain.usecases.category.CreateCategoryUseCase
+import com.vullpes.financeapp.domain.usecases.category.CreateDefaultCategoriesUsecase
 import com.vullpes.financeapp.domain.usecases.category.DeactivateCategoryUseCase
 import com.vullpes.financeapp.domain.usecases.category.ListCategoryUseCase
 import dagger.Module
@@ -61,6 +62,12 @@ object CategoryModule {
     @Singleton
     fun providesButtonSaveCategoryEnabledUsecase(): ButtonSaveCategoryEnabledUsecase {
         return ButtonSaveCategoryEnabledUsecase()
+    }
+
+    @Provides
+    @Singleton
+    fun providesCreateDefaultCategoriesUsecase(categoryRepository: CategoryRepository): CreateDefaultCategoriesUsecase {
+        return CreateDefaultCategoriesUsecase(categoryRepository)
     }
 
 }

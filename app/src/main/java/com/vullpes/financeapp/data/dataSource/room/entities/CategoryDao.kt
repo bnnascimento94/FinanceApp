@@ -10,7 +10,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface CategoryDao {
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.IGNORE)
     fun insert(categoryDb: CategoryDb)
 
     @Update
@@ -21,5 +21,8 @@ interface CategoryDao {
 
     @Query("select * from categorydb")
     fun getCategories(): Flow<List<CategoryDb>>
+
+    @Query("select * from categorydb")
+    fun getCategoriesSaved(): List<CategoryDb>
 
 }
