@@ -196,7 +196,10 @@ fun NavGraphBuilder.chartRoute(
 
         ChartsScreen(
             uiState = viewModel.uiState,
-            onBackPressed = onBackPressed
+            onBackPressed = onBackPressed,
+            onSelectedDates = { startDate, endDate ->
+                viewModel.selectDates(startDate, endDate)
+            }
         )
     }
 }

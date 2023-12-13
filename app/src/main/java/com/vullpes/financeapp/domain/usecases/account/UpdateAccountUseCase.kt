@@ -1,5 +1,6 @@
 package com.vullpes.financeapp.domain.usecases.account
 
+import android.util.Log
 import com.vullpes.financeapp.domain.AccountRepository
 import com.vullpes.financeapp.domain.TransactionRepository
 import com.vullpes.financeapp.domain.model.Account
@@ -29,7 +30,9 @@ class UpdateAccountUseCase @Inject constructor(
                     oldValue - newValue
                 } else {
                     newValue - oldValue
-                }
+                }.round(2)
+
+                Log.e("difference", difference.toString())
 
                 transaction = Transaction(
                     name = "Account Update",
@@ -39,7 +42,7 @@ class UpdateAccountUseCase @Inject constructor(
                     withdrawal = oldValue > newValue,
                     categoryID = 0,
                     categoryName = "",
-                    value = difference.round(2)
+                    value = difference
                 )
                 val dayBalance: DayBalance = setDayBalanceAccountUsecase.execute(account)
                 transactionRepository.createTransaction(

@@ -11,6 +11,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CallMade
+import androidx.compose.material.icons.filled.CallReceived
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -43,18 +46,17 @@ fun TransactionItem(transaction: Transaction) {
     ) {
 
         Row(horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically) {
+
+
             Image(
-                painter = when {
-                    transaction.withdrawal -> painterResource(id = R.drawable.withdraw)
-                    transaction.deposit -> painterResource(id = R.drawable.deposit)
-                    transaction.transference -> painterResource(id = R.drawable.transference)
-                    else -> painterResource(id = R.drawable.no_user)
+                when {
+                    transaction.withdrawal -> Icons.Filled.CallMade
+                    transaction.deposit -> Icons.Filled.CallReceived
+                    transaction.transference -> Icons.Filled.CallMade
+                    else -> Icons.Filled.CallMade
                 },
                 modifier = Modifier
-                    .padding(6.dp)
-                    .clip(CircleShape)
-                    .size(30.dp)
-                    .clickable { },
+                    .padding(6.dp),
                 contentScale = ContentScale.Crop,
                 contentDescription = stringResource(R.string.profile_image)
             )
