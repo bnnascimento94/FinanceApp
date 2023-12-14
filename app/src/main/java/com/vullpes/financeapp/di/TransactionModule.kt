@@ -6,6 +6,7 @@ import com.vullpes.financeapp.data.dataSource.room.repository.transaction.Transa
 import com.vullpes.financeapp.data.dataSource.room.repository.transaction.TransactionRoomDataSourceImpl
 import com.vullpes.financeapp.domain.TransactionRepository
 import com.vullpes.financeapp.domain.usecases.account.FindAccountByIdUsecase
+import com.vullpes.financeapp.domain.usecases.charts.GroupTransactionsByTransferenceWithdrawalDepositUsecase
 import com.vullpes.financeapp.domain.usecases.dayBalance.SetDayBalanceAccountUsecase
 import com.vullpes.financeapp.domain.usecases.transaction.ButtonSaveTransactionEnabledUseCase
 import com.vullpes.financeapp.domain.usecases.transaction.CreateTransactionUseCase
@@ -78,5 +79,8 @@ object TransactionModule {
     fun providesListAllTransactionsByNameUsecase(transactionRepository: TransactionRepository): ListAllTransactionsByNameUsecase {
         return ListAllTransactionsByNameUsecase(transactionRepository)
     }
+
+
+
 
 }

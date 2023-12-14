@@ -100,6 +100,17 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
         }
     }
 
+    override suspend fun listTransactionsByAccountAndDate(
+        accountID: Int,
+        date1: Date,
+        date2: Date
+    ): List<Transaction> {
+        val transactionDao = financeAppDatabase.transactionDao()
+        return transactionDao.listTransactionsByAccountAndDate(accountID, date1, date2).map {
+                listAccountTransaction -> listAccountTransaction.toTransaction()
+        }
+    }
+
     override fun getLastTransactionsByAccount(accountID: Int): Flow<List<Transaction>> {
         return try {
             val transactionDao = financeAppDatabase.transactionDao()

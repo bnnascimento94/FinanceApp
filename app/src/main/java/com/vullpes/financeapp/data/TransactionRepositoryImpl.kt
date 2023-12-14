@@ -38,6 +38,8 @@ class TransactionRepositoryImpl @Inject constructor(
         return transactionRoomDataSource.listTransactions(accountID = accountID, date = date)
     }
 
+
+
     override suspend fun findTransactionById(transactionID: Int): Transaction? {
         return transactionRoomDataSource.findTransactionById(transactionID)
     }
@@ -52,6 +54,14 @@ class TransactionRepositoryImpl @Inject constructor(
 
     override fun listAllTransactionsByAccountName(transactionName: String): Flow<List<Transaction>> {
         return transactionRoomDataSource.listAllTransactionsByAccountName(transactionName)
+    }
+
+    override suspend fun listTransactionsByAccountAndDate(
+        accountID: Int,
+        date1: Date,
+        date2: Date
+    ): List<Transaction> {
+        return transactionRoomDataSource.listTransactionsByAccountAndDate(accountID, date1, date2)
     }
 
 

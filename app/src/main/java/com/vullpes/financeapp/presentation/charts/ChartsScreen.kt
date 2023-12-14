@@ -38,6 +38,7 @@ import co.yml.charts.common.utils.DataUtils
 import co.yml.charts.ui.barchart.BarChart
 import co.yml.charts.ui.barchart.models.BarChartData
 import co.yml.charts.ui.barchart.models.BarChartType
+import co.yml.charts.ui.barchart.models.BarData
 import co.yml.charts.ui.barchart.models.BarStyle
 import co.yml.charts.ui.linechart.LineChart
 import co.yml.charts.ui.linechart.model.IntersectionPoint
@@ -50,6 +51,7 @@ import co.yml.charts.ui.linechart.model.SelectionHighlightPopUp
 import co.yml.charts.ui.linechart.model.ShadowUnderLine
 import co.yml.charts.ui.piechart.charts.DonutPieChart
 import co.yml.charts.ui.piechart.models.PieChartConfig
+import co.yml.charts.ui.piechart.models.PieChartData
 import co.yml.charts.ui.piechart.utils.proportion
 import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
@@ -84,32 +86,40 @@ fun ChartsScreen(
                 .onGloballyPositioned { coordinates ->
                     chartWidth = with(localDensity) { coordinates.size.height.toDp() }
                 }) {
-                item {
-                    Text(
-                        modifier=Modifier.padding(12.dp),
-                        text = "Day balance in ${uiState.firstDate?.toStringDate()?:""} to ${uiState.secondDate?.toStringDate()?:""}",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    DayBalanceLinechart(listOf(Point(0f, 40f, description = ""), Point(1f, 90f), Point(2f, 0f), Point(3f, 60f), Point(4f, 10f)), chartWidth)
+                uiState.balanceAccount?.let {
+                    item {
+                        Text(
+                            modifier=Modifier.padding(12.dp),
+                            text = "Day balance in ${uiState.firstDate?.toStringDate()?:""} to ${uiState.secondDate?.toStringDate()?:""}",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        DayBalanceLinechart(it, chartWidth)
+                    }
                 }
-                item{
-                    Text(
-                        modifier=Modifier.padding(12.dp),
-                        text = "Division by Group in ${uiState.firstDate?.toStringDate()?:""} to ${uiState.secondDate?.toStringDate()?:""}",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    SimpleDonutChart()
+
+                uiState.groupAccount?.let {
+                    item{
+                        Text(
+                            modifier=Modifier.padding(12.dp),
+                            text = "Division by Group in ${uiState.firstDate?.toStringDate()?:""} to ${uiState.secondDate?.toStringDate()?:""}",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        SimpleDonutChart(it)
+                    }
                 }
-                item {
-                    Text(
-                        modifier=Modifier.padding(12.dp),
-                        text = "Categories in ${uiState.firstDate?.toStringDate()?:""} to ${uiState.secondDate?.toStringDate()?:""}",
-                        style = MaterialTheme.typography.titleMedium,
-                        fontWeight = FontWeight.Bold
-                    )
-                    BarchartWithSolidBars()
+
+                uiState.categoryExpenses?.let {
+                    item {
+                        Text(
+                            modifier = Modifier.padding(12.dp),
+                            text = "Categories in ${uiState.firstDate?.toStringDate() ?: ""} to ${uiState.secondDate?.toStringDate() ?: ""}",
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.Bold
+                        )
+                        BarchartWithSolidBars(it)
+                    }
                 }
             }
 
@@ -130,7 +140,7 @@ fun ChartsScreen(
 @Composable
 fun DayBalanceLinechart(pointsData: List<Point>, widthChart: Dp) {
     val xAxisData = AxisData.Builder()
-        .axisStepSize((widthChart/(pointsData.size)))
+        .axisStepSize(60.dp)
         .steps(pointsData.size - 1)
         //.labelData { i -> i.toString() }
         .axisLabelAngle(20f)
@@ -172,6 +182,7 @@ fun DayBalanceLinechart(pointsData: List<Point>, widthChart: Dp) {
 
     LineChart(
         modifier = Modifier
+            .padding(8.dp)
             .fillMaxWidth()
             .height(300.dp),
         lineChartData = data
@@ -180,8 +191,8 @@ fun DayBalanceLinechart(pointsData: List<Point>, widthChart: Dp) {
 
 
 @Composable
-private fun SimpleDonutChart() {
-    val data = DataUtils.getDonutChartData()
+private fun SimpleDonutChart(data:PieChartData) {
+
     // Sum of all the values
     val sumOfValues = data.totalLength
 
@@ -219,9 +230,8 @@ private fun SimpleDonutChart() {
 
 
 @Composable
-private fun BarchartWithSolidBars() {
+private fun BarchartWithSolidBars(barData:List<BarData>) {
     val maxRange = 50
-    val barData = DataUtils.getBarChartData(50, maxRange, BarChartType.VERTICAL, DataCategoryOptions())
     val yStepSize = 10
 
     val xAxisData = AxisData.Builder()

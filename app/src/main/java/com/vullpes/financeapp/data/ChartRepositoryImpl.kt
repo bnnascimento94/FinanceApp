@@ -13,16 +13,11 @@ class ChartRepositoryImpl @Inject constructor(private val chartsRoomDataSource: 
         accountId: Int,
         date1: Date,
         date2: Date
-    ): Flow<Resource<Map<String, Double>>> {
+    ): Flow<Map<String, Double>> {
         return chartsRoomDataSource.getAccountBalanceByDate(accountId = accountId, date1 = date1,date2= date2)
     }
 
-    override fun getAccountBalanceByMonth(
-        accountId: Int,
-        month: Months
-    ): Flow<Resource<Map<String, Double>>> {
-        return chartsRoomDataSource.getAccountBalanceByMonth(accountId = accountId,month = month)
-    }
+
 
     override fun getAllCategoryBalanceByDate(
         date1: Date,

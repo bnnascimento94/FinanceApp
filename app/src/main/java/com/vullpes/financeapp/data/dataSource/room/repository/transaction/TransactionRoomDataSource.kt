@@ -17,10 +17,8 @@ interface TransactionRoomDataSource {
 
     fun listAllTransactionsByAccountName(transactionName: String): Flow<List<Transaction>>
     fun listAllTransactionsByAccount(accountID: Int): Flow<List<Transaction>>
-
+    suspend fun listTransactionsByAccountAndDate(accountID: Int, date1: Date, date2:Date): List<Transaction>
     fun getLastTransactionsByAccount(accountID: Int): Flow<List<Transaction>>
-
-
     suspend fun findTransactionById(transactionId: Int): Transaction?
     suspend fun createTransaction(
         transaction: Transaction,

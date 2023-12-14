@@ -22,6 +22,7 @@ interface TransactionRepository {
     fun getLastTransactionsByAccount(accountID: Int): Flow<List<Transaction>>
     fun getAllTransactionsByAccount(accountID: Int): Flow<List<Transaction>>
     fun listAllTransactionsByAccountName(transactionName: String): Flow<List<Transaction>>
+    suspend fun listTransactionsByAccountAndDate(accountID: Int, date1: Date, date2:Date): List<Transaction>
 
 
 }

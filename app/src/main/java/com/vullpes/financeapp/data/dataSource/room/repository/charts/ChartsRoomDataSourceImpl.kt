@@ -19,29 +19,15 @@ class ChartsRoomDataSourceImpl @Inject constructor(private val financeAppDatabas
         accountId: Int,
         date1: Date,
         date2: Date
-    ): Flow<Resource<Map<String, Double>>> {
+    ): Flow<Map<String, Double>> {
         val dayBalanceDao = financeAppDatabase.dayBalanceDao()
         val listDayBalanceDb = dayBalanceDao.getDayBalanceByDates(accountID = accountId, date1 = date1,date2 = date2)
 
         return listDayBalanceDb.map { listBalances ->
-            Resource.Success(listBalances.associate { it.date.toString(it.date) to it.finalBalance })
+            listBalances.associate { it.date.toString(it.date) to it.finalBalance }
         }
     }
-    override fun getAccountBalanceByMonth(
-        accountId: Int,
-        month: Months?
-    ): Flow<Resource<Map<String, Double>>> {
 
-        val dates = begginingAndEndOfMonth(month)
-
-        val dayBalanceDao = financeAppDatabase.dayBalanceDao()
-        val listDayBalanceDb = dayBalanceDao.getDayBalanceByDates(accountID = accountId, date1 = dates["firstDate"]!!,date2 = dates["lastDate"]!!)
-
-        return listDayBalanceDb.map { listBalances ->
-            Resource.Success(listBalances.associate { it.date.toString(it.date) to it.finalBalance })
-        }
-
-    }
 
     override fun getAllCategoryBalanceByAccountAndDate(
         accountId: Int,
