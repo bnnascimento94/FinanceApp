@@ -1,6 +1,5 @@
 package com.vullpes.financeapp.domain.usecases.charts
 
-import android.util.Log
 import com.vullpes.financeapp.domain.TransactionRepository
 import com.vullpes.financeapp.domain.model.Transaction
 import java.util.Date
@@ -13,14 +12,15 @@ class GroupTransactionsByTransferenceWithdrawalDepositUsecase @Inject constructo
         val groupedByWithdraw = calculateFinalBalance(transactions.filter { it.withdrawal })
         val groupedByDeposit = calculateFinalBalance(transactions.filter { it.deposit })
 
-        Log.e("deposit", groupedByDeposit.toString() )
-        Log.e("Withdraw", groupedByWithdraw.toString() )
-        Log.e("Transference", groupedByTransference.toString() )
-        return mapOf<String,Double>(
-            "Deposit" to groupedByDeposit,
-            "Withdraw" to groupedByWithdraw,
-            "Transference" to groupedByTransference,
-        )
+        return if(groupedByDeposit == 0.0 && groupedByWithdraw == 0.0 && groupedByTransference ==0.0){
+            mapOf()
+        }else{
+            mapOf(
+                "Deposit" to groupedByDeposit,
+                "Withdraw" to groupedByWithdraw,
+                "Transference" to groupedByTransference,
+            )
+        }
     }
 
     private fun calculateFinalBalance(transactions: List<Transaction>?): Double {

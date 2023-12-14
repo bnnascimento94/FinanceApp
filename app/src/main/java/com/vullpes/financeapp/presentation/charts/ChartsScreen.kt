@@ -1,10 +1,10 @@
 package com.vullpes.financeapp.presentation.charts
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.graphics.Typeface
-import android.widget.Toast
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -12,15 +12,13 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
-import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.onGloballyPositioned
@@ -31,13 +29,11 @@ import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import co.yml.charts.axis.AxisData
-import co.yml.charts.axis.DataCategoryOptions
 import co.yml.charts.common.components.Legends
 import co.yml.charts.common.model.Point
 import co.yml.charts.common.utils.DataUtils
 import co.yml.charts.ui.barchart.BarChart
 import co.yml.charts.ui.barchart.models.BarChartData
-import co.yml.charts.ui.barchart.models.BarChartType
 import co.yml.charts.ui.barchart.models.BarData
 import co.yml.charts.ui.barchart.models.BarStyle
 import co.yml.charts.ui.linechart.LineChart
@@ -79,49 +75,56 @@ fun ChartsScreen(
                 openCalendarDialog = { dateDialog.show() })
         }
     ) {
-        Column(modifier = Modifier.padding(paddingValues = it)) {
+        Column(modifier = Modifier.padding(paddingValues = it).fillMaxSize(), horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center) {
 
-            LazyColumn(modifier = Modifier
-                .padding(6.dp)
-                .onGloballyPositioned { coordinates ->
-                    chartWidth = with(localDensity) { coordinates.size.height.toDp() }
-                }) {
-                uiState.balanceAccount?.let {
-                    item {
-                        Text(
-                            modifier=Modifier.padding(12.dp),
-                            text = "Day balance in ${uiState.firstDate?.toStringDate()?:""} to ${uiState.secondDate?.toStringDate()?:""}",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        DayBalanceLinechart(it, chartWidth)
+            if(uiState.balanceAccount == null && uiState.categoryExpenses == null && uiState.groupAccount == null){
+                Text(text = "Charts", style = MaterialTheme.typography.titleLarge)
+                Text(text = "No Data available", style = MaterialTheme.typography.titleMedium)
+            }else{
+                LazyColumn(modifier = Modifier
+                    .padding(6.dp)
+                    .onGloballyPositioned { coordinates ->
+                        chartWidth = with(localDensity) { coordinates.size.height.toDp() }
                     }
-                }
-
-                uiState.groupAccount?.let {
-                    item{
-                        Text(
-                            modifier=Modifier.padding(12.dp),
-                            text = "Division by Group in ${uiState.firstDate?.toStringDate()?:""} to ${uiState.secondDate?.toStringDate()?:""}",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        SimpleDonutChart(it)
+                    .fillMaxSize()) {
+                    uiState.balanceAccount?.let {
+                        item {
+                            Text(
+                                modifier=Modifier.padding(12.dp),
+                                text = "Day balance from ${uiState.firstDate?.toStringDate()?:""} to ${uiState.secondDate?.toStringDate()?:""}",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                            DayBalanceLinechart(it, chartWidth)
+                        }
                     }
-                }
 
-                uiState.categoryExpenses?.let {
-                    item {
-                        Text(
-                            modifier = Modifier.padding(12.dp),
-                            text = "Categories in ${uiState.firstDate?.toStringDate() ?: ""} to ${uiState.secondDate?.toStringDate() ?: ""}",
-                            style = MaterialTheme.typography.titleMedium,
-                            fontWeight = FontWeight.Bold
-                        )
-                        BarchartWithSolidBars(it)
+                    uiState.groupAccount?.let {
+                        item{
+                            Text(
+                                modifier=Modifier.padding(12.dp),
+                                text = "Division by Group from ${uiState.firstDate?.toStringDate()?:""} to ${uiState.secondDate?.toStringDate()?:""}",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                            SimpleDonutChart(it)
+                        }
+                    }
+
+                    uiState.categoryExpenses?.let {
+                        item {
+                            Text(
+                                modifier = Modifier.padding(12.dp),
+                                text = "Categories from ${uiState.firstDate?.toStringDate() ?: ""} to ${uiState.secondDate?.toStringDate() ?: ""}",
+                                style = MaterialTheme.typography.titleMedium,
+                                fontWeight = FontWeight.Bold
+                            )
+                            BarchartWithSolidBars(it)
+                        }
                     }
                 }
             }
+
 
         }
 
@@ -260,7 +263,7 @@ private fun BarchartWithSolidBars(barData:List<BarData>) {
         showXAxis = true,
         horizontalExtraSpace = 10.dp,
     )
-    BarChart(modifier = Modifier.height(350.dp), barChartData = barChartData)
+    BarChart(modifier = Modifier.height(400.dp), barChartData = barChartData)
 }
 
 @Preview

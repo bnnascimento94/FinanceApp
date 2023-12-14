@@ -41,20 +41,19 @@ class ChartViewModel @Inject constructor(
 
 
     init {
+        val currentMonth: Map<String, Date> = BegginingEndMonth.execute()
         uiState = uiState.copy(
             accountID = savedStateHandle.get<Int>(
                 key = Constants.ACCOUNTID
-            ) ?: 0
-        )
-        load()
-    }
-
-    private fun load() {
-        val currentMonth: Map<String, Date> = BegginingEndMonth.execute()
-        uiState = uiState.copy(
+            ) ?: 0,
             firstDate = currentMonth["firstDate"],
             secondDate = currentMonth["lastDate"]
         )
+        load()
+
+    }
+
+    private fun load() {
         getBalanceByDate()
         getGroupAccountByDate()
         categoryTransactionsByAccountAndDate()
@@ -86,14 +85,25 @@ class ChartViewModel @Inject constructor(
                         )
                     )
                 }
-                Log.e("balances", balancePoints.toString())
-                uiState = uiState.copy(balanceAccount = balancePoints)
+                uiState = uiState.copy(balanceAccount = balancePoints.ifEmpty { null })
             }
         }
 
     }
 
     private fun getGroupAccountByDate() = viewModelScope.launch(Dispatchers.IO) {
+        withContext(Dispatchers.Main){
+            if(uiState.accountID == 0 && uiState.firstDate == null && uiState.secondDate == null){
+                val currentMonth: Map<String, Date> = BegginingEndMonth.execute()
+                uiState = uiState.copy(
+                    accountID = savedStateHandle.get<Int>(
+                        key = Constants.ACCOUNTID
+                    ) ?: 0,
+                    firstDate = currentMonth["firstDate"],
+                    secondDate = currentMonth["lastDate"]
+                )
+            }
+        }
         val result = groupTransactionsByTransferenceWithdrawalDepositUsecase.execute(
             uiState.accountID,
             uiState.firstDate!!,
@@ -107,18 +117,29 @@ class ChartViewModel @Inject constructor(
         }
         withContext(Dispatchers.Main) {
             uiState = uiState.copy(
-                groupAccount = PieChartData(
+                groupAccount = if(result.isNotEmpty()) PieChartData(
                     slices = result,
                     plotType = PlotType.Donut
-                )
+                ) else null
             )
         }
 
     }
 
     private fun categoryTransactionsByAccountAndDate() = viewModelScope.launch(Dispatchers.IO) {
+        withContext(Dispatchers.Main){
+            if(uiState.accountID == 0 && uiState.firstDate == null && uiState.secondDate == null){
+                val currentMonth: Map<String, Date> = BegginingEndMonth.execute()
+                uiState = uiState.copy(
+                    accountID = savedStateHandle.get<Int>(
+                        key = Constants.ACCOUNTID
+                    ) ?: 0,
+                    firstDate = currentMonth["firstDate"],
+                    secondDate = currentMonth["lastDate"]
+                )
+            }
+        }
         var index = 0;
-
         val result = allCategoryTransactionByAccountAndDateUseCase.execute(
             uiState.accountID,
             uiState.firstDate!!,
@@ -130,7 +151,6 @@ class ChartViewModel @Inject constructor(
                 "%.2f".format(it.value).toFloat()
             )
             index++
-
 
             BarData(
                 point = point,
@@ -145,14 +165,9 @@ class ChartViewModel @Inject constructor(
 
         withContext(Dispatchers.Main) {
             uiState = uiState.copy(
-                categoryExpenses = result
+                categoryExpenses = result.ifEmpty { null }
             )
         }
-
-
-
-
-
     }
 
 }
