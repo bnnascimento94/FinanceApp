@@ -11,10 +11,11 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class AccountRoomDataSourceImpl @Inject constructor(private val financeAppDatabase: FinanceAppDatabase): AccountRoomDataSource {
-    override suspend fun createAccount(account: Account) {
+    override suspend fun createAccount(account: Account) : Account{
         try {
              val accountDao = financeAppDatabase.accountDao()
-             accountDao.insert(account.toAccountDb())
+             val accountID = accountDao.insert(account.toAccountDb())
+             return accountDao.findAccountById(accountID.toInt()).toAccount()
         }catch (e:Exception){
             throw e
         }

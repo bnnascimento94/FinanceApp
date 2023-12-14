@@ -184,7 +184,7 @@ fun TransactionScreen(
             },
             visualTransformation = CurrencyAmountInputVisualTransformation(),
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Decimal
+                keyboardType = KeyboardType.NumberPassword
             )
         )
 

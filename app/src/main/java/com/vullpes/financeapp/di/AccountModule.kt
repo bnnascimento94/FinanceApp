@@ -46,8 +46,10 @@ object AccountModule {
 
     @Provides
     @Singleton
-    fun providesCreateAccountUsecase(accountRepository: AccountRepository): CreateAccountUseCase{
-        return CreateAccountUseCase(accountRepository)
+    fun providesCreateAccountUsecase(accountRepository: AccountRepository,
+                                     transactionRepository: TransactionRepository,
+                                     setDayBalanceAccountUsecase: SetDayBalanceAccountUsecase): CreateAccountUseCase{
+        return CreateAccountUseCase(accountRepository,transactionRepository, setDayBalanceAccountUsecase)
     }
 
     @Provides

@@ -32,7 +32,6 @@ class UpdateAccountUseCase @Inject constructor(
                     newValue - oldValue
                 }.round(2)
 
-                Log.e("difference", difference.toString())
 
                 transaction = Transaction(
                     name = "Account Update",

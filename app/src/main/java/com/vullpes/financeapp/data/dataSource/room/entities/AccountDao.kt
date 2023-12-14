@@ -12,7 +12,7 @@ import java.util.Date
 @Dao
 interface AccountDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(accountDb: AccountDb)
+    fun insert(accountDb: AccountDb): Long
 
     @Update
     fun update(accountDb: AccountDb)

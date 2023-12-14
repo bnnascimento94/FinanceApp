@@ -1,6 +1,7 @@
 package com.vullpes.financeapp.presentation.charts
 
 import android.annotation.SuppressLint
+import android.graphics.Paint
 import android.graphics.Typeface
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -36,6 +37,7 @@ import co.yml.charts.ui.barchart.BarChart
 import co.yml.charts.ui.barchart.models.BarChartData
 import co.yml.charts.ui.barchart.models.BarData
 import co.yml.charts.ui.barchart.models.BarStyle
+import co.yml.charts.ui.barchart.models.SelectionHighlightData
 import co.yml.charts.ui.linechart.LineChart
 import co.yml.charts.ui.linechart.model.IntersectionPoint
 import co.yml.charts.ui.linechart.model.Line
@@ -171,10 +173,13 @@ fun DayBalanceLinechart(pointsData: List<Point>, widthChart: Dp) {
                     shadowUnderLine = ShadowUnderLine(),
                     lineStyle = LineStyle(lineType = LineType.SmoothCurve(), color = Color.Blue),
                     intersectionPoint = IntersectionPoint(color = Color.Red),
-                    selectionHighlightPopUp = SelectionHighlightPopUp(popUpLabel = { x, y ->
-                        val xLabel = "x : ${x.toInt()} "
-                        val yLabel = "y : ${String.format("%.2f", y)}"
-                        "$xLabel $yLabel"
+                    selectionHighlightPopUp = SelectionHighlightPopUp(
+                        labelAlignment = Paint.Align.LEFT,
+                        popUpLabel = { x, y ->
+                        val pointSelected = pointsData.find { it.x == x}
+                        val xLabel = pointSelected?.description
+                        val yLabel = String.format("%.2f", y)
+                        "$xLabel  $$yLabel"
                     })
                 )
             )
@@ -235,7 +240,7 @@ private fun SimpleDonutChart(data:PieChartData) {
 @Composable
 private fun BarchartWithSolidBars(barData:List<BarData>) {
     val maxRange = 50
-    val yStepSize = 10
+    val yStepSize = barData.size + 15
 
     val xAxisData = AxisData.Builder()
         .axisStepSize(30.dp)
@@ -243,25 +248,35 @@ private fun BarchartWithSolidBars(barData:List<BarData>) {
         .bottomPadding(40.dp)
         .axisLabelAngle(20f)
         .startDrawPadding(48.dp)
-        .labelData { index -> barData[index].label }
+        .labelData { index ->"${barData[index].label.subSequence(0,(barData[index].label.length/2))}..."  }
         .build()
     val yAxisData = AxisData.Builder()
         .steps(yStepSize)
         .labelAndAxisLinePadding(20.dp)
         .axisOffset(20.dp)
-        .labelData { index -> (index * (maxRange / yStepSize)).toString() }
+        //.labelData { index -> (index * (maxRange / yStepSize)).toString() }
         .build()
     val barChartData = BarChartData(
         chartData = barData,
         xAxisData = xAxisData,
         yAxisData = yAxisData,
         barStyle = BarStyle(
-            paddingBetweenBars = 20.dp,
-            barWidth = 25.dp
+            paddingBetweenBars = 50.dp,
+            barWidth = 25.dp,
+            selectionHighlightData = SelectionHighlightData(
+                highlightTextOffset =6.dp,
+                popUpLabel = { x, y ->
+                    val barSelected = barData.find { it.point.x == x }
+                    val xLabel = barSelected?.label?:""
+                    val yLabel = " ${String.format("%.2f", y)}"
+                    "$xLabel $$yLabel"
+                }
+            )
+
         ),
-        showYAxis = true,
+        showYAxis = false,
         showXAxis = true,
-        horizontalExtraSpace = 10.dp,
+        horizontalExtraSpace = 20.dp,
     )
     BarChart(modifier = Modifier.height(400.dp), barChartData = barChartData)
 }

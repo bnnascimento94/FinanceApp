@@ -11,8 +11,8 @@ import javax.inject.Inject
 class AccountRepositoryImpl @Inject constructor(
     private val accountRoomDataSource: AccountRoomDataSource
 ): AccountRepository {
-    override suspend fun createAccount(account: Account) {
-        accountRoomDataSource.createAccount(account)
+    override suspend fun createAccount(account: Account):Account {
+       return accountRoomDataSource.createAccount(account)
     }
 
     override suspend fun updateAccount(account: Account) {
