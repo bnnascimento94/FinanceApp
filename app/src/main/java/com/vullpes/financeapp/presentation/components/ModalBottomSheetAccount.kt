@@ -37,6 +37,7 @@ import java.util.Date
 @Composable
 fun ModalBottomSheetAccount(
     activateSaveAccount: Boolean,
+    inputValueAccount: String,
     account: Account?,
     onAccountSaveBlocked: Boolean = false,
     onChangeAccountStatus: (Boolean) -> Unit,
@@ -55,6 +56,7 @@ fun ModalBottomSheetAccount(
         ) {
         CreateAccount(
             activateSaveAccount = activateSaveAccount,
+            inputValueAccount = inputValueAccount,
             account = account,
             onAccountSaveBlocked = onAccountSaveBlocked,
             onChangeAccountStatus = onChangeAccountStatus,
@@ -72,6 +74,7 @@ fun ModalBottomSheetAccount(
 @Composable
 fun CreateAccount(
     activateSaveAccount: Boolean,
+    inputValueAccount: String,
     account: Account?,
     onAccountSaveBlocked: Boolean = false,
     onChangeAccountStatus: (Boolean) -> Unit,
@@ -129,8 +132,15 @@ fun CreateAccount(
                 .padding(8.dp)
                 .fillMaxWidth(),
             label = { Text(text = stringResource(R.string.total_balance)) },
-            value = account?.accountBalance?.toString()?.replace(",", "")?.replace(".", "") ?: "0",
-            onValueChange = onChangeAccountValue,
+            value =  inputValueAccount,
+            onValueChange ={
+                val value = if (it.startsWith("0")) {
+                    ""
+                } else {
+                    it
+                }
+                onChangeAccountValue(value)
+            } ,
             prefix = { Text(text = "$") },
             visualTransformation = CurrencyAmountInputVisualTransformation(),
             keyboardOptions = KeyboardOptions(
@@ -169,6 +179,7 @@ fun PreviewCreateAccount() {
         onChangeAccountName = {},
         onChangeAccountStatus = {},
         onChangeAccountValue = {},
-        onSave = {}
+        onSave = {},
+        inputValueAccount = ""
     )
 }

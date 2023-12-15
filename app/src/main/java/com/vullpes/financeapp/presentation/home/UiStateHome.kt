@@ -19,5 +19,7 @@ data class UiStateHome(
     val accounts: List<Account> = emptyList(),
     val transactions: List<Transaction> = emptyList(),
     val categories: List<Category> = emptyList(),
-    val transaction: Transaction = Transaction()
+    val transaction: Transaction = Transaction(),
+    val valueAccount:String = "",
+    val valueTransaction:String = ""
 )

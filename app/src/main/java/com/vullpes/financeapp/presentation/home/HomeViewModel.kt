@@ -1,5 +1,6 @@
 package com.vullpes.financeapp.presentation.home
 
+import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -105,12 +106,14 @@ class HomeViewModel @Inject constructor(
     }
 
     fun statusAccountValueChanged(accountValue: String) {
+        uiState = uiState.copy(valueAccount = accountValue)
         uiState = uiState.copy(
             accountCreateUpdate = uiState.accountCreateUpdate?.copy(
-                accountBalance = accountValue.replace(
-                    ",",
-                    ""
-                ).toDouble()
+                accountBalance = if(accountValue.isBlank()) 0.00 else CurrencyAmountInputVisualTransformation().filter(
+                    AnnotatedString(
+                        accountValue
+                    )
+                ).text.toString().replace(",", "").toDouble()
             )
         )
         enableSaveAccountButton()
@@ -129,9 +132,9 @@ class HomeViewModel @Inject constructor(
 
     fun onOpenAccountModal(account: Account? = null) {
         uiState = if (account != null) {
-            uiState.copy(accountCreateUpdate = account, openAccountModal = true)
+            uiState.copy(accountCreateUpdate = account, openAccountModal = true, valueAccount = account.accountBalance.toString().replace(",", "").replace(".", ""))
         } else {
-            uiState.copy(accountCreateUpdate = Account(), openAccountModal = true)
+            uiState.copy(accountCreateUpdate = Account(), openAccountModal = true, valueAccount = "")
         }
 
     }
@@ -160,6 +163,7 @@ class HomeViewModel @Inject constructor(
             transaction = Transaction(),
             buttonSaveTransactionEnabled = false,
             withdrawalBlocked = false,
+            valueTransaction = ""
         )
     }
 
@@ -188,6 +192,7 @@ class HomeViewModel @Inject constructor(
     }
 
     fun onValueSelected(accountValue: String) {
+        uiState = uiState.copy(valueTransaction = accountValue)
 
         uiState = uiState.copy(
             transaction = uiState.transaction.copy(
@@ -198,6 +203,7 @@ class HomeViewModel @Inject constructor(
                 ).text.toString().replace(",", "").toDouble(),
             )
         )
+
         buttonSaveTransactionEnabled()
     }
 

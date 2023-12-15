@@ -17,8 +17,13 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.SheetState
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -40,6 +45,7 @@ fun ModalBottomSheetTransactions(
     buttonSaveEnabled: Boolean,
     withdrawalBlocked:Boolean,
     transaction: Transaction,
+    inputValueTransaction:String,
     accountSelected: Account,
     listCategory: List<Category>,
     listAccounts: List<Account>,
@@ -61,6 +67,7 @@ fun ModalBottomSheetTransactions(
         ) {
         TransactionScreen(
             transaction = transaction,
+            inputValueTransaction= inputValueTransaction,
             listCategory = listCategory,
             listAccounts = listAccounts,
             onKindOfTransactionSelected = onKindOfTransactionSelected,
@@ -83,6 +90,7 @@ fun ModalBottomSheetTransactions(
 
 @Composable
 fun TransactionScreen(
+    inputValueTransaction:String,
     buttonSaveEnabled: Boolean,
     withdrawalBlocked:Boolean,
     transaction: Transaction,
@@ -97,7 +105,7 @@ fun TransactionScreen(
     onSave: () -> Unit
 ) {
 
-
+    var text by remember { mutableStateOf("2.500,00") }
 
     Column(
         modifier = Modifier
@@ -171,13 +179,21 @@ fun TransactionScreen(
                 })
         }
 
+        //
         OutlinedTextField(
             modifier = Modifier
                 .padding(8.dp)
                 .fillMaxWidth(),
             label = { Text(text = stringResource(R.string.value)) },
-            value = transaction.value.toString().replace(".","").replace(",",""),
-            onValueChange = onValueTransaction,
+            value = inputValueTransaction,
+            onValueChange = {
+                val value = if (it.startsWith("0")) {
+                    ""
+                } else {
+                    it
+                }
+                onValueTransaction(value)
+            },
             prefix = { Text(text = "$") },
             supportingText = {
                  if(withdrawalBlocked){ Text(text = "You don't have sufficient amount") }
@@ -252,7 +268,8 @@ fun PreviewBottomSheetDialogTransactions() {
         onSave = {},
         buttonSaveEnabled = true,
         accountSelected = Account(),
-        withdrawalBlocked = false
+        withdrawalBlocked = false,
+        inputValueTransaction = ""
 
     )
 }

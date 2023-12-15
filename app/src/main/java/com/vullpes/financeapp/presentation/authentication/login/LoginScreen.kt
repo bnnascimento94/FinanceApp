@@ -59,14 +59,7 @@ fun LoginScreen(
 
     ) {
 
-        Image(painter = painterResource(R.drawable.finance_money),
-            modifier = Modifier
-                .padding(20.dp)
-                .size(100.dp)
-                .clip(shape = CircleShape)
-                .align(Alignment.TopCenter),
 
-            contentDescription = "Image Jui")
         Column(
             modifier = Modifier
                 .padding(16.dp)

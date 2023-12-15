@@ -33,6 +33,7 @@ import com.vullpes.financeapp.domain.model.Transaction
 import com.vullpes.financeapp.domain.util.CurrencyAmountInputVisualTransformation
 import com.vullpes.financeapp.domain.util.tolongStringDate
 import com.vullpes.financeapp.domain.util.toCurrencyFormat
+import com.vullpes.financeapp.ui.theme.Green
 import java.util.Date
 
 
@@ -83,7 +84,7 @@ fun TransactionItem(transaction: Transaction) {
                 .background(
                     color = when {
                         transaction.withdrawal -> Color.Red
-                        transaction.deposit -> Color.Green
+                        transaction.deposit -> Green
                         transaction.transference -> Color.Red
                         else -> Color.Transparent
                     }

@@ -322,6 +322,7 @@ fun NavGraphBuilder.homeRoute(
             ModalBottomSheetTransactions(
                 buttonSaveEnabled = viewModel.uiState.buttonSaveTransactionEnabled,
                 transaction = viewModel.uiState.transaction,
+                inputValueTransaction = viewModel.uiState.valueTransaction,
                 listCategory = viewModel.uiState.categories.filter { it.active },
                 listAccounts = viewModel.uiState.accounts.filter { it.activeAccount },
                 onKindOfTransactionSelected = { viewModel.onTransaction(it) },
@@ -341,6 +342,7 @@ fun NavGraphBuilder.homeRoute(
         if (viewModel.uiState.openAccountModal) {
             ModalBottomSheetAccount(
                 activateSaveAccount = viewModel.uiState.buttonSaveAccountEnabled,
+                inputValueAccount = viewModel.uiState.valueAccount,
                 account = viewModel.uiState.accountCreateUpdate,
                 onAccountSaveBlocked = viewModel.uiState.accountNameInvalid,
                 onChangeAccountStatus = { status -> viewModel.statusAccountChanged(status) },

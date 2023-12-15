@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vullpes.financeapp.domain.model.Category
 import com.vullpes.financeapp.domain.util.tolongStringDate
+import com.vullpes.financeapp.ui.theme.Green
 import java.util.Date
 
 @Composable
@@ -42,9 +43,9 @@ fun CategoryItem(
             modifier = Modifier
                 .clip(RoundedCornerShape(10.dp))
                 .background(
-                    color = if(category.active) Color.Green else Color.Red
+                    color = if(category.active) Green else Color.Red
                 ).padding(6.dp),
-            text = if(category.active) "Activate" else "Deactivated",
+            text = if(category.active) "Active" else "Disabled",
             style = MaterialTheme.typography.labelLarge.copy(fontWeight = FontWeight.Bold, color = Color.White)
         )
 
