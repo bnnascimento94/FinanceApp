@@ -144,7 +144,8 @@ class HomeViewModel @Inject constructor(
             openAccountModal = false,
             accountNameInvalid = false,
             accountCreateUpdate = null,
-            buttonSaveAccountEnabled = false
+            buttonSaveAccountEnabled = false,
+            valueAccount = ""
         )
     }
 
