@@ -52,6 +52,8 @@ class UpdateAccountUseCase @Inject constructor(
                     dayBalance = dayBalance,
                     null
                 )
+            }else{
+                accountRepository.updateAccount(account = account)
             }
         } ?: accountRepository.updateAccount(account = account)
 

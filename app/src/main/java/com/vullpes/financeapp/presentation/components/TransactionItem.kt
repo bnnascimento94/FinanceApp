@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CallMade
 import androidx.compose.material.icons.filled.CallReceived
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -48,7 +49,7 @@ fun TransactionItem(transaction: Transaction) {
         Row(horizontalArrangement = Arrangement.Start, verticalAlignment = Alignment.CenterVertically) {
 
 
-            Image(
+            Icon(
                 when {
                     transaction.withdrawal -> Icons.Filled.CallMade
                     transaction.deposit -> Icons.Filled.CallReceived
@@ -57,7 +58,6 @@ fun TransactionItem(transaction: Transaction) {
                 },
                 modifier = Modifier
                     .padding(6.dp),
-                contentScale = ContentScale.Crop,
                 contentDescription = stringResource(R.string.profile_image)
             )
 
