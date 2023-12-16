@@ -1,5 +1,6 @@
 package com.vullpes.financeapp.presentation.transactions
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
@@ -33,10 +34,11 @@ import com.maxkeppeler.sheets.calendar.models.CalendarSelection
 import com.vullpes.financeapp.R
 import com.vullpes.financeapp.presentation.components.EmptyPage
 import com.vullpes.financeapp.presentation.components.TransactionItem
+import com.vullpes.financeapp.presentation.home.components.DateHeader
 import java.time.LocalDate
 
 
-@OptIn(ExperimentalMaterial3Api::class)
+@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun TransactionsListScreen(
     uiState: UiTransactionsListState,
@@ -125,8 +127,13 @@ fun TransactionsListScreen(
     )  { paddingValues ->
         if (uiState.transactions.isNotEmpty()) {
             LazyColumn(modifier = Modifier.fillMaxSize().padding(paddingValues)) {
-                items(uiState.transactions) { transaction ->
-                    TransactionItem(transaction = transaction)
+                uiState.transactions.forEach { (localDate, transactions) ->
+                    stickyHeader(key = localDate) {
+                        DateHeader(localDate = localDate)
+                    }
+                    items(items = transactions, key = { it.transactionID.toString() }) {
+                        TransactionItem(transaction = it)
+                    }
                 }
             }
         } else {

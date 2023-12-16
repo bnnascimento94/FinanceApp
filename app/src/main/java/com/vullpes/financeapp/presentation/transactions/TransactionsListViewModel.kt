@@ -77,7 +77,7 @@ class TransactionsListViewModel @Inject constructor(
         }
     }
 
-    fun getSearchByAccount() {
+    private fun getSearchByAccount() {
         alltransactionsByAccount = viewModelScope.launch{
             if(::alltransactionsByAccountAndDate.isInitialized){
                 alltransactionsByAccountAndDate.cancelAndJoin()

@@ -40,6 +40,7 @@ import androidx.compose.ui.unit.dp
 import com.vullpes.financeapp.R
 import com.vullpes.financeapp.domain.model.Account
 import com.vullpes.financeapp.domain.model.Transaction
+import com.vullpes.financeapp.presentation.components.EmptyPage
 import com.vullpes.financeapp.presentation.components.TransactionItem
 import com.vullpes.financeapp.presentation.home.components.AccountsComponent
 import com.vullpes.financeapp.presentation.home.components.TopAppBar
@@ -82,160 +83,156 @@ fun HomeScreen(
             }
         ) { padingValues ->
 
-            Column(
-                modifier = Modifier
-                    .padding(padingValues)
-                    .padding(6.dp)
-            ) {
 
-                Text(
-                    modifier = Modifier.padding(start = 6.dp),
-                    text = "My Accounts",
-                    style = MaterialTheme.typography.titleMedium
-                )
-                Spacer(modifier = Modifier.height(10.dp))
-                AccountsComponent(
-                    accounts = uiState.accounts,
-                    onAddAccount = onCreateAccount,
-                    onAccountSelected = onAccountSelected
-                )
+            LazyColumn(modifier = Modifier
+                .padding(padingValues)
+                .padding(6.dp)){
 
-
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(6.dp),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(6.dp)
-                            .clickable {
-                                uiState.accountSelected?.accountID?.let {
-                                    onDeposit(it)
-                                }
-                            },
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.deposit),
-                            modifier = Modifier.size(30.dp),
-                            tint = Purple40,
-                            contentDescription = null
-                        )
-                        Spacer(Modifier.height(4.dp))
-                        Text(text = "Deposit", style = MaterialTheme.typography.bodyMedium)
-                    }
-
-
-                    Column(
-                        modifier = Modifier
-                            .padding(6.dp)
-                            .clickable {
-                                uiState.accountSelected?.accountID?.let {
-                                    onWithdraw(it)
-                                }
-                            },
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.withdraw),
-                            modifier = Modifier.size(30.dp),
-                            tint = Purple40,
-                            contentDescription = null
-                        )
-                        Spacer(Modifier.height(4.dp))
-                        Text(text = "Withdraw", style = MaterialTheme.typography.bodyMedium)
-                    }
-
-
-                    Column(
-                        modifier = Modifier
-                            .padding(6.dp)
-                            .clickable {
-                                uiState.accountSelected?.accountID?.let {
-                                    onTransference(it)
-                                }
-                            },
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.transference),
-                            modifier = Modifier.size(30.dp),
-                            tint = Purple40,
-                            contentDescription = null
-                        )
-                        Spacer(Modifier.height(4.dp))
-                        Text(text = "Transference", style = MaterialTheme.typography.bodyMedium)
-                    }
-
-                    Column(
-                        modifier = Modifier
-                            .padding(6.dp)
-                            .clickable {
-                                uiState.accountSelected?.accountID?.let {
-                                    onChart(it)
-                                }
-                            },
-                        verticalArrangement = Arrangement.Center,
-                        horizontalAlignment = Alignment.CenterHorizontally
-                    ) {
-                        Icon(
-                            painterResource(id = R.drawable.chart),
-                            modifier = Modifier.size(30.dp),
-                            tint = Purple40,
-                            contentDescription = null
-                        )
-                        Spacer(Modifier.height(4.dp))
-                        Text(text = "Chart", style = MaterialTheme.typography.bodyMedium)
-                    }
-                }
-                Row(
-                    modifier = Modifier
-                        .padding(6.dp)
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically
-                ) {
+                item {
                     Text(
-                        text = "Last transactions",
+                        modifier = Modifier.padding(start = 6.dp),
+                        text = "My Accounts",
                         style = MaterialTheme.typography.titleMedium
                     )
+                    Spacer(modifier = Modifier.height(10.dp))
+                    AccountsComponent(
+                        accounts = uiState.accounts,
+                        onAddAccount = onCreateAccount,
+                        onAccountSelected = onAccountSelected
+                    )
+                }
+                item {
+                    Row(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(6.dp),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
+                        Column(
+                            modifier = Modifier
+                                .padding(6.dp)
+                                .clickable {
+                                    uiState.accountSelected?.accountID?.let {
+                                        onDeposit(it)
+                                    }
+                                },
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                painterResource(id = R.drawable.deposit),
+                                modifier = Modifier.size(30.dp),
+                                tint = Purple40,
+                                contentDescription = null
+                            )
+                            Spacer(Modifier.height(4.dp))
+                            Text(text = "Deposit", style = MaterialTheme.typography.bodyMedium)
+                        }
 
-                    TextButton(onClick = { uiState.accountSelected?.accountID?.let { allTransactions(it) }  }) {
-                        Text(text = "List All", style = MaterialTheme.typography.titleMedium)
+
+                        Column(
+                            modifier = Modifier
+                                .padding(6.dp)
+                                .clickable {
+                                    uiState.accountSelected?.accountID?.let {
+                                        onWithdraw(it)
+                                    }
+                                },
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                painterResource(id = R.drawable.withdraw),
+                                modifier = Modifier.size(30.dp),
+                                tint = Purple40,
+                                contentDescription = null
+                            )
+                            Spacer(Modifier.height(4.dp))
+                            Text(text = "Withdraw", style = MaterialTheme.typography.bodyMedium)
+                        }
+
+
+                        Column(
+                            modifier = Modifier
+                                .padding(6.dp)
+                                .clickable {
+                                    uiState.accountSelected?.accountID?.let {
+                                        onTransference(it)
+                                    }
+                                },
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                painterResource(id = R.drawable.transference),
+                                modifier = Modifier.size(30.dp),
+                                tint = Purple40,
+                                contentDescription = null
+                            )
+                            Spacer(Modifier.height(4.dp))
+                            Text(text = "Transference", style = MaterialTheme.typography.bodyMedium)
+                        }
+
+                        Column(
+                            modifier = Modifier
+                                .padding(6.dp)
+                                .clickable {
+                                    uiState.accountSelected?.accountID?.let {
+                                        onChart(it)
+                                    }
+                                },
+                            verticalArrangement = Arrangement.Center,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+                            Icon(
+                                painterResource(id = R.drawable.chart),
+                                modifier = Modifier.size(30.dp),
+                                tint = Purple40,
+                                contentDescription = null
+                            )
+                            Spacer(Modifier.height(4.dp))
+                            Text(text = "Chart", style = MaterialTheme.typography.bodyMedium)
+                        }
                     }
                 }
-
-                Column(
-                    modifier = Modifier
-                        .padding(6.dp)
-                        .fillMaxWidth().fillMaxHeight(),
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.CenterHorizontally
-                ) {
-                    if (uiState.transactions.isNotEmpty()) {
-                        LazyColumn(modifier = Modifier.fillMaxSize()) {
-                            items(uiState.transactions) {
-                                TransactionItem(transaction = it)
-                            }
-                        }
-                    } else {
+                item {
+                    Row(
+                        modifier = Modifier
+                            .padding(6.dp)
+                            .fillMaxWidth(),
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         Text(
-                            text = stringResource(R.string.transactions),
+                            text = "Last transactions",
                             style = MaterialTheme.typography.titleMedium
                         )
-                        Text(
-                            text = stringResource(R.string.there_are_no_records),
-                            style = MaterialTheme.typography.titleSmall
+
+                        TextButton(onClick = { uiState.accountSelected?.accountID?.let { allTransactions(it) }  }) {
+                            Text(text = "List All", style = MaterialTheme.typography.titleMedium)
+                        }
+                    }
+                }
+
+                if (uiState.transactions.isNotEmpty()) {
+
+                    items(uiState.transactions) {
+                        TransactionItem(transaction = it)
+                    }
+
+                } else {
+                    item{
+                        EmptyPage(
+                            title = stringResource(R.string.transactions),
+                            subtitle = stringResource(R.string.there_are_no_records)
                         )
                     }
                 }
+
+
             }
+
 
         }
     }

@@ -2,6 +2,7 @@ package com.vullpes.financeapp.domain.util
 
 import java.text.SimpleDateFormat
 import java.time.LocalDate
+import java.time.ZoneId
 import java.util.Date
 
 fun Date.tolongStringDate() : String{
@@ -16,4 +17,10 @@ fun Date.toStringDate() : String{
 
 fun LocalDate.toDate(): Date?{
     return SimpleDateFormat("yyyy-MM-dd").parse(this.toString());
+}
+
+fun Date.toLocalDate(): LocalDate{
+    return this.toInstant()
+        .atZone(ZoneId.systemDefault())
+        .toLocalDate();
 }

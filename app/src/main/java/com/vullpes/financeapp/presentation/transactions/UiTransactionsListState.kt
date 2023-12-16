@@ -2,6 +2,7 @@ package com.vullpes.financeapp.presentation.transactions
 
 import com.vullpes.financeapp.domain.model.Transaction
 import com.vullpes.financeapp.util.Resource
+import java.time.LocalDate
 
 data class UiTransactionsListState(
     val accountId: Int = 0,
@@ -9,5 +10,5 @@ data class UiTransactionsListState(
     val textSearch:String = "",
     val errorText:String = "",
     val searchBarActive: Boolean = false,
-    val transactions:List<Transaction> = emptyList()
+    val transactions:Map<LocalDate, List<Transaction>> = mapOf()
 )

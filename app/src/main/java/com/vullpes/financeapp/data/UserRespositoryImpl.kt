@@ -18,7 +18,6 @@ class UserRespositoryImpl @Inject constructor(
 
     override suspend fun updateUser(user: User) {
         var userSaved = userRoomDataSource.getUserById(user.id)
-        Log.e("user","got here ${userSaved?.name}")
 
         userSaved = userSaved?.copy(
             name= user.name,
