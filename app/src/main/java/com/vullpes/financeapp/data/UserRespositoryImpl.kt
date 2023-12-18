@@ -1,6 +1,8 @@
 package com.vullpes.financeapp.data
 
 import android.util.Log
+import com.vullpes.financeapp.data.dataSource.firebase.auth.AuthFirebaseDataSource
+import com.vullpes.financeapp.data.dataSource.room.entities.toUserDb
 import com.vullpes.financeapp.data.dataSource.room.repository.user.UserRoomDataSource
 import com.vullpes.financeapp.data.sharedPreferences.PreferenciasRepository
 import com.vullpes.financeapp.domain.UserRepository
@@ -10,14 +12,23 @@ import javax.inject.Inject
 
 class UserRespositoryImpl @Inject constructor(
     private val userRoomDataSource: UserRoomDataSource,
-    private val preferenciasRepository: PreferenciasRepository
+    private val preferenciasRepository: PreferenciasRepository,
+    private val authFirebaseDataSource: AuthFirebaseDataSource
 ): UserRepository {
     override suspend fun createUser(user: User) {
-        userRoomDataSource.createUser(user)
+        val userRegistered = authFirebaseDataSource.registerUser(user.email, user.password)
+        if(userRegistered){
+            userRoomDataSource.createUser(user)
+        }
+
     }
 
     override suspend fun updateUser(user: User) {
         var userSaved = userRoomDataSource.getUserById(user.id)
+
+        if(user.email != userSaved?.email){
+            authFirebaseDataSource.registerUser(user.email, user.password)
+        }
 
         userSaved = userSaved?.copy(
             name= user.name,
@@ -44,15 +55,28 @@ class UserRespositoryImpl @Inject constructor(
         userRoomDataSource.deactivateUser(userID)
     }
 
-    override suspend fun loginUser(user: String, password: String): Boolean {
-        val user = userRoomDataSource.loginUser(user, password)
-        return user?.let {
-            preferenciasRepository.saveUser(userID = it.id)
-            true
-        }?:false
+    override suspend fun loginUser(email: String, password: String): Boolean {
+        return if(authFirebaseDataSource.buscarLogin(email,password)){
+            val user = userRoomDataSource.loginUser(email, password)
+            if(user != null){
+                preferenciasRepository.saveUser(userID = user.id)
+                true
+            }else{
+                var user = userRoomDataSource.userByEmail(email = email)
+                user = user?.copy(email = email, password = password)
+                user?.let {
+                    updateUser(it)
+                    true
+                }?:false
+            }
+        }else{
+            false
+        }
+
     }
 
     override suspend fun logout() {
+        authFirebaseDataSource.logoutUser()
         preferenciasRepository.cleanData()
     }
 

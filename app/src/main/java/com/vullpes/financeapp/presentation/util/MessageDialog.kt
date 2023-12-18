@@ -93,9 +93,6 @@ fun MessageDialog(
                     )
                 }
             }
-
-
-
         }
 
     }

@@ -1,6 +1,7 @@
 package com.vullpes.financeapp.presentation.category
 
 import android.annotation.SuppressLint
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -19,6 +20,9 @@ fun CategoryScreen(
     onBackPressed:() -> Unit,
     openCategoryModal:(Category?) -> Unit,
 ){
+    BackHandler {
+        onBackPressed()
+    }
     Scaffold(
         topBar = {
             CategoryTopBar(onBackPressed = onBackPressed, openCategoryModal = {openCategoryModal(null)})

@@ -9,7 +9,8 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class UserRoomDataSourceImpl @Inject constructor(
-    private val financeAppDatabase: FinanceAppDatabase
+    private val financeAppDatabase: FinanceAppDatabase,
+
 ): UserRoomDataSource {
     override suspend fun createUser(user: User) {
         try {
@@ -54,11 +55,25 @@ class UserRoomDataSourceImpl @Inject constructor(
     override suspend fun loginUser(user: String, password: String): User? {
       return try{
             val userDao = financeAppDatabase.userDao()
-            val userDb = userDao.getUserByUserNameAndPassword(name = user,password = password)
+            val userDb = userDao.getUserByEmailAndPassword(name = user,password = password)
             userDb?.toUser()
+
+
       }catch (e:Exception){
             throw e
       }
+    }
+
+    override suspend fun userByEmail(email: String): User? {
+        return try{
+            val userDao = financeAppDatabase.userDao()
+            val userDb = userDao.getUserByEmail(email)
+            userDb?.toUser()
+
+
+        }catch (e:Exception){
+            throw e
+        }
     }
 
     override suspend fun getLoggedUser(userID: Int): Flow<User> {

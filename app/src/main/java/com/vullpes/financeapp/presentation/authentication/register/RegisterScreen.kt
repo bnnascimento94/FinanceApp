@@ -1,5 +1,6 @@
 package com.vullpes.financeapp.presentation.authentication.register
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -46,6 +47,9 @@ fun RegisterScreen(
     onRegisterClicked: () -> Unit,
 
 ) {
+    BackHandler {
+        onBackPressed()
+    }
     Box(modifier = Modifier
         .background(color = Color.Blue.copy(alpha = 0.5f))
         .fillMaxSize()

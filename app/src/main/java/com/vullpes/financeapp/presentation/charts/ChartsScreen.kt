@@ -3,6 +3,7 @@ package com.vullpes.financeapp.presentation.charts
 import android.annotation.SuppressLint
 import android.graphics.Paint
 import android.graphics.Typeface
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -66,6 +67,10 @@ fun ChartsScreen(
     onBackPressed: () -> Unit,
     onSelectedDates:(LocalDate, LocalDate) -> Unit
 ) {
+
+    BackHandler {
+        onBackPressed()
+    }
 
     val dateDialog = rememberSheetState()
     var chartWidth by remember { mutableStateOf(0.dp) }

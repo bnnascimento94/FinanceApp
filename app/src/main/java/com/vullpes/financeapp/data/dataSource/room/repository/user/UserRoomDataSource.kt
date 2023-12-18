@@ -10,6 +10,8 @@ interface UserRoomDataSource {
     suspend fun deactivateUser(userID: Int)
     suspend fun getUserById(userID: Int): User?
     suspend fun loginUser(user:String, password:String): User?
+
+    suspend fun userByEmail(email:String): User?
     suspend fun getLoggedUser(userID:Int): Flow<User>
 
 

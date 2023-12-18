@@ -1,5 +1,6 @@
 package com.vullpes.financeapp.presentation.profile
 
+import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -52,6 +53,10 @@ fun ProfileScreen(
 ) {
 
     val passwordVisibility = remember{ mutableStateOf(false) }
+
+    BackHandler {
+        onBackScreen()
+    }
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -123,6 +128,7 @@ fun ProfileScreen(
                 OutlinedTextField(
                     value = uiStateProfile.profile?.password?:"",
                     label = { Text(text = "Password")},
+                    readOnly = true,
                     onValueChange = onPasswordChanged,
                     modifier = Modifier
                         .fillMaxWidth()

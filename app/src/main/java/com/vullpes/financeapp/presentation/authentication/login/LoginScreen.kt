@@ -72,7 +72,7 @@ fun LoginScreen(
 
             OutlinedTextField(
                 value = uiStateLogin.user,
-                label = { Text(text = stringResource(R.string.user), color = Color.White) },
+                label = { Text(text = stringResource(R.string.e_mail), color = Color.White) },
                 onValueChange = onUsernameChanged,
                 modifier = Modifier
                     .fillMaxWidth()

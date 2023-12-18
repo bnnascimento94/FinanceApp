@@ -28,8 +28,11 @@ interface UserDao {
     @Query("select * from userDb where userID = :userID")
     fun getCurrentUser(userID:Int): Flow<UserDb>
 
-    @Query("select * from userDb where name = :name and password = :password")
-    suspend fun getUserByUserNameAndPassword(name:String,password: String): UserDb?
+    @Query("select * from userDb where email = :name and password = :password")
+    suspend fun getUserByEmailAndPassword(name:String, password: String): UserDb?
+
+    @Query("select * from userDb where email = :name")
+    suspend fun getUserByEmail(name:String): UserDb?
 
 
 }
