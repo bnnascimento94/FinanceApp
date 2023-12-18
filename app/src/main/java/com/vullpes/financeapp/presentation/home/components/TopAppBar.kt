@@ -68,7 +68,8 @@ fun TopAppBar(
                         .padding(6.dp)
                         .clip(CircleShape)
                         .size(30.dp)
-                        .clickable { onProfileClick() },
+                        .clickable{onProfileClick()},
+
                     contentScale = ContentScale.Crop,
                     contentDescription = stringResource(R.string.profile_image)
                 )
@@ -79,7 +80,7 @@ fun TopAppBar(
                         .padding(6.dp)
                         .clip(CircleShape)
                         .size(30.dp)
-                        .clickable { onProfileClick() },
+                        .clickable{onProfileClick()},
                     contentScale = ContentScale.Crop,
                     contentDescription = stringResource(R.string.profile_image)
                 )
@@ -98,5 +99,6 @@ fun PrevTopBar() {
     TopAppBar(
         onMenuClick = {},
         user = User(id = 1, name = "", email = "", password = "", imgSrc = ""),
-        onProfileClick = {}, onEditAccount = {})
+        onProfileClick = {}, onEditAccount = {}
+    )
 }

@@ -81,7 +81,7 @@ fun AddAccount(onAddAccount: () -> Unit) {
                 )
             }
             .clip(RoundedCornerShape(6.dp))
-            .clickable { onAddAccount() }
+            .clickable{onAddAccount()}
             .background(color = MaterialTheme.colorScheme.surface),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
@@ -100,7 +100,8 @@ fun ItemAccount(account: Account, onAccountSelected: (Int) -> Unit) {
             .width(250.dp)
             .height(200.dp)
             .clip(RoundedCornerShape(6.dp))
-            .background(color = Purple40).clickable { onAccountSelected(account.accountID) },
+            .background(color = Purple40)
+            .clickable{onAccountSelected(account.accountID)},
         verticalArrangement = Arrangement.SpaceBetween,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {

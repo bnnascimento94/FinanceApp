@@ -1,14 +1,18 @@
 package com.vullpes.financeapp.presentation.home
 
 import android.content.res.Configuration
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.Interaction
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.PressInteraction
+import androidx.compose.foundation.interaction.collectIsPressedAsState
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -20,6 +24,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Category
 import androidx.compose.material.icons.filled.ExitToApp
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.DrawerState
 import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.Icon
@@ -31,8 +36,13 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -40,10 +50,12 @@ import androidx.compose.ui.unit.dp
 import com.vullpes.financeapp.R
 import com.vullpes.financeapp.domain.model.Account
 import com.vullpes.financeapp.domain.model.Transaction
+import com.vullpes.financeapp.domain.util.UserSession
 import com.vullpes.financeapp.presentation.components.EmptyPage
 import com.vullpes.financeapp.presentation.components.TransactionItem
 import com.vullpes.financeapp.presentation.home.components.AccountsComponent
 import com.vullpes.financeapp.presentation.home.components.TopAppBar
+import com.vullpes.financeapp.presentation.util.MessageDialog
 import com.vullpes.financeapp.ui.theme.Purple40
 import java.util.Date
 
@@ -63,15 +75,19 @@ fun HomeScreen(
     onCategoryClicked: () -> Unit,
     onExitAppClicked: () -> Unit,
     onEditAccount: (Account) -> Unit,
-    allTransactions:(Int) -> Unit
+    allTransactions:(Int) -> Unit,
 ) {
+
+
+
 
     NavigationDrawer(
         drawerState = drawerState,
         onCategoryClicked = onCategoryClicked,
         onExitAppClicked = onExitAppClicked
     ) {
-        Scaffold(modifier = Modifier.fillMaxSize(),
+        Scaffold(modifier = Modifier
+            .fillMaxSize(),
             topBar = {
                 TopAppBar(
                     account = uiState.accountSelected,
@@ -112,7 +128,7 @@ fun HomeScreen(
                         Column(
                             modifier = Modifier
                                 .padding(6.dp)
-                                .clickable {
+                                .clickable{
                                     uiState.accountSelected?.accountID?.let {
                                         onDeposit(it)
                                     }
@@ -134,11 +150,11 @@ fun HomeScreen(
                         Column(
                             modifier = Modifier
                                 .padding(6.dp)
-                                .clickable {
-                                    uiState.accountSelected?.accountID?.let {
-                                        onWithdraw(it)
-                                    }
-                                },
+                                .clickable{
+                                        uiState.accountSelected?.accountID?.let {
+                                            onWithdraw(it)
+                                        }
+                                    },
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
@@ -156,11 +172,11 @@ fun HomeScreen(
                         Column(
                             modifier = Modifier
                                 .padding(6.dp)
-                                .clickable {
-                                    uiState.accountSelected?.accountID?.let {
-                                        onTransference(it)
-                                    }
-                                },
+                                .clickable{
+                                        uiState.accountSelected?.accountID?.let {
+                                            onTransference(it)
+                                        }
+                                    },
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
@@ -177,11 +193,11 @@ fun HomeScreen(
                         Column(
                             modifier = Modifier
                                 .padding(6.dp)
-                                .clickable {
-                                    uiState.accountSelected?.accountID?.let {
-                                        onChart(it)
-                                    }
-                                },
+                                .clickable{
+                                        uiState.accountSelected?.accountID?.let {
+                                            onChart(it)
+                                        }
+                                    },
                             verticalArrangement = Arrangement.Center,
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
