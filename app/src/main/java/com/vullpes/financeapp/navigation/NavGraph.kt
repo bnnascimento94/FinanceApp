@@ -18,6 +18,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.vullpes.financeapp.R
 import com.vullpes.financeapp.domain.util.KindOfTransaction
 import com.vullpes.financeapp.domain.util.UserSession
 import com.vullpes.financeapp.navigation.Constants.ACCOUNTID
@@ -520,6 +521,7 @@ fun NavGraphBuilder.profileRoute(
 ) {
     composable(route = Screen.Profile.route) {
         val viewModel: ProfileViewModel = hiltViewModel()
+        val context = LocalContext.current
         val scope = rememberCoroutineScope()
 
         ProfileScreen(
@@ -530,7 +532,10 @@ fun NavGraphBuilder.profileRoute(
                 onInteraction()
             },
             onSave = {
-                viewModel.onSave()
+                viewModel.onSave(onSuccess = {
+                    Toast.makeText(context,
+                        context.getString(R.string.user_updated), Toast.LENGTH_SHORT).show()                         
+                }, onError = {message -> Toast.makeText(context, message, Toast.LENGTH_SHORT).show()})
                 onInteraction()
             },
             onNameChanged = {

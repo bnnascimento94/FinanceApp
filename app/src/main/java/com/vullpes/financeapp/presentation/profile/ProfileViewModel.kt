@@ -106,22 +106,30 @@ class ProfileViewModel @Inject constructor(
         return uri
     }
 
-    fun onSave() = viewModelScope.launch(Dispatchers.IO){
-        withContext(Dispatchers.Main){
-            uiState = uiState.copy(loading = true)
-        }
-        uiState.profile?.let {
+    fun onSave(onSuccess:() ->Unit, onError:(String) -> Unit) = viewModelScope.launch(Dispatchers.IO){
+        try {
+            withContext(Dispatchers.Main){
+                uiState = uiState.copy(loading = true)
+            }
+            uiState.profile?.let {
 
-            updateUserUsecase.execute(
-                userID = it.id,
-                username = it.name,
-                email = it.email,
-                password = it.password
-            )
+                updateUserUsecase.execute(
+                    userID = it.id,
+                    username = it.name,
+                    email = it.email,
+                    password = it.password
+                )
+            }
+            withContext(Dispatchers.Main){
+                uiState = uiState.copy(loading = false)
+                onSuccess()
+            }
+        }catch (e:Exception){
+            withContext(Dispatchers.Main){
+                onError(e.message.toString())
+            }
         }
-        withContext(Dispatchers.Main){
-            uiState = uiState.copy(loading = false)
-        }
+
     }
 
 

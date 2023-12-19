@@ -44,8 +44,8 @@ interface TransactionDao {
     fun getAllTransactionsByAccount(accountID: Int): Flow<List<AccountTransaction>>
 
     @Transaction
-    @Query("select * from transactiondb where name LIKE '%' || :nameAccount || '%' order by dateTransaction desc")
-    fun getAllTransactionsByName(nameAccount: String): Flow<List<AccountTransaction>>
+    @Query("select * from transactiondb where name LIKE '%' || :nameAccount || '%' and accountFromID = :accountID order by dateTransaction desc")
+    fun getAllTransactionsByNameAndAccount(nameAccount: String, accountID: Int): Flow<List<AccountTransaction>>
 
     @Transaction
     @Query("select * from transactiondb where transactionID = :transactionID ")

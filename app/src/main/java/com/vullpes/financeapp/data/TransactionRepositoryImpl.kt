@@ -52,8 +52,8 @@ class TransactionRepositoryImpl @Inject constructor(
         return transactionRoomDataSource.listAllTransactionsByAccount(accountID)
     }
 
-    override fun listAllTransactionsByAccountName(transactionName: String): Flow<List<Transaction>> {
-        return transactionRoomDataSource.listAllTransactionsByAccountName(transactionName)
+    override fun listAllTransactionsByAccountName(transactionName: String,accountID: Int): Flow<List<Transaction>> {
+        return transactionRoomDataSource.listAllTransactionsByAccountName(transactionName, accountID)
     }
 
     override suspend fun listTransactionsByAccountAndDate(

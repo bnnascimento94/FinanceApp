@@ -9,8 +9,8 @@ import java.time.LocalDate
 import javax.inject.Inject
 
 class ListAllTransactionsByNameUsecase @Inject constructor(private val transactionRepository: TransactionRepository){
-    fun execute(transactionName: String): Flow<Map<LocalDate, List<Transaction>>> {
-        return transactionRepository.listAllTransactionsByAccountName(transactionName).map { transactions ->
+    fun execute(transactionName: String, accountID: Int): Flow<Map<LocalDate, List<Transaction>>> {
+        return transactionRepository.listAllTransactionsByAccountName(transactionName, accountID).map { transactions ->
             transactions.groupBy { transaction -> transaction.dateTransaction.toLocalDate() }
         }
     }

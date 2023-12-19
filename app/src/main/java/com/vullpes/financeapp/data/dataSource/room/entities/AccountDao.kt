@@ -20,8 +20,8 @@ interface AccountDao {
     @Delete
     fun delete(accountDb: AccountDb)
 
-    @Query("select * from accountdb")
-    fun getAccountDb(): Flow<List<AccountDb>>
+    @Query("select * from accountdb where userID = :userID")
+    fun getAccountDb(userID: Int): Flow<List<AccountDb>>
 
     @Query("select * from accountdb where accountID = :accountID")
     fun findAccountById(accountID: Int): AccountDb

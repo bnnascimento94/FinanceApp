@@ -7,5 +7,6 @@ data class Account(
     val accountName:String = "",
     val accountBalance:Double = 0.0,
     val dataCreationAccount: Date = Date(),
-    val activeAccount:Boolean = true
+    val activeAccount:Boolean = true,
+    var userID: Int = 0
 )

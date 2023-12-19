@@ -12,14 +12,15 @@ data class AccountDb(
     val accountName:String,
     val accountBalance:Double,
     val dataCreationAccount: Date,
-    val activeAccount:Boolean
+    val activeAccount:Boolean,
+    val userID: Int
 )
 
 
 fun AccountDb.toAccount() = Account(
-    accountID, accountName, accountBalance, dataCreationAccount, activeAccount
+    accountID, accountName, accountBalance, dataCreationAccount, activeAccount, userID
 )
 
 fun Account.toAccountDb() = AccountDb(
-    accountID, accountName, accountBalance, dataCreationAccount, activeAccount
+    accountID, accountName, accountBalance, dataCreationAccount, activeAccount, userID
 )

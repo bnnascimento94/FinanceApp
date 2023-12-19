@@ -1,6 +1,5 @@
 package com.vullpes.financeapp.presentation.home
 
-import android.util.Log
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -49,13 +48,12 @@ class HomeViewModel @Inject constructor(
     var uiState by mutableStateOf(UiStateHome())
 
     init {
-        listAccount()
-        listCategories()
         getCurrentUser()
-        createDefault()
+        listCategories()
+        createCategoriesDefault()
     }
 
-    private fun createDefault() = viewModelScope.launch(Dispatchers.IO) {
+    private fun createCategoriesDefault() = viewModelScope.launch(Dispatchers.IO) {
         createDefaultCategoriesUsecase.execute()
     }
 
@@ -64,6 +62,7 @@ class HomeViewModel @Inject constructor(
             uiState = uiState.copy(
                 user = it
             )
+            listAccount(it.id)
         }
     }
 
@@ -77,9 +76,9 @@ class HomeViewModel @Inject constructor(
 
             if (checkIfAccountNameIsDifferentUsecase.execute(account, uiState.accounts)) {
                 if (account.accountID == 0) {
-                    createAccountUseCase.invoke(account)
+                    createAccountUseCase.invoke(account.apply { this.userID = uiState.user?.id?:0 })
                 } else {
-                    updateAccountUseCase.invoke(account)
+                    updateAccountUseCase.invoke(account.apply { this.userID = uiState.user?.id?:0 })
                 }
                 withContext(Dispatchers.Main) {
                     val accountCreateUpDate = uiState.accountCreateUpdate
@@ -309,8 +308,8 @@ class HomeViewModel @Inject constructor(
         }
     }
 
-    private fun listAccount() = viewModelScope.launch {
-        listAccountUseCase.operator().collect {
+    private fun listAccount(userID: Int) = viewModelScope.launch {
+        listAccountUseCase.operator(userID).collect {
             uiState = uiState.copy(accounts = it)
             if (uiState.accountSelected == null && it.isNotEmpty()) {
                 uiState = uiState.copy(accountSelected = it.first())

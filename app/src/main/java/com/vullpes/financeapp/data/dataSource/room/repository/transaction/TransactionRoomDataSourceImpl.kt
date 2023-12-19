@@ -1,9 +1,6 @@
 package com.vullpes.financeapp.data.dataSource.room.repository.transaction
 
-import android.util.Log
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
-import com.vullpes.financeapp.data.dataSource.room.entities.AccountDb
-import com.vullpes.financeapp.data.dataSource.room.entities.DayBalanceDb
 import com.vullpes.financeapp.data.dataSource.room.entities.toAccountDb
 import com.vullpes.financeapp.data.dataSource.room.entities.toDayBalanceDb
 import com.vullpes.financeapp.data.dataSource.room.entities.toTransaction
@@ -13,11 +10,8 @@ import com.vullpes.financeapp.domain.model.DayBalance
 import com.vullpes.financeapp.domain.model.Transaction
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
-import java.text.SimpleDateFormat
 import java.time.Instant
-import java.time.LocalDate
 import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 import java.util.Date
 import javax.inject.Inject
 
@@ -78,10 +72,10 @@ class TransactionRoomDataSourceImpl @Inject constructor(private val financeAppDa
         }
     }
 
-    override fun listAllTransactionsByAccountName(transactionName: String): Flow<List<Transaction>> {
+    override fun listAllTransactionsByAccountName(transactionName: String, accountID: Int): Flow<List<Transaction>> {
         return try {
             val transactionDao = financeAppDatabase.transactionDao()
-            transactionDao.getAllTransactionsByName(transactionName).map { listAccountTransaction ->
+            transactionDao.getAllTransactionsByNameAndAccount(transactionName, accountID).map { listAccountTransaction ->
                 listAccountTransaction.map { it.toTransaction() }
             }
         }catch (e:Exception){

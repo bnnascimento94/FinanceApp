@@ -30,10 +30,10 @@ class AccountRoomDataSourceImpl @Inject constructor(private val financeAppDataba
         }
     }
 
-    override fun getAccounts(): Flow<List<Account>> {
+    override fun getAccounts(userID: Int): Flow<List<Account>> {
         try {
             val accountDao = financeAppDatabase.accountDao()
-            return accountDao.getAccountDb().map { accountList ->
+            return accountDao.getAccountDb(userID).map { accountList ->
                 accountList.map { account -> account.toAccount() }
             }
         }catch (e:Exception){

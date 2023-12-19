@@ -99,7 +99,7 @@ class TransactionsListViewModel @Inject constructor(
             if(::alltransactionsByAccount.isInitialized){
                 alltransactionsByAccount.cancelAndJoin()
             }
-            listAllTransactionsByNameUsecase.execute(uiState.textSearch).collect{
+            listAllTransactionsByNameUsecase.execute(uiState.textSearch, uiState.accountId).collect{
                 uiState = uiState.copy(transactions = it)
             }
         }

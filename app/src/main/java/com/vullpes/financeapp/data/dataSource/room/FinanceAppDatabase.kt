@@ -16,7 +16,7 @@ import com.vullpes.financeapp.data.dataSource.room.entities.UserDb
 
 @Database(
     entities = [AccountDb::class, DayBalanceDb::class, CategoryDb::class, TransactionDb::class, UserDb::class],
-    version = 3,
+    version = 4,
     exportSchema = false
 )
 @TypeConverters(

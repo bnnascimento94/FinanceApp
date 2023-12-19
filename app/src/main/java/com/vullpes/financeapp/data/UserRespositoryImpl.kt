@@ -20,9 +20,7 @@ class UserRespositoryImpl @Inject constructor(
             user?.let {
                 preferenciasRepository.saveUser(it.id)
             }
-
         }
-
     }
 
     override suspend fun updateUser(user: User) {
@@ -75,7 +73,10 @@ class UserRespositoryImpl @Inject constructor(
                     true
                 }?: kotlin.run {
                     val user = User(name=email.subSequence(0, email.indexOf("@")).toString(), email = email, password = password)
-                    userRoomDataSource.createUser(user)
+                    val userSaved:User ? = userRoomDataSource.createUser(user)
+                    userSaved?.let {
+                        preferenciasRepository.saveUser(it.id)
+                    }
                     true
                 }
             }

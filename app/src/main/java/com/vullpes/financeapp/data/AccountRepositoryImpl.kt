@@ -19,8 +19,8 @@ class AccountRepositoryImpl @Inject constructor(
         accountRoomDataSource.updateAccount(account)
     }
 
-    override fun getAccounts(): Flow<List<Account>> {
-        return accountRoomDataSource.getAccounts()
+    override fun getAccounts(userID: Int): Flow<List<Account>> {
+        return accountRoomDataSource.getAccounts(userID)
     }
 
     override suspend fun findAccountById(accountID: Int): Account? {
