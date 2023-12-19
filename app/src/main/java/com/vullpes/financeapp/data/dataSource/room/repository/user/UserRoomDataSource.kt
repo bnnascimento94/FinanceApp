@@ -5,7 +5,7 @@ import kotlinx.coroutines.flow.Flow
 
 interface UserRoomDataSource {
 
-    suspend fun createUser(user: User)
+    suspend fun createUser(user: User): User?
     suspend fun updateUser(user: User)
     suspend fun deactivateUser(userID: Int)
     suspend fun getUserById(userID: Int): User?

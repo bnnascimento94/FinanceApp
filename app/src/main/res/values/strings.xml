@@ -45,4 +45,8 @@
     <string name="no">No</string>
     <string name="ok">Ok</string>
     <string name="e_mail">E-mail</string>
+    <string name="e_mail_not_supplied">E-mail not supplied</string>
+    <string name="an_e_mail_has_sent_with_your_new_credentials">An E-mail has sent with your new credentials</string>
+    <string name="user_not_found">User not found</string>
+    <string name="the_e_mail_supplied_has_not_been_found">The e-mail supplied has not been found.</string>
 </resources>

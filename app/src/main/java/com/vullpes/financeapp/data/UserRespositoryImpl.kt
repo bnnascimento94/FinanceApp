@@ -1,8 +1,6 @@
 package com.vullpes.financeapp.data
 
-import android.util.Log
 import com.vullpes.financeapp.data.dataSource.firebase.auth.AuthFirebaseDataSource
-import com.vullpes.financeapp.data.dataSource.room.entities.toUserDb
 import com.vullpes.financeapp.data.dataSource.room.repository.user.UserRoomDataSource
 import com.vullpes.financeapp.data.sharedPreferences.PreferenciasRepository
 import com.vullpes.financeapp.domain.UserRepository
@@ -18,7 +16,11 @@ class UserRespositoryImpl @Inject constructor(
     override suspend fun createUser(user: User) {
         val userRegistered = authFirebaseDataSource.registerUser(user.email, user.password)
         if(userRegistered){
-            userRoomDataSource.createUser(user)
+            val user:User ? = userRoomDataSource.createUser(user)
+            user?.let {
+                preferenciasRepository.saveUser(it.id)
+            }
+
         }
 
     }
@@ -27,7 +29,11 @@ class UserRespositoryImpl @Inject constructor(
         var userSaved = userRoomDataSource.getUserById(user.id)
 
         if(user.email != userSaved?.email){
-            authFirebaseDataSource.registerUser(user.email, user.password)
+            authFirebaseDataSource.updateEmail(user.email)
+        }
+
+        if(user.password != userSaved?.password){
+            authFirebaseDataSource.updatePassword(user.password)
         }
 
         userSaved = userSaved?.copy(
@@ -67,7 +73,11 @@ class UserRespositoryImpl @Inject constructor(
                 user?.let {
                     updateUser(it)
                     true
-                }?:false
+                }?: kotlin.run {
+                    val user = User(name=email.subSequence(0, email.indexOf("@")).toString(), email = email, password = password)
+                    userRoomDataSource.createUser(user)
+                    true
+                }
             }
         }else{
             false
@@ -90,5 +100,9 @@ class UserRespositoryImpl @Inject constructor(
     override suspend fun currentUser(): Flow<User> {
         val usedID = preferenciasRepository.getSavedUser()
         return userRoomDataSource.getLoggedUser(usedID!!)
+    }
+
+    override suspend fun forgotPassword(email: String): Boolean {
+       return authFirebaseDataSource.forgotPassword(email)
     }
 }

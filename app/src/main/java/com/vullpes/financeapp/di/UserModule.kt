@@ -1,7 +1,10 @@
 package com.vullpes.financeapp.di
 
+import com.google.firebase.auth.FirebaseAuth
 import com.itm.juipdv.util.imagem.ImageSaver
 import com.vullpes.financeapp.data.UserRespositoryImpl
+import com.vullpes.financeapp.data.dataSource.firebase.auth.AuthFirebaseDataSource
+import com.vullpes.financeapp.data.dataSource.firebase.auth.AuthFirebaseDataSourceImpl
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.repository.user.UserRoomDataSource
 import com.vullpes.financeapp.data.dataSource.room.repository.user.UserRoomDataSourceImpl
@@ -26,14 +29,24 @@ object UserModule {
 
     @Provides
     @Singleton
-    fun providesUserRoomDataSource(firebaseAppDatabase: FinanceAppDatabase): UserRoomDataSource {
-        return UserRoomDataSourceImpl(firebaseAppDatabase)
+    fun providesUserRoomDataSource(financeAppDatabase: FinanceAppDatabase): UserRoomDataSource {
+        return UserRoomDataSourceImpl(financeAppDatabase)
     }
 
     @Provides
     @Singleton
-    fun providesUserRepository(userRoomDataSource: UserRoomDataSource, preferenciasRepository: PreferenciasRepository): UserRepository {
-        return UserRespositoryImpl(userRoomDataSource, preferenciasRepository)
+    fun providesAuthFirebaseDataSource(auth: FirebaseAuth): AuthFirebaseDataSource {
+        return AuthFirebaseDataSourceImpl(auth)
+    }
+
+    @Provides
+    @Singleton
+    fun providesUserRepository(
+        userRoomDataSource: UserRoomDataSource,
+        preferenciasRepository: PreferenciasRepository,
+        authFirebaseDataSource: AuthFirebaseDataSource
+    ): UserRepository {
+        return UserRespositoryImpl(userRoomDataSource, preferenciasRepository, authFirebaseDataSource)
     }
 
     @Provides
@@ -56,7 +69,10 @@ object UserModule {
 
     @Provides
     @Singleton
-    fun providesUpdatePhotoImageUsecase(userRepository: UserRepository, imageSaver: ImageSaver): UpdatePhotoImageUsecase {
+    fun providesUpdatePhotoImageUsecase(
+        userRepository: UserRepository,
+        imageSaver: ImageSaver
+    ): UpdatePhotoImageUsecase {
         return UpdatePhotoImageUsecase(userRepository, imageSaver)
     }
 

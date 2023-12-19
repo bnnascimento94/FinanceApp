@@ -25,6 +25,9 @@ interface UserDao {
     @Query("select * from userDb where userID = :userID")
     suspend fun getUsersById(userID:Int): UserDb?
 
+    @Query("select * from userDb order by userID desc limit 1")
+    suspend fun getLastInsertedUser(): UserDb?
+
     @Query("select * from userDb where userID = :userID")
     fun getCurrentUser(userID:Int): Flow<UserDb>
 

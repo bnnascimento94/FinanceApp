@@ -72,7 +72,9 @@ class RegisterViewModel @Inject constructor(
                 onSuccess()
             }
         } catch (e: Exception) {
-            e.message?.let { onError(it) }
+            withContext(Dispatchers.Main){
+                e.message?.let { onError(it) }
+            }
         }
     }
 }

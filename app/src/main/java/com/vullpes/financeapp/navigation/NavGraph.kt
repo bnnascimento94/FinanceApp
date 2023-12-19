@@ -198,7 +198,16 @@ fun NavGraphBuilder.loginRoute(
                     }
                 )
             },
-            onForgotPassword = {},
+            onForgotPassword = {
+                viewModel.forgotPassword(
+                    onSuccess = {
+                        Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                    },
+                    onError = {error ->
+                        Toast.makeText(context, error, Toast.LENGTH_SHORT).show()
+                    }
+                )
+            },
             onRegisterUser = onRegisterUser
         )
     }

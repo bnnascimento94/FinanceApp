@@ -9,9 +9,10 @@ interface UserRepository {
     suspend fun updateUser(user: User)
     suspend fun updatePhoto(imageSrc: String)
     suspend fun deactivateUser(userID: Int)
-    suspend fun loginUser(user:String, password:String): Boolean
+    suspend fun loginUser(email:String, password:String): Boolean
     suspend fun logout()
     suspend fun getLoggedUser():User?
     suspend fun currentUser(): Flow<User>
+    suspend fun forgotPassword(email:String):Boolean
 
 }

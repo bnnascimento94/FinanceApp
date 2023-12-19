@@ -1,5 +1,6 @@
 package com.vullpes.financeapp.data.dataSource.room.repository.user
 
+import android.util.Log
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.entities.toUser
 import com.vullpes.financeapp.data.dataSource.room.entities.toUserDb
@@ -12,10 +13,12 @@ class UserRoomDataSourceImpl @Inject constructor(
     private val financeAppDatabase: FinanceAppDatabase,
 
 ): UserRoomDataSource {
-    override suspend fun createUser(user: User) {
-        try {
+    override suspend fun createUser(user: User) :User?{
+       return try {
             val userDao = financeAppDatabase.userDao()
-            userDao.insert(user.toUserDb())
+            val userDb = user.toUserDb()
+            userDao.insert(userDb)
+            userDao.getLastInsertedUser()?.toUser()
         }catch (e:Exception){
             throw e
         }
@@ -69,8 +72,6 @@ class UserRoomDataSourceImpl @Inject constructor(
             val userDao = financeAppDatabase.userDao()
             val userDb = userDao.getUserByEmail(email)
             userDb?.toUser()
-
-
         }catch (e:Exception){
             throw e
         }
