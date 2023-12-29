@@ -1,9 +1,15 @@
 package com.vullpes.financeapp.presentation.profile
 
+import android.Manifest
+import android.content.pm.PackageManager
+import android.widget.Toast
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,9 +25,11 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -30,12 +38,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
 import com.vullpes.financeapp.R
 import com.vullpes.financeapp.presentation.profile.components.ProfileTopAppBar
@@ -50,13 +60,31 @@ fun ProfileScreen(
     onNameChanged: (String) -> Unit,
     onEmailChanged: (String) -> Unit,
     onPasswordChanged: (String) -> Unit,
+    onChangeBiometricAuth:(Boolean) ->Unit
 ) {
 
     val passwordVisibility = remember{ mutableStateOf(false) }
+    val context = LocalContext.current
 
     BackHandler {
         onBackScreen()
     }
+
+    val launcherMultiplePermissions = rememberLauncherForActivityResult(
+        ActivityResultContracts.RequestMultiplePermissions()
+    ) { permissionsMap ->
+        val areGranted = permissionsMap.values.reduce { acc, next -> acc && next }
+        if (areGranted) {
+            Toast.makeText(context, "Permission Granted", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "Permission Denied", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    val permissions = arrayOf(
+        Manifest.permission.USE_BIOMETRIC
+    )
+
 
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -79,7 +107,7 @@ fun ProfileScreen(
 
                 uiStateProfile.profile?.imgSrc?.let {
                     AsyncImage(
-                        model = uiStateProfile.profile?.imgSrc,
+                        model = uiStateProfile.profile.imgSrc,
                         placeholder = painterResource(R.drawable.no_user),
                         modifier = Modifier
                             .padding(6.dp)
@@ -143,12 +171,37 @@ fun ProfileScreen(
                         }
                     },
                 )
+
+                if(uiStateProfile.checkBiometricSupport){
+                    Row(modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp), verticalAlignment = Alignment.CenterVertically, horizontalArrangement = Arrangement.SpaceBetween){
+                        Text(stringResource(R.string.allow_biometric_auth), style = MaterialTheme.typography.titleMedium)
+                        Switch(
+                            checked = uiStateProfile.biometricAuthpermission,
+                            onCheckedChange = { checkedValue ->
+                                if (permissions.all { permission ->
+                                        ContextCompat.checkSelfPermission(
+                                            context,
+                                            permission
+                                        ) == PackageManager.PERMISSION_GRANTED
+                                    }) {
+                                    onChangeBiometricAuth(checkedValue)
+                                } else {
+                                    launcherMultiplePermissions.launch(permissions)
+                                }
+
+                            }
+                        )
+                    }
+                }
+
             }
 
             Button(modifier = Modifier
                 .fillMaxWidth()
                 .padding(8.dp),onClick = { onSave()}) {
-                Text(text = "Save")
+                Text(text = stringResource(R.string.save))
             }
         }
 
@@ -161,5 +214,5 @@ fun ProfileScreen(
 @Preview
 @Composable
 fun PreviewProfile() {
-    ProfileScreen(UiStateProfile(),onBackScreen = {  }, onEditImage = {}, onSave = {}, {},{},{})
+    ProfileScreen(UiStateProfile(),onBackScreen = {  }, onEditImage = {}, onSave = {}, {},{},{},{})
 }

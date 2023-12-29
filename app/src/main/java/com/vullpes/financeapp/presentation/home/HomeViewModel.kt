@@ -14,6 +14,7 @@ import com.vullpes.financeapp.domain.usecases.account.CheckIfCanWithdrawUsecase
 import com.vullpes.financeapp.domain.usecases.account.CreateAccountUseCase
 import com.vullpes.financeapp.domain.usecases.account.ListAccountUseCase
 import com.vullpes.financeapp.domain.usecases.account.UpdateAccountUseCase
+import com.vullpes.financeapp.domain.usecases.authentication.ClearAllSessionDataUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.GetFlowUserUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.LogoutUsecase
 import com.vullpes.financeapp.domain.usecases.category.CreateDefaultCategoriesUsecase
@@ -33,6 +34,7 @@ import javax.inject.Inject
 class HomeViewModel @Inject constructor(
     private val getFlowUserUsecase: GetFlowUserUsecase,
     private val logoutUsecase: LogoutUsecase,
+    private val clearAllSessionDataUsecase: ClearAllSessionDataUsecase,
     private val checkIfCanWithdrawUsecase: CheckIfCanWithdrawUsecase,
     private val createTransactionUseCase: CreateTransactionUseCase,
     private val buttonSaveTransactionEnabledUseCase: ButtonSaveTransactionEnabledUseCase,
@@ -302,6 +304,7 @@ class HomeViewModel @Inject constructor(
             uiState = uiState.copy(loading = true)
         }
         logoutUsecase.execute()
+        clearAllSessionDataUsecase.execute()
         withContext(Dispatchers.Main) {
             uiState = uiState.copy(loading = false)
             onSuccess()

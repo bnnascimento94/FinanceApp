@@ -10,6 +10,7 @@ class PreferenciasRepositoryImpl @Inject constructor(
 
 
     private val USER_ID = "userID"
+    private val useBiometrics = "allowBiometrics"
 
     override fun saveUser(userID: Int) {
         editor.putInt(USER_ID, userID)
@@ -23,5 +24,14 @@ class PreferenciasRepositoryImpl @Inject constructor(
 
     override fun getSavedUser(): Int{
         return preferences.getInt(USER_ID, 0)
+    }
+
+    override fun allowUseBiometrics(allow: Boolean) {
+        editor.putBoolean(useBiometrics, allow)
+        editor.commit()
+    }
+
+    override fun getAllowBiometrics(): Boolean {
+        return preferences.getBoolean(useBiometrics, false)
     }
 }

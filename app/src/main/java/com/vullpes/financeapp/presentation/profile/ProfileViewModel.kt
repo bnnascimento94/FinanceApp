@@ -12,6 +12,9 @@ import androidx.compose.runtime.setValue
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.vullpes.financeapp.domain.usecases.authentication.AllowBiometricsUsecase
+import com.vullpes.financeapp.domain.usecases.authentication.CheckBiometricSupportUsecase
+import com.vullpes.financeapp.domain.usecases.authentication.GetBiometricStatusUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.GetCurrentUserUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.UpdatePhotoImageUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.UpdateUserUsercase
@@ -32,7 +35,10 @@ class ProfileViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val updateUserUsecase: UpdateUserUsercase,
     private val getCurrentUserUsecase: GetCurrentUserUsecase,
-    private val updatePhotoImageUsecase: UpdatePhotoImageUsecase
+    private val updatePhotoImageUsecase: UpdatePhotoImageUsecase,
+    private val allowBiometricsUsecase: AllowBiometricsUsecase,
+    private val getBiometricStatusUsecase: GetBiometricStatusUsecase,
+    private val checkBiometricSupportUsecase: CheckBiometricSupportUsecase
 ) : ViewModel() {
 
     var uiState by mutableStateOf(UiStateProfile())
@@ -43,11 +49,13 @@ class ProfileViewModel @Inject constructor(
 
     init {
         loadLoggedUser()
+        uiState = uiState.copy(checkBiometricSupport = checkBiometricSupportUsecase.execute())
     }
 
     private fun loadLoggedUser() = viewModelScope.launch {
         withContext(Dispatchers.Main) {
-            uiState = uiState.copy(loading = true)
+            val biometricStatus = getBiometricStatusUsecase.execute()
+            uiState = uiState.copy(loading = true, biometricAuthpermission = biometricStatus )
         }
         val result = getCurrentUserUsecase.execute()
         withContext(Dispatchers.Main) {
@@ -130,6 +138,11 @@ class ProfileViewModel @Inject constructor(
             }
         }
 
+    }
+
+    fun biometricAllowance(allowBiometric:Boolean) {
+        uiState = uiState.copy(biometricAuthpermission = allowBiometric)
+        allowBiometricsUsecase.execute(allowBiometric)
     }
 
 

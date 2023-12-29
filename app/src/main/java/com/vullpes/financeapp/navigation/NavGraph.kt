@@ -1,6 +1,11 @@
 package com.vullpes.financeapp.navigation
 
+import android.app.KeyguardManager
+import android.content.Context
+import android.content.pm.PackageManager
+import android.hardware.biometrics.BiometricPrompt
 import android.os.Build
+import android.os.CancellationSignal
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.compose.material3.DrawerValue
@@ -11,6 +16,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
+import androidx.core.app.ActivityCompat
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
@@ -65,6 +71,7 @@ fun SetupNavGraph(
             onNegativeClick = { /*TODO*/ }
         ) {
             openDialog.value = false
+            UserSession.stopSession()
             navController.popBackStack()
             navController.navigate(Screen.Login.route)
         }
@@ -177,6 +184,7 @@ fun NavGraphBuilder.loginRoute(
     onSignIn: () -> Unit,
     onRegisterUser:() -> Unit
 ) {
+
     composable(route = Screen.Login.route) {
         val viewModel: LoginViewModel = hiltViewModel()
         val context = LocalContext.current
@@ -209,7 +217,16 @@ fun NavGraphBuilder.loginRoute(
                     }
                 )
             },
-            onRegisterUser = onRegisterUser
+            onRegisterUser = onRegisterUser,
+            useBiometrics = {
+                viewModel.biometricAuth(
+                    onSuccess = {
+                        onSignIn()
+                    },
+                    onError = {
+                        Toast.makeText(context,it, Toast.LENGTH_SHORT).show()
+                    })
+            }
         )
     }
 }
@@ -549,6 +566,9 @@ fun NavGraphBuilder.profileRoute(
             onPasswordChanged = {
                 viewModel.setPassword(it)
                 onInteraction()
+            },
+            onChangeBiometricAuth = {
+                viewModel.biometricAllowance(it)
             }
         )
 

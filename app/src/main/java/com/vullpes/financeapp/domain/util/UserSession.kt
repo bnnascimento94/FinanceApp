@@ -31,7 +31,6 @@ object UserSession {
 
     fun stopSession()  {
         userSession.cancel()
-        sessionScope.cancel()
     }
 
 

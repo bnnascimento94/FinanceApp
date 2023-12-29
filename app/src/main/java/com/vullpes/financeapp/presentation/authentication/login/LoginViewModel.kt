@@ -8,7 +8,10 @@ import androidx.compose.runtime.withFrameMillis
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.vullpes.financeapp.R
+import com.vullpes.financeapp.domain.usecases.authentication.AllowBiometricsUsecase
+import com.vullpes.financeapp.domain.usecases.authentication.BiometricAuthenticationUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.ForgotPasswordUsecase
+import com.vullpes.financeapp.domain.usecases.authentication.GetBiometricStatusUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.LoginUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -21,10 +24,22 @@ import javax.inject.Inject
 class LoginViewModel @Inject constructor(
     @ApplicationContext private val context: Context,
     private val loginUsecase: LoginUsecase,
-    private val forgotPasswordUsecase: ForgotPasswordUsecase
+    private val forgotPasswordUsecase: ForgotPasswordUsecase,
+    private val getBiometricStatusUsecase: GetBiometricStatusUsecase,
+    private val biometricAuthenticationUsecase: BiometricAuthenticationUsecase
 ): ViewModel() {
+
     var uiState by mutableStateOf(UiStateLogin())
         private set
+    init {
+        uiState = uiState.copy(allowBiometrics = getBiometricStatusUsecase.execute())
+    }
+
+
+
+    fun biometricAuth(onSuccess: () -> Unit, onError: (String) -> Unit){
+        biometricAuthenticationUsecase.execute(onSuccess, onError)
+    }
 
     fun setUsername(username: String){
         uiState = uiState.copy(email = username)

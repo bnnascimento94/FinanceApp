@@ -50,4 +50,6 @@
     <string name="user_not_found">User not found</string>
     <string name="the_e_mail_supplied_has_not_been_found">The e-mail supplied has not been found.</string>
     <string name="user_updated">User updated</string>
+    <string name="allow_biometric_auth">Allow Biometric Auth</string>
+    <string name="use_biometrics">Use Biometrics</string>
 </resources>

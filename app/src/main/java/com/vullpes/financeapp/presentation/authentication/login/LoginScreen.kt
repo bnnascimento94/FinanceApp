@@ -46,6 +46,7 @@ fun LoginScreen(
     onSignInClicked: () -> Unit,
     onForgotPassword:() -> Unit,
     onRegisterUser:() -> Unit,
+    useBiometrics:() ->Unit
 
 ) {
     Box(modifier = Modifier
@@ -135,6 +136,22 @@ fun LoginScreen(
                 }
             }
 
+            if(uiStateLogin.allowBiometrics){
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Button(enabled = true,
+                    onClick = { useBiometrics()},
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                )
+                {
+
+                  Text(text = stringResource(R.string.use_biometrics),fontFamily = FontFamily.Default, color = Color.White)
+
+                }
+
+            }
 
 
             ClickableText(
@@ -179,7 +196,8 @@ fun PrevLogin() {
         onPasswordChanged = {},
         onSignInClicked = { /*TODO*/ },
         onRegisterUser = {},
-        onForgotPassword = {}
+        onForgotPassword = {},
+        useBiometrics = {}
         )
 }
 

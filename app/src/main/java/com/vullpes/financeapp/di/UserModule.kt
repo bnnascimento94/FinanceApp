@@ -1,5 +1,6 @@
 package com.vullpes.financeapp.di
 
+import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.itm.juipdv.util.imagem.ImageSaver
 import com.vullpes.financeapp.data.UserRespositoryImpl
@@ -10,7 +11,12 @@ import com.vullpes.financeapp.data.dataSource.room.repository.user.UserRoomDataS
 import com.vullpes.financeapp.data.dataSource.room.repository.user.UserRoomDataSourceImpl
 import com.vullpes.financeapp.data.sharedPreferences.PreferenciasRepository
 import com.vullpes.financeapp.domain.UserRepository
+import com.vullpes.financeapp.domain.usecases.authentication.AllowBiometricsUsecase
+import com.vullpes.financeapp.domain.usecases.authentication.BiometricAuthenticationUsecase
+import com.vullpes.financeapp.domain.usecases.authentication.CheckBiometricSupportUsecase
+import com.vullpes.financeapp.domain.usecases.authentication.ClearAllSessionDataUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.CreateUserUseCase
+import com.vullpes.financeapp.domain.usecases.authentication.GetBiometricStatusUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.GetCurrentUserUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.GetFlowUserUsecase
 import com.vullpes.financeapp.domain.usecases.authentication.LoginUsecase
@@ -20,6 +26,7 @@ import com.vullpes.financeapp.domain.usecases.authentication.UpdateUserUsercase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
@@ -93,5 +100,36 @@ object UserModule {
     @Singleton
     fun providesGetFlowUserUseCase(userRepository: UserRepository): GetFlowUserUsecase {
         return GetFlowUserUsecase(userRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun providesAllowBiometricsUsecase(preferenciasRepository: PreferenciasRepository): AllowBiometricsUsecase {
+        return AllowBiometricsUsecase(preferenciasRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun providesGetBiometricStatusUsecase(preferenciasRepository: PreferenciasRepository): GetBiometricStatusUsecase {
+        return GetBiometricStatusUsecase(preferenciasRepository)
+    }
+
+    @Provides
+    @Singleton
+    fun providesClearAllSessionDataUsecase(preferenciasRepository: PreferenciasRepository): ClearAllSessionDataUsecase {
+        return ClearAllSessionDataUsecase(preferenciasRepository)
+    }
+
+
+    @Provides
+    @Singleton
+    fun providesCheckBiometricSupportUsecase(@ApplicationContext context: Context): CheckBiometricSupportUsecase {
+        return CheckBiometricSupportUsecase(context)
+    }
+
+    @Provides
+    @Singleton
+    fun providesBiometricAuthenticationUsecase(@ApplicationContext context: Context): BiometricAuthenticationUsecase {
+        return BiometricAuthenticationUsecase(context)
     }
 }
