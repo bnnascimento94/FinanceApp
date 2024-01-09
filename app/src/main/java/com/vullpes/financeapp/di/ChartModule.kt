@@ -1,15 +1,15 @@
 package com.vullpes.financeapp.di
 
-import com.vullpes.financeapp.data.ChartRepositoryImpl
+import com.vullpes.financeapp.charts.data.ChartRepositoryImpl
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.repository.charts.ChartsRoomDataSource
 import com.vullpes.financeapp.data.dataSource.room.repository.charts.ChartsRoomDataSourceImpl
-import com.vullpes.financeapp.domain.ChartsRepository
-import com.vullpes.financeapp.domain.TransactionRepository
-import com.vullpes.financeapp.domain.usecases.charts.AccountBalanceByDateUseCase
-import com.vullpes.financeapp.domain.usecases.charts.AllCategoryBalanceByDateUseCase
-import com.vullpes.financeapp.domain.usecases.charts.AllCategoryTransactionByAccountAndDateUseCase
-import com.vullpes.financeapp.domain.usecases.charts.GroupTransactionsByTransferenceWithdrawalDepositUsecase
+import com.vullpes.financeapp.charts.domain.ChartsRepository
+import com.vullpes.financeapp.transaction.domain.TransactionRepository
+import com.vullpes.financeapp.charts.domain.usecase.AccountBalanceByDateUseCase
+import com.vullpes.financeapp.charts.domain.usecase.AllCategoryBalanceByDateUseCase
+import com.vullpes.financeapp.charts.domain.usecase.AllCategoryTransactionByAccountAndDateUseCase
+import com.vullpes.financeapp.charts.domain.usecase.GroupTransactionsByTransferenceWithdrawalDepositUsecase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,13 +28,13 @@ object ChartModule {
 
     @Provides
     @Singleton
-    fun providesChartRepository(chartsRoomDataSource: ChartsRoomDataSource): ChartsRepository{
+    fun providesChartRepository(chartsRoomDataSource: ChartsRoomDataSource): ChartsRepository {
         return ChartRepositoryImpl(chartsRoomDataSource)
     }
 
     @Provides
     @Singleton
-    fun providesAccountBalanceByDateUseCase(chartsRepository: ChartsRepository):AccountBalanceByDateUseCase{
+    fun providesAccountBalanceByDateUseCase(chartsRepository: ChartsRepository): AccountBalanceByDateUseCase {
         return AccountBalanceByDateUseCase(chartsRepository)
     }
 

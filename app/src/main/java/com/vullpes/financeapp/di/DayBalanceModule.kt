@@ -1,11 +1,11 @@
 package com.vullpes.financeapp.di
 
-import com.vullpes.financeapp.data.DayBalanceRepositoryImpl
+import com.vullpes.financeapp.charts.data.DayBalanceRepositoryImpl
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.repository.dayBalance.DayBalanceRoomDataSource
 import com.vullpes.financeapp.data.dataSource.room.repository.dayBalance.DayBalanceRoomDataSourceImpl
-import com.vullpes.financeapp.domain.DayBalanceRepository
-import com.vullpes.financeapp.domain.usecases.dayBalance.SetDayBalanceAccountUsecase
+import com.vullpes.financeapp.charts.domain.DayBalanceRepository
+import com.vullpes.financeapp.charts.domain.usecase.SetDayBalanceAccountUsecase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

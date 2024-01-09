@@ -6,24 +6,24 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.text.AnnotatedString
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vullpes.financeapp.domain.model.Account
-import com.vullpes.financeapp.domain.model.Transaction
-import com.vullpes.financeapp.domain.usecases.account.ButtonSaveAccountEnabledUsecase
-import com.vullpes.financeapp.domain.usecases.account.CheckIfAccountNameIsDifferentUsecase
-import com.vullpes.financeapp.domain.usecases.account.CheckIfCanWithdrawUsecase
-import com.vullpes.financeapp.domain.usecases.account.CreateAccountUseCase
-import com.vullpes.financeapp.domain.usecases.account.ListAccountUseCase
-import com.vullpes.financeapp.domain.usecases.account.UpdateAccountUseCase
-import com.vullpes.financeapp.domain.usecases.authentication.ClearAllSessionDataUsecase
-import com.vullpes.financeapp.domain.usecases.authentication.GetFlowUserUsecase
-import com.vullpes.financeapp.domain.usecases.authentication.LogoutUsecase
-import com.vullpes.financeapp.domain.usecases.category.CreateDefaultCategoriesUsecase
-import com.vullpes.financeapp.domain.usecases.category.ListCategoryUseCase
-import com.vullpes.financeapp.domain.usecases.transaction.ButtonSaveTransactionEnabledUseCase
-import com.vullpes.financeapp.domain.usecases.transaction.CreateTransactionUseCase
-import com.vullpes.financeapp.domain.usecases.transaction.GetLastTransactionsByAccountUseCase
-import com.vullpes.financeapp.domain.util.CurrencyAmountInputVisualTransformation
-import com.vullpes.financeapp.domain.util.KindOfTransaction
+import com.vullpes.financeapp.account.domain.Account
+import com.vullpes.financeapp.transaction.domain.Transaction
+import com.vullpes.financeapp.account.domain.usecases.account.ButtonSaveAccountEnabledUsecase
+import com.vullpes.financeapp.account.domain.usecases.account.CheckIfAccountNameIsDifferentUsecase
+import com.vullpes.financeapp.account.domain.usecases.account.CheckIfCanWithdrawUsecase
+import com.vullpes.financeapp.account.domain.usecases.account.CreateAccountUseCase
+import com.vullpes.financeapp.account.domain.usecases.account.ListAccountUseCase
+import com.vullpes.financeapp.account.domain.usecases.account.UpdateAccountUseCase
+import com.vullpes.financeapp.authentication.domain.usecases.ClearAllSessionDataUsecase
+import com.vullpes.financeapp.authentication.domain.usecases.GetFlowUserUsecase
+import com.vullpes.financeapp.authentication.domain.usecases.LogoutUsecase
+import com.vullpes.financeapp.category.domain.usecases.CreateDefaultCategoriesUsecase
+import com.vullpes.financeapp.category.domain.usecases.ListCategoryUseCase
+import com.vullpes.financeapp.transaction.domain.usecases.ButtonSaveTransactionEnabledUseCase
+import com.vullpes.financeapp.transaction.domain.usecases.CreateTransactionUseCase
+import com.vullpes.financeapp.transaction.domain.usecases.GetLastTransactionsByAccountUseCase
+import com.vullpes.util.domain.currency.CurrencyAmountInputVisualTransformation
+import com.vullpes.util.domain.KindOfTransaction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -110,7 +110,8 @@ class HomeViewModel @Inject constructor(
         uiState = uiState.copy(valueAccount = accountValue)
         uiState = uiState.copy(
             accountCreateUpdate = uiState.accountCreateUpdate?.copy(
-                accountBalance = if(accountValue.isBlank()) 0.00 else CurrencyAmountInputVisualTransformation().filter(
+                accountBalance = if(accountValue.isBlank()) 0.00 else com.vullpes.util.domain.currency.CurrencyAmountInputVisualTransformation()
+                    .filter(
                     AnnotatedString(
                         accountValue
                     )
@@ -169,25 +170,25 @@ class HomeViewModel @Inject constructor(
         )
     }
 
-    fun onOpenModalTransacton(accountID: Int, kindOfTransaction: KindOfTransaction) {
+    fun onOpenModalTransacton(accountID: Int, kindOfTransaction: com.vullpes.util.domain.KindOfTransaction) {
         uiState = uiState.copy(
             openTransactionModal = true,
             transaction = uiState.transaction.copy(
                 accountFromID = accountID,
                 deposit = when (kindOfTransaction) {
-                    KindOfTransaction.WITHDRAW -> false
-                    KindOfTransaction.DEPOSIT -> true
-                    KindOfTransaction.TRANSFERENCE -> false
+                    com.vullpes.util.domain.KindOfTransaction.WITHDRAW -> false
+                    com.vullpes.util.domain.KindOfTransaction.DEPOSIT -> true
+                    com.vullpes.util.domain.KindOfTransaction.TRANSFERENCE -> false
                 },
                 withdrawal = when (kindOfTransaction) {
-                    KindOfTransaction.WITHDRAW -> true
-                    KindOfTransaction.DEPOSIT -> false
-                    KindOfTransaction.TRANSFERENCE -> false
+                    com.vullpes.util.domain.KindOfTransaction.WITHDRAW -> true
+                    com.vullpes.util.domain.KindOfTransaction.DEPOSIT -> false
+                    com.vullpes.util.domain.KindOfTransaction.TRANSFERENCE -> false
                 },
                 transference = when (kindOfTransaction) {
-                    KindOfTransaction.WITHDRAW -> false
-                    KindOfTransaction.DEPOSIT -> false
-                    KindOfTransaction.TRANSFERENCE -> true
+                    com.vullpes.util.domain.KindOfTransaction.WITHDRAW -> false
+                    com.vullpes.util.domain.KindOfTransaction.DEPOSIT -> false
+                    com.vullpes.util.domain.KindOfTransaction.TRANSFERENCE -> true
                 }
             )
         )
@@ -198,7 +199,7 @@ class HomeViewModel @Inject constructor(
 
         uiState = uiState.copy(
             transaction = uiState.transaction.copy(
-                value = CurrencyAmountInputVisualTransformation().filter(
+                value = com.vullpes.util.domain.currency.CurrencyAmountInputVisualTransformation().filter(
                     AnnotatedString(
                         accountValue
                     )
@@ -237,23 +238,23 @@ class HomeViewModel @Inject constructor(
         buttonSaveTransactionEnabled()
     }
 
-    fun onTransaction(kindOfTransaction: KindOfTransaction) {
+    fun onTransaction(kindOfTransaction: com.vullpes.util.domain.KindOfTransaction) {
         uiState = uiState.copy(
             transaction = uiState.transaction.copy(
                 deposit = when (kindOfTransaction) {
-                    KindOfTransaction.WITHDRAW -> false
-                    KindOfTransaction.DEPOSIT -> true
-                    KindOfTransaction.TRANSFERENCE -> false
+                    com.vullpes.util.domain.KindOfTransaction.WITHDRAW -> false
+                    com.vullpes.util.domain.KindOfTransaction.DEPOSIT -> true
+                    com.vullpes.util.domain.KindOfTransaction.TRANSFERENCE -> false
                 },
                 withdrawal = when (kindOfTransaction) {
-                    KindOfTransaction.WITHDRAW -> true
-                    KindOfTransaction.DEPOSIT -> false
-                    KindOfTransaction.TRANSFERENCE -> false
+                    com.vullpes.util.domain.KindOfTransaction.WITHDRAW -> true
+                    com.vullpes.util.domain.KindOfTransaction.DEPOSIT -> false
+                    com.vullpes.util.domain.KindOfTransaction.TRANSFERENCE -> false
                 },
                 transference = when (kindOfTransaction) {
-                    KindOfTransaction.WITHDRAW -> false
-                    KindOfTransaction.DEPOSIT -> false
-                    KindOfTransaction.TRANSFERENCE -> true
+                    com.vullpes.util.domain.KindOfTransaction.WITHDRAW -> false
+                    com.vullpes.util.domain.KindOfTransaction.DEPOSIT -> false
+                    com.vullpes.util.domain.KindOfTransaction.TRANSFERENCE -> true
                 }
             )
         )

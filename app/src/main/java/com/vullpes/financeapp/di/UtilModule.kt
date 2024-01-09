@@ -4,8 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.itm.juipdv.util.imagem.ImageSaver
 import com.itm.juipdv.util.imagem.ImageSaverImpl
-import com.vullpes.financeapp.data.sharedPreferences.PreferenciasRepository
-import com.vullpes.financeapp.data.sharedPreferences.PreferenciasRepositoryImpl
+import com.vullpes.sharedpreferences.PreferenciasRepository
+import com.vullpes.sharedpreferences.PreferenciasRepositoryImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,9 +25,9 @@ object UtilModule {
 
     @Provides
     @Singleton
-    fun providesPreferenciasRepository(@ApplicationContext context: Context): PreferenciasRepository {
+    fun providesPreferenciasRepository(@ApplicationContext context: Context): com.vullpes.sharedpreferences.PreferenciasRepository {
         val preferences: SharedPreferences = context.getSharedPreferences("dadosUsuario", 0)
         val editor: SharedPreferences.Editor = preferences.edit()
-        return PreferenciasRepositoryImpl(preferences, editor)
+        return com.vullpes.sharedpreferences.PreferenciasRepositoryImpl(preferences, editor)
     }
 }

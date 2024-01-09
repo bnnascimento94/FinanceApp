@@ -12,6 +12,19 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/buildSrc" />
+            <option value="$PROJECT_DIR$/firebase" />
+            <option value="$PROJECT_DIR$/room" />
+            <option value="$PROJECT_DIR$/sharedPreferences" />
+            <option value="$PROJECT_DIR$/ui" />
+            <option value="$PROJECT_DIR$/ui/category" />
+            <option value="$PROJECT_DIR$/ui/charts" />
+            <option value="$PROJECT_DIR$/ui/components" />
+            <option value="$PROJECT_DIR$/ui/login" />
+            <option value="$PROJECT_DIR$/ui/profile" />
+            <option value="$PROJECT_DIR$/ui/transaction" />
+            <option value="$PROJECT_DIR$/ui/uiregister" />
+            <option value="$PROJECT_DIR$/util" />
           </set>
         </option>
       </GradleProjectSettings>

@@ -27,8 +27,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.AsyncImage
 import com.vullpes.financeapp.R
-import com.vullpes.financeapp.domain.model.Account
-import com.vullpes.financeapp.domain.model.User
+import com.vullpes.financeapp.account.domain.Account
+import com.vullpes.financeapp.authentication.domain.User
 
 @Composable
 fun TopAppBar(

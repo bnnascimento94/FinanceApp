@@ -39,8 +39,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.vullpes.financeapp.R
-import com.vullpes.financeapp.domain.model.Account
-import com.vullpes.financeapp.domain.util.toCurrencyFormat
+import com.vullpes.financeapp.account.domain.Account
+import com.vullpes.util.domain.currency.toCurrencyFormat
 import com.vullpes.financeapp.ui.theme.Purple40
 import java.util.Date
 

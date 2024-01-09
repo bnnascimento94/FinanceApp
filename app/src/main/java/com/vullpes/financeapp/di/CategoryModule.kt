@@ -1,16 +1,16 @@
 package com.vullpes.financeapp.di
 
-import com.vullpes.financeapp.data.CategoryRepositoryImpl
+import com.vullpes.financeapp.category.data.CategoryRepositoryImpl
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.repository.category.CategoryRoomDataSource
 import com.vullpes.financeapp.data.dataSource.room.repository.category.CategoryRoomDataSourceImpl
-import com.vullpes.financeapp.domain.CategoryRepository
-import com.vullpes.financeapp.domain.usecases.category.ButtonSaveCategoryEnabledUsecase
-import com.vullpes.financeapp.domain.usecases.category.UpdateCategoryUseCase
-import com.vullpes.financeapp.domain.usecases.category.CreateCategoryUseCase
-import com.vullpes.financeapp.domain.usecases.category.CreateDefaultCategoriesUsecase
-import com.vullpes.financeapp.domain.usecases.category.DeactivateCategoryUseCase
-import com.vullpes.financeapp.domain.usecases.category.ListCategoryUseCase
+import com.vullpes.financeapp.category.domain.CategoryRepository
+import com.vullpes.financeapp.category.domain.usecases.ButtonSaveCategoryEnabledUsecase
+import com.vullpes.financeapp.category.domain.usecases.UpdateCategoryUseCase
+import com.vullpes.financeapp.category.domain.usecases.CreateCategoryUseCase
+import com.vullpes.financeapp.category.domain.usecases.CreateDefaultCategoriesUsecase
+import com.vullpes.financeapp.category.domain.usecases.DeactivateCategoryUseCase
+import com.vullpes.financeapp.category.domain.usecases.ListCategoryUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

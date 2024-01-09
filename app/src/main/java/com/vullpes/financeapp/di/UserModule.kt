@@ -3,26 +3,26 @@ package com.vullpes.financeapp.di
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.itm.juipdv.util.imagem.ImageSaver
-import com.vullpes.financeapp.data.UserRespositoryImpl
-import com.vullpes.financeapp.data.dataSource.firebase.auth.AuthFirebaseDataSource
-import com.vullpes.financeapp.data.dataSource.firebase.auth.AuthFirebaseDataSourceImpl
+import com.vullpes.financeapp.authentication.data.UserRespositoryImpl
+import com.vullpes.firebase.auth.AuthFirebaseDataSource
+import com.vullpes.firebase.auth.AuthFirebaseDataSourceImpl
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.repository.user.UserRoomDataSource
 import com.vullpes.financeapp.data.dataSource.room.repository.user.UserRoomDataSourceImpl
-import com.vullpes.financeapp.data.sharedPreferences.PreferenciasRepository
-import com.vullpes.financeapp.domain.UserRepository
-import com.vullpes.financeapp.domain.usecases.authentication.AllowBiometricsUsecase
-import com.vullpes.financeapp.domain.usecases.authentication.BiometricAuthenticationUsecase
-import com.vullpes.financeapp.domain.usecases.authentication.CheckBiometricSupportUsecase
-import com.vullpes.financeapp.domain.usecases.authentication.ClearAllSessionDataUsecase
-import com.vullpes.financeapp.domain.usecases.authentication.CreateUserUseCase
-import com.vullpes.financeapp.domain.usecases.authentication.GetBiometricStatusUsecase
-import com.vullpes.financeapp.domain.usecases.authentication.GetCurrentUserUsecase
-import com.vullpes.financeapp.domain.usecases.authentication.GetFlowUserUsecase
-import com.vullpes.financeapp.domain.usecases.authentication.LoginUsecase
-import com.vullpes.financeapp.domain.usecases.authentication.LogoutUsecase
-import com.vullpes.financeapp.domain.usecases.authentication.UpdatePhotoImageUsecase
-import com.vullpes.financeapp.domain.usecases.authentication.UpdateUserUsercase
+import com.vullpes.sharedpreferences.PreferenciasRepository
+import com.vullpes.financeapp.authentication.domain.UserRepository
+import com.vullpes.financeapp.authentication.domain.usecases.AllowBiometricsUsecase
+import com.vullpes.util.domain.biometrics.BiometricAuthenticationUsecase
+import com.vullpes.util.domain.biometrics.CheckBiometricSupportUsecase
+import com.vullpes.financeapp.authentication.domain.usecases.ClearAllSessionDataUsecase
+import com.vullpes.financeapp.authentication.domain.usecases.CreateUserUseCase
+import com.vullpes.financeapp.authentication.domain.usecases.GetBiometricStatusUsecase
+import com.vullpes.financeapp.authentication.domain.usecases.GetCurrentUserUsecase
+import com.vullpes.financeapp.authentication.domain.usecases.GetFlowUserUsecase
+import com.vullpes.financeapp.authentication.domain.usecases.LoginUsecase
+import com.vullpes.financeapp.authentication.domain.usecases.LogoutUsecase
+import com.vullpes.financeapp.authentication.domain.usecases.UpdatePhotoImageUsecase
+import com.vullpes.financeapp.authentication.domain.usecases.UpdateUserUsercase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -42,16 +42,16 @@ object UserModule {
 
     @Provides
     @Singleton
-    fun providesAuthFirebaseDataSource(auth: FirebaseAuth): AuthFirebaseDataSource {
-        return AuthFirebaseDataSourceImpl(auth)
+    fun providesAuthFirebaseDataSource(auth: FirebaseAuth): com.vullpes.firebase.auth.AuthFirebaseDataSource {
+        return com.vullpes.firebase.auth.AuthFirebaseDataSourceImpl(auth)
     }
 
     @Provides
     @Singleton
     fun providesUserRepository(
         userRoomDataSource: UserRoomDataSource,
-        preferenciasRepository: PreferenciasRepository,
-        authFirebaseDataSource: AuthFirebaseDataSource
+        preferenciasRepository: com.vullpes.sharedpreferences.PreferenciasRepository,
+        authFirebaseDataSource: com.vullpes.firebase.auth.AuthFirebaseDataSource
     ): UserRepository {
         return UserRespositoryImpl(userRoomDataSource, preferenciasRepository, authFirebaseDataSource)
     }
@@ -104,32 +104,32 @@ object UserModule {
 
     @Provides
     @Singleton
-    fun providesAllowBiometricsUsecase(preferenciasRepository: PreferenciasRepository): AllowBiometricsUsecase {
+    fun providesAllowBiometricsUsecase(preferenciasRepository: com.vullpes.sharedpreferences.PreferenciasRepository): AllowBiometricsUsecase {
         return AllowBiometricsUsecase(preferenciasRepository)
     }
 
     @Provides
     @Singleton
-    fun providesGetBiometricStatusUsecase(preferenciasRepository: PreferenciasRepository): GetBiometricStatusUsecase {
+    fun providesGetBiometricStatusUsecase(preferenciasRepository: com.vullpes.sharedpreferences.PreferenciasRepository): GetBiometricStatusUsecase {
         return GetBiometricStatusUsecase(preferenciasRepository)
     }
 
     @Provides
     @Singleton
-    fun providesClearAllSessionDataUsecase(preferenciasRepository: PreferenciasRepository): ClearAllSessionDataUsecase {
+    fun providesClearAllSessionDataUsecase(preferenciasRepository: com.vullpes.sharedpreferences.PreferenciasRepository): ClearAllSessionDataUsecase {
         return ClearAllSessionDataUsecase(preferenciasRepository)
     }
 
 
     @Provides
     @Singleton
-    fun providesCheckBiometricSupportUsecase(@ApplicationContext context: Context): CheckBiometricSupportUsecase {
-        return CheckBiometricSupportUsecase(context)
+    fun providesCheckBiometricSupportUsecase(@ApplicationContext context: Context): com.vullpes.util.domain.biometrics.CheckBiometricSupportUsecase {
+        return com.vullpes.util.domain.biometrics.CheckBiometricSupportUsecase(context)
     }
 
     @Provides
     @Singleton
-    fun providesBiometricAuthenticationUsecase(@ApplicationContext context: Context): BiometricAuthenticationUsecase {
-        return BiometricAuthenticationUsecase(context)
+    fun providesBiometricAuthenticationUsecase(@ApplicationContext context: Context): com.vullpes.util.domain.biometrics.BiometricAuthenticationUsecase {
+        return com.vullpes.util.domain.biometrics.BiometricAuthenticationUsecase(context)
     }
 }
