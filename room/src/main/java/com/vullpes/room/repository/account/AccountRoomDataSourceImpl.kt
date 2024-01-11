@@ -1,9 +1,10 @@
 package com.vullpes.room.repository.account
 
-import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
-import com.vullpes.financeapp.data.dataSource.room.entities.toAccount
-import com.vullpes.financeapp.data.dataSource.room.entities.toAccountDb
-import com.vullpes.financeapp.account.domain.Account
+
+import com.vullpes.room.entities.toAccountDb
+import com.vullpes.account.Account
+import com.vullpes.room.FinanceAppDatabase
+import com.vullpes.room.entities.toAccount
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject

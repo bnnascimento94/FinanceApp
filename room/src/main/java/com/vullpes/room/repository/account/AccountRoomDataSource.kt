@@ -1,6 +1,6 @@
 package com.vullpes.room.repository.account
 
-import com.vullpes.financeapp.account.domain.Account
+import com.vullpes.account.Account
 import kotlinx.coroutines.flow.Flow
 
 interface AccountRoomDataSource {

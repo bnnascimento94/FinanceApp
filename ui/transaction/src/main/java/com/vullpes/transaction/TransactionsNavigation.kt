@@ -5,8 +5,6 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
-import com.vullpes.util.navigation.Constants
-import com.vullpes.util.navigation.Screen
 
 fun NavGraphBuilder.transactionsRoute(
     onBackPressed: () -> Unit,

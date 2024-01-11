@@ -52,4 +52,5 @@ dependencies {
 
     implementation(project(":util"))
     implementation(project(":ui:components"))
+    implementation(project(":domain:transaction"))
 }

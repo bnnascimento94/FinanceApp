@@ -2,7 +2,7 @@ package com.vullpes.room.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.vullpes.financeapp.category.domain.Category
+import com.vullpes.category.Category
 import java.util.Date
 
 @Entity

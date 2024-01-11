@@ -49,4 +49,7 @@ dependencies {
     implementation(libs.hilt.android)
 
     implementation(project(":util"))
+    implementation(project(":domain:account"))
+    implementation(project(":domain:category"))
+    implementation(project(":domain:transaction"))
 }

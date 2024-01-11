@@ -1,18 +1,18 @@
 package com.vullpes.financeapp.di
 
-import com.vullpes.financeapp.transaction.data.TransactionRepositoryImpl
+import com.vullpes.transaction.TransactionRepositoryImpl
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.repository.transaction.TransactionRoomDataSource
 import com.vullpes.financeapp.data.dataSource.room.repository.transaction.TransactionRoomDataSourceImpl
-import com.vullpes.financeapp.transaction.domain.TransactionRepository
-import com.vullpes.financeapp.account.domain.usecases.account.FindAccountByIdUsecase
+import com.vullpes.transaction.TransactionRepository
+import com.vullpes.account.domain.usecases.account.FindAccountByIdUsecase
 import com.vullpes.financeapp.charts.domain.usecase.SetDayBalanceAccountUsecase
-import com.vullpes.financeapp.transaction.domain.usecases.ButtonSaveTransactionEnabledUseCase
-import com.vullpes.financeapp.transaction.domain.usecases.CreateTransactionUseCase
-import com.vullpes.financeapp.transaction.domain.usecases.GetLastTransactionsByAccountUseCase
-import com.vullpes.financeapp.transaction.domain.usecases.ListAllTransactionsByAccountUsecase
-import com.vullpes.financeapp.transaction.domain.usecases.ListAllTransactionsByNameUsecase
-import com.vullpes.financeapp.transaction.domain.usecases.ListTransactionByAccountDateUseCase
+import com.vullpes.transaction.usecases.ButtonSaveTransactionEnabledUseCase
+import com.vullpes.transaction.usecases.CreateTransactionUseCase
+import com.vullpes.transaction.usecases.GetLastTransactionsByAccountUseCase
+import com.vullpes.transaction.usecases.ListAllTransactionsByAccountUsecase
+import com.vullpes.transaction.usecases.ListAllTransactionsByNameUsecase
+import com.vullpes.transaction.usecases.ListTransactionByAccountDateUseCase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,18 +31,18 @@ object TransactionModule {
 
     @Provides
     @Singleton
-    fun providesTransactionRepository(transactionRoomDataSource: TransactionRoomDataSource): TransactionRepository {
-        return TransactionRepositoryImpl(transactionRoomDataSource)
+    fun providesTransactionRepository(transactionRoomDataSource: TransactionRoomDataSource): com.vullpes.transaction.TransactionRepository {
+        return com.vullpes.transaction.TransactionRepositoryImpl(transactionRoomDataSource)
     }
 
     @Provides
     @Singleton
     fun providesCreateTransactionUsecase(
-        transactionRepository: TransactionRepository,
-        findAccountByIdUsecase: FindAccountByIdUsecase,
+        transactionRepository: com.vullpes.transaction.TransactionRepository,
+        findAccountByIdUsecase: com.vullpes.account.domain.usecases.account.FindAccountByIdUsecase,
         setDayBalanceAccountUsecase: SetDayBalanceAccountUsecase
-    ): CreateTransactionUseCase {
-        return CreateTransactionUseCase(
+    ): com.vullpes.transaction.usecases.CreateTransactionUseCase {
+        return com.vullpes.transaction.usecases.CreateTransactionUseCase(
             transactionRepository,
             findAccountByIdUsecase,
             setDayBalanceAccountUsecase
@@ -51,32 +51,40 @@ object TransactionModule {
 
     @Provides
     @Singleton
-    fun providesListTransactionUsecase(transactionRepository: TransactionRepository): ListTransactionByAccountDateUseCase {
-        return ListTransactionByAccountDateUseCase(transactionRepository)
+    fun providesListTransactionUsecase(transactionRepository: com.vullpes.transaction.TransactionRepository): com.vullpes.transaction.usecases.ListTransactionByAccountDateUseCase {
+        return com.vullpes.transaction.usecases.ListTransactionByAccountDateUseCase(
+            transactionRepository
+        )
     }
 
     @Provides
     @Singleton
-    fun providesButtonSaveTransactionEnabledUseCase(): ButtonSaveTransactionEnabledUseCase {
-        return ButtonSaveTransactionEnabledUseCase()
+    fun providesButtonSaveTransactionEnabledUseCase(): com.vullpes.transaction.usecases.ButtonSaveTransactionEnabledUseCase {
+        return com.vullpes.transaction.usecases.ButtonSaveTransactionEnabledUseCase()
     }
 
     @Provides
     @Singleton
-    fun providesGetLastTransactionsByAccountUseCase(transactionRepository: TransactionRepository): GetLastTransactionsByAccountUseCase {
-        return GetLastTransactionsByAccountUseCase(transactionRepository)
+    fun providesGetLastTransactionsByAccountUseCase(transactionRepository: com.vullpes.transaction.TransactionRepository): com.vullpes.transaction.usecases.GetLastTransactionsByAccountUseCase {
+        return com.vullpes.transaction.usecases.GetLastTransactionsByAccountUseCase(
+            transactionRepository
+        )
     }
 
     @Provides
     @Singleton
-    fun providesListAllTransactionsByAccountUsecase(transactionRepository: TransactionRepository): ListAllTransactionsByAccountUsecase {
-        return ListAllTransactionsByAccountUsecase(transactionRepository)
+    fun providesListAllTransactionsByAccountUsecase(transactionRepository: com.vullpes.transaction.TransactionRepository): com.vullpes.transaction.usecases.ListAllTransactionsByAccountUsecase {
+        return com.vullpes.transaction.usecases.ListAllTransactionsByAccountUsecase(
+            transactionRepository
+        )
     }
 
     @Provides
     @Singleton
-    fun providesListAllTransactionsByNameUsecase(transactionRepository: TransactionRepository): ListAllTransactionsByNameUsecase {
-        return ListAllTransactionsByNameUsecase(transactionRepository)
+    fun providesListAllTransactionsByNameUsecase(transactionRepository: com.vullpes.transaction.TransactionRepository): com.vullpes.transaction.usecases.ListAllTransactionsByNameUsecase {
+        return com.vullpes.transaction.usecases.ListAllTransactionsByNameUsecase(
+            transactionRepository
+        )
     }
 
 

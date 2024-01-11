@@ -5,10 +5,10 @@ import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import com.vullpes.financeapp.category.domain.Category
 import com.vullpes.category.components.CategoryItem
 import com.vullpes.category.components.CategoryTopBar
 

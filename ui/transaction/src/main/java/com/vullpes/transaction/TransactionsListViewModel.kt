@@ -7,9 +7,9 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vullpes.financeapp.transaction.domain.usecases.ListAllTransactionsByAccountUsecase
-import com.vullpes.financeapp.transaction.domain.usecases.ListAllTransactionsByNameUsecase
-import com.vullpes.financeapp.transaction.domain.usecases.ListTransactionByAccountDateUseCase
+import com.vullpes.transaction.usecases.ListAllTransactionsByAccountUsecase
+import com.vullpes.transaction.usecases.ListAllTransactionsByNameUsecase
+import com.vullpes.transaction.usecases.ListTransactionByAccountDateUseCase
 import com.vullpes.util.navigation.Constants.ACCOUNTID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job

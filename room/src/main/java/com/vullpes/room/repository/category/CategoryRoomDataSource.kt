@@ -1,6 +1,6 @@
 package com.vullpes.room.repository.category
 
-import com.vullpes.financeapp.category.domain.Category
+import com.vullpes.category.Category
 import kotlinx.coroutines.flow.Flow
 
 interface CategoryRoomDataSource {

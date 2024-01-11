@@ -1,6 +1,6 @@
 package com.vullpes.category
 
-import com.vullpes.financeapp.category.domain.Category
+
 
 data class UiStateCategory(
     val loading:Boolean = false,

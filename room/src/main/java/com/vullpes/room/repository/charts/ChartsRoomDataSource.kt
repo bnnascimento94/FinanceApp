@@ -1,7 +1,7 @@
 package com.vullpes.room.repository.charts
 
-import com.vullpes.financeapp.transaction.domain.Transaction
-import com.vullpes.financeapp.domain.util.Resource
+import com.vullpes.transaction.Transaction
+import com.vullpes.util.Resource
 import kotlinx.coroutines.flow.Flow
 import java.util.Date
 

@@ -1,20 +1,20 @@
 package com.vullpes.financeapp.di
 
-import com.vullpes.financeapp.account.data.AccountRepositoryImpl
+import com.vullpes.account.data.AccountRepositoryImpl
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.repository.account.AccountRoomDataSource
 import com.vullpes.financeapp.data.dataSource.room.repository.account.AccountRoomDataSourceImpl
-import com.vullpes.financeapp.account.domain.AccountRepository
-import com.vullpes.financeapp.transaction.domain.TransactionRepository
-import com.vullpes.financeapp.account.domain.usecases.account.ActivateAccountUseCase
-import com.vullpes.financeapp.account.domain.usecases.account.ButtonSaveAccountEnabledUsecase
-import com.vullpes.financeapp.account.domain.usecases.account.CheckIfAccountNameIsDifferentUsecase
-import com.vullpes.financeapp.account.domain.usecases.account.CheckIfCanWithdrawUsecase
-import com.vullpes.financeapp.account.domain.usecases.account.CreateAccountUseCase
-import com.vullpes.financeapp.account.domain.usecases.account.DeactivateAccountUseCase
-import com.vullpes.financeapp.account.domain.usecases.account.FindAccountByIdUsecase
-import com.vullpes.financeapp.account.domain.usecases.account.ListAccountUseCase
-import com.vullpes.financeapp.account.domain.usecases.account.UpdateAccountUseCase
+import com.vullpes.account.domain.AccountRepository
+import com.vullpes.transaction.TransactionRepository
+import com.vullpes.account.domain.usecases.account.ActivateAccountUseCase
+import com.vullpes.account.domain.usecases.account.ButtonSaveAccountEnabledUsecase
+import com.vullpes.account.domain.usecases.account.CheckIfAccountNameIsDifferentUsecase
+import com.vullpes.account.domain.usecases.account.CheckIfCanWithdrawUsecase
+import com.vullpes.account.domain.usecases.account.CreateAccountUseCase
+import com.vullpes.account.domain.usecases.account.DeactivateAccountUseCase
+import com.vullpes.account.domain.usecases.account.FindAccountByIdUsecase
+import com.vullpes.account.domain.usecases.account.ListAccountUseCase
+import com.vullpes.account.domain.usecases.account.UpdateAccountUseCase
 import com.vullpes.financeapp.charts.domain.usecase.SetDayBalanceAccountUsecase
 import dagger.Module
 import dagger.Provides
@@ -34,65 +34,75 @@ object AccountModule {
 
     @Provides
     @Singleton
-    fun providesAccountRepository(accountRoomDataSource: AccountRoomDataSource): AccountRepository {
-        return AccountRepositoryImpl(accountRoomDataSource)
+    fun providesAccountRepository(accountRoomDataSource: AccountRoomDataSource): com.vullpes.account.domain.AccountRepository {
+        return com.vullpes.account.data.AccountRepositoryImpl(accountRoomDataSource)
     }
 
     @Provides
     @Singleton
-    fun providesActivateAccountUsecase(accountRepository: AccountRepository): ActivateAccountUseCase {
-        return ActivateAccountUseCase(accountRepository)
+    fun providesActivateAccountUsecase(accountRepository: com.vullpes.account.domain.AccountRepository): com.vullpes.account.domain.usecases.account.ActivateAccountUseCase {
+        return com.vullpes.account.domain.usecases.account.ActivateAccountUseCase(accountRepository)
     }
 
     @Provides
     @Singleton
-    fun providesCreateAccountUsecase(accountRepository: AccountRepository,
-                                     transactionRepository: TransactionRepository,
+    fun providesCreateAccountUsecase(accountRepository: com.vullpes.account.domain.AccountRepository,
+                                     transactionRepository: com.vullpes.transaction.TransactionRepository,
                                      setDayBalanceAccountUsecase: SetDayBalanceAccountUsecase
-    ): CreateAccountUseCase {
-        return CreateAccountUseCase(accountRepository,transactionRepository, setDayBalanceAccountUsecase)
+    ): com.vullpes.account.domain.usecases.account.CreateAccountUseCase {
+        return com.vullpes.account.domain.usecases.account.CreateAccountUseCase(
+            accountRepository,
+            transactionRepository,
+            setDayBalanceAccountUsecase
+        )
     }
 
     @Provides
     @Singleton
-    fun providesDeactivateAccountUsecase(accountRepository: AccountRepository): DeactivateAccountUseCase {
-        return DeactivateAccountUseCase(accountRepository)
+    fun providesDeactivateAccountUsecase(accountRepository: com.vullpes.account.domain.AccountRepository): com.vullpes.account.domain.usecases.account.DeactivateAccountUseCase {
+        return com.vullpes.account.domain.usecases.account.DeactivateAccountUseCase(
+            accountRepository
+        )
     }
 
     @Provides
     @Singleton
-    fun providesListAccountUsecase(accountRepository: AccountRepository): ListAccountUseCase {
-        return ListAccountUseCase(accountRepository)
+    fun providesListAccountUsecase(accountRepository: com.vullpes.account.domain.AccountRepository): com.vullpes.account.domain.usecases.account.ListAccountUseCase {
+        return com.vullpes.account.domain.usecases.account.ListAccountUseCase(accountRepository)
     }
 
     @Provides
     @Singleton
-    fun providesUpdateAccountUsecase(accountRepository: AccountRepository, transactionRepository: TransactionRepository, setDayBalanceAccountUsecase: SetDayBalanceAccountUsecase): UpdateAccountUseCase {
-        return UpdateAccountUseCase(accountRepository,transactionRepository, setDayBalanceAccountUsecase)
+    fun providesUpdateAccountUsecase(accountRepository: com.vullpes.account.domain.AccountRepository, transactionRepository: com.vullpes.transaction.TransactionRepository, setDayBalanceAccountUsecase: SetDayBalanceAccountUsecase): com.vullpes.account.domain.usecases.account.UpdateAccountUseCase {
+        return com.vullpes.account.domain.usecases.account.UpdateAccountUseCase(
+            accountRepository,
+            transactionRepository,
+            setDayBalanceAccountUsecase
+        )
     }
 
     @Provides
     @Singleton
-    fun providesButtonSaveAccountEnabledUsecase(): ButtonSaveAccountEnabledUsecase {
-        return ButtonSaveAccountEnabledUsecase()
+    fun providesButtonSaveAccountEnabledUsecase(): com.vullpes.account.domain.usecases.account.ButtonSaveAccountEnabledUsecase {
+        return com.vullpes.account.domain.usecases.account.ButtonSaveAccountEnabledUsecase()
     }
 
     @Provides
     @Singleton
-    fun providesCheckIfAccountNameIsDifferentUsecase(): CheckIfAccountNameIsDifferentUsecase {
-        return CheckIfAccountNameIsDifferentUsecase()
+    fun providesCheckIfAccountNameIsDifferentUsecase(): com.vullpes.account.domain.usecases.account.CheckIfAccountNameIsDifferentUsecase {
+        return com.vullpes.account.domain.usecases.account.CheckIfAccountNameIsDifferentUsecase()
     }
 
     @Provides
     @Singleton
-    fun providesFindAccountByIdUsecase(accountRepository: AccountRepository): FindAccountByIdUsecase {
-        return FindAccountByIdUsecase(accountRepository)
+    fun providesFindAccountByIdUsecase(accountRepository: com.vullpes.account.domain.AccountRepository): com.vullpes.account.domain.usecases.account.FindAccountByIdUsecase {
+        return com.vullpes.account.domain.usecases.account.FindAccountByIdUsecase(accountRepository)
     }
 
     @Provides
     @Singleton
-    fun providesCheckIfCanWithdrawUsecase(): CheckIfCanWithdrawUsecase {
-        return CheckIfCanWithdrawUsecase()
+    fun providesCheckIfCanWithdrawUsecase(): com.vullpes.account.domain.usecases.account.CheckIfCanWithdrawUsecase {
+        return com.vullpes.account.domain.usecases.account.CheckIfCanWithdrawUsecase()
     }
 
 

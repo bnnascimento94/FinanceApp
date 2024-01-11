@@ -1,6 +1,6 @@
 package com.vullpes.financeapp.di
 
-import com.vullpes.financeapp.charts.data.DayBalanceRepositoryImpl
+import com.vullpes.charts.DayBalanceRepositoryImpl
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.repository.dayBalance.DayBalanceRoomDataSource
 import com.vullpes.financeapp.data.dataSource.room.repository.dayBalance.DayBalanceRoomDataSourceImpl
@@ -25,7 +25,7 @@ object DayBalanceModule {
     @Provides
     @Singleton
     fun providesDayBalanceRepository(dayBalanceRoomDataSource: DayBalanceRoomDataSource): DayBalanceRepository {
-        return DayBalanceRepositoryImpl(dayBalanceRoomDataSource)
+        return com.vullpes.charts.DayBalanceRepositoryImpl(dayBalanceRoomDataSource)
     }
 
     @Provides

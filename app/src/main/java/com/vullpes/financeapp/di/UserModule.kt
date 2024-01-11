@@ -3,26 +3,26 @@ package com.vullpes.financeapp.di
 import android.content.Context
 import com.google.firebase.auth.FirebaseAuth
 import com.itm.juipdv.util.imagem.ImageSaver
-import com.vullpes.financeapp.authentication.data.UserRespositoryImpl
+import com.vullpes.authentication.UserRespositoryImpl
 import com.vullpes.firebase.auth.AuthFirebaseDataSource
 import com.vullpes.firebase.auth.AuthFirebaseDataSourceImpl
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.repository.user.UserRoomDataSource
 import com.vullpes.financeapp.data.dataSource.room.repository.user.UserRoomDataSourceImpl
 import com.vullpes.sharedpreferences.PreferenciasRepository
-import com.vullpes.financeapp.authentication.domain.UserRepository
-import com.vullpes.financeapp.authentication.domain.usecases.AllowBiometricsUsecase
+import com.vullpes.authentication.UserRepository
+import com.vullpes.authentication.usecases.AllowBiometricsUsecase
 import com.vullpes.util.domain.biometrics.BiometricAuthenticationUsecase
 import com.vullpes.util.domain.biometrics.CheckBiometricSupportUsecase
-import com.vullpes.financeapp.authentication.domain.usecases.ClearAllSessionDataUsecase
-import com.vullpes.financeapp.authentication.domain.usecases.CreateUserUseCase
-import com.vullpes.financeapp.authentication.domain.usecases.GetBiometricStatusUsecase
-import com.vullpes.financeapp.authentication.domain.usecases.GetCurrentUserUsecase
-import com.vullpes.financeapp.authentication.domain.usecases.GetFlowUserUsecase
-import com.vullpes.financeapp.authentication.domain.usecases.LoginUsecase
-import com.vullpes.financeapp.authentication.domain.usecases.LogoutUsecase
-import com.vullpes.financeapp.authentication.domain.usecases.UpdatePhotoImageUsecase
-import com.vullpes.financeapp.authentication.domain.usecases.UpdateUserUsercase
+import com.vullpes.authentication.usecases.ClearAllSessionDataUsecase
+import com.vullpes.authentication.usecases.CreateUserUseCase
+import com.vullpes.authentication.usecases.GetBiometricStatusUsecase
+import com.vullpes.authentication.usecases.GetCurrentUserUsecase
+import com.vullpes.authentication.usecases.GetFlowUserUsecase
+import com.vullpes.authentication.usecases.LoginUsecase
+import com.vullpes.authentication.usecases.LogoutUsecase
+import com.vullpes.authentication.usecases.UpdatePhotoImageUsecase
+import com.vullpes.authentication.usecases.UpdateUserUsercase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -52,72 +52,79 @@ object UserModule {
         userRoomDataSource: UserRoomDataSource,
         preferenciasRepository: com.vullpes.sharedpreferences.PreferenciasRepository,
         authFirebaseDataSource: com.vullpes.firebase.auth.AuthFirebaseDataSource
-    ): UserRepository {
-        return UserRespositoryImpl(userRoomDataSource, preferenciasRepository, authFirebaseDataSource)
+    ): com.vullpes.authentication.UserRepository {
+        return com.vullpes.authentication.UserRespositoryImpl(
+            userRoomDataSource,
+            preferenciasRepository,
+            authFirebaseDataSource
+        )
     }
 
     @Provides
     @Singleton
-    fun providesCreateUsecase(userRepository: UserRepository): CreateUserUseCase {
-        return CreateUserUseCase(userRepository)
+    fun providesCreateUsecase(userRepository: com.vullpes.authentication.UserRepository): com.vullpes.authentication.usecases.CreateUserUseCase {
+        return com.vullpes.authentication.usecases.CreateUserUseCase(userRepository)
     }
 
     @Provides
     @Singleton
-    fun providesGetCurrentUserUsecase(userRepository: UserRepository): GetCurrentUserUsecase {
-        return GetCurrentUserUsecase(userRepository)
+    fun providesGetCurrentUserUsecase(userRepository: com.vullpes.authentication.UserRepository): com.vullpes.authentication.usecases.GetCurrentUserUsecase {
+        return com.vullpes.authentication.usecases.GetCurrentUserUsecase(userRepository)
     }
 
     @Provides
     @Singleton
-    fun providesLoginUsecase(userRepository: UserRepository): LoginUsecase {
-        return LoginUsecase(userRepository)
+    fun providesLoginUsecase(userRepository: com.vullpes.authentication.UserRepository): com.vullpes.authentication.usecases.LoginUsecase {
+        return com.vullpes.authentication.usecases.LoginUsecase(userRepository)
     }
 
     @Provides
     @Singleton
     fun providesUpdatePhotoImageUsecase(
-        userRepository: UserRepository,
+        userRepository: com.vullpes.authentication.UserRepository,
         imageSaver: ImageSaver
-    ): UpdatePhotoImageUsecase {
-        return UpdatePhotoImageUsecase(userRepository, imageSaver)
+    ): com.vullpes.authentication.usecases.UpdatePhotoImageUsecase {
+        return com.vullpes.authentication.usecases.UpdatePhotoImageUsecase(
+            userRepository,
+            imageSaver
+        )
     }
 
     @Provides
     @Singleton
-    fun providesUpdateUserUseCase(userRepository: UserRepository): UpdateUserUsercase {
-        return UpdateUserUsercase(userRepository)
+    fun providesUpdateUserUseCase(userRepository: com.vullpes.authentication.UserRepository): com.vullpes.authentication.usecases.UpdateUserUsercase {
+        return com.vullpes.authentication.usecases.UpdateUserUsercase(userRepository)
     }
 
     @Provides
     @Singleton
-    fun providesLogoutUserUseCase(userRepository: UserRepository): LogoutUsecase {
-        return LogoutUsecase(userRepository)
+    fun providesLogoutUserUseCase(userRepository: com.vullpes.authentication.UserRepository): com.vullpes.authentication.usecases.LogoutUsecase {
+        return com.vullpes.authentication.usecases.LogoutUsecase(userRepository)
     }
 
 
     @Provides
     @Singleton
-    fun providesGetFlowUserUseCase(userRepository: UserRepository): GetFlowUserUsecase {
-        return GetFlowUserUsecase(userRepository)
+    fun providesGetFlowUserUseCase(userRepository: com.vullpes.authentication.UserRepository): com.vullpes.authentication.usecases.GetFlowUserUsecase {
+        return com.vullpes.authentication.usecases.GetFlowUserUsecase(userRepository)
     }
 
     @Provides
     @Singleton
-    fun providesAllowBiometricsUsecase(preferenciasRepository: com.vullpes.sharedpreferences.PreferenciasRepository): AllowBiometricsUsecase {
-        return AllowBiometricsUsecase(preferenciasRepository)
+    fun providesAllowBiometricsUsecase(preferenciasRepository: com.vullpes.sharedpreferences.PreferenciasRepository): com.vullpes.authentication.usecases.AllowBiometricsUsecase {
+        return com.vullpes.authentication.usecases.AllowBiometricsUsecase(preferenciasRepository)
     }
 
     @Provides
     @Singleton
-    fun providesGetBiometricStatusUsecase(preferenciasRepository: com.vullpes.sharedpreferences.PreferenciasRepository): GetBiometricStatusUsecase {
-        return GetBiometricStatusUsecase(preferenciasRepository)
+    fun providesGetBiometricStatusUsecase(preferenciasRepository: com.vullpes.sharedpreferences.PreferenciasRepository): com.vullpes.authentication.usecases.GetBiometricStatusUsecase {
+        return com.vullpes.authentication.usecases.GetBiometricStatusUsecase(preferenciasRepository)
     }
 
     @Provides
     @Singleton
-    fun providesClearAllSessionDataUsecase(preferenciasRepository: com.vullpes.sharedpreferences.PreferenciasRepository): ClearAllSessionDataUsecase {
-        return ClearAllSessionDataUsecase(preferenciasRepository)
+    fun providesClearAllSessionDataUsecase(preferenciasRepository: com.vullpes.sharedpreferences.PreferenciasRepository): com.vullpes.authentication.usecases.ClearAllSessionDataUsecase {
+        return com.vullpes.authentication.usecases.ClearAllSessionDataUsecase(preferenciasRepository)
     }
 
 

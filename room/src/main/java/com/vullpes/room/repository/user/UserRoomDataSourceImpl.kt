@@ -1,9 +1,9 @@
 package com.vullpes.room.repository.user
 
-import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
-import com.vullpes.financeapp.data.dataSource.room.entities.toUser
-import com.vullpes.financeapp.data.dataSource.room.entities.toUserDb
-import com.vullpes.financeapp.authentication.domain.User
+import com.vullpes.authentication.User
+import com.vullpes.room.FinanceAppDatabase
+import com.vullpes.room.entities.toUser
+import com.vullpes.room.entities.toUserDb
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
@@ -11,7 +11,7 @@ import javax.inject.Inject
 class UserRoomDataSourceImpl @Inject constructor(
     private val financeAppDatabase: FinanceAppDatabase,
 
-): UserRoomDataSource {
+    ): UserRoomDataSource {
     override suspend fun createUser(user: User) : User?{
        return try {
             val userDao = financeAppDatabase.userDao()

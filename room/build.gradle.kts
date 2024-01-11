@@ -3,6 +3,7 @@ plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id ("org.jetbrains.kotlin.kapt")
+    id ("com.google.dagger.hilt.android")
 }
 
 android {
@@ -45,7 +46,19 @@ dependencies {
     implementation(libs.room.compiler)
     implementation(libs.room.paging)
 
+    implementation(libs.hilt.android)
+    implementation(libs.dagger.hilt.compiler)
+    implementation(libs.hilt.compiler)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.junit.ext)
     androidTestImplementation(libs.espresso.core)
+
+    implementation(project(":domain:account"))
+    implementation(project(":domain:authentication"))
+    implementation(project(":domain:category"))
+    implementation(project(":domain:charts"))
+    implementation(project(":domain:transaction"))
+
+    implementation(project(":util"))
 }

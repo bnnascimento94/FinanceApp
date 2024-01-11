@@ -1,6 +1,7 @@
 package com.vullpes.room.repository.user
 
-import com.vullpes.financeapp.authentication.domain.User
+
+import com.vullpes.authentication.User
 import kotlinx.coroutines.flow.Flow
 
 interface UserRoomDataSource {

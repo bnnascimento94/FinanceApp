@@ -1,11 +1,11 @@
 package com.vullpes.financeapp.di
 
-import com.vullpes.financeapp.charts.data.ChartRepositoryImpl
+import com.vullpes.charts.ChartRepositoryImpl
 import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
 import com.vullpes.financeapp.data.dataSource.room.repository.charts.ChartsRoomDataSource
 import com.vullpes.financeapp.data.dataSource.room.repository.charts.ChartsRoomDataSourceImpl
 import com.vullpes.financeapp.charts.domain.ChartsRepository
-import com.vullpes.financeapp.transaction.domain.TransactionRepository
+import com.vullpes.transaction.TransactionRepository
 import com.vullpes.financeapp.charts.domain.usecase.AccountBalanceByDateUseCase
 import com.vullpes.financeapp.charts.domain.usecase.AllCategoryBalanceByDateUseCase
 import com.vullpes.financeapp.charts.domain.usecase.AllCategoryTransactionByAccountAndDateUseCase
@@ -29,7 +29,7 @@ object ChartModule {
     @Provides
     @Singleton
     fun providesChartRepository(chartsRoomDataSource: ChartsRoomDataSource): ChartsRepository {
-        return ChartRepositoryImpl(chartsRoomDataSource)
+        return com.vullpes.charts.ChartRepositoryImpl(chartsRoomDataSource)
     }
 
     @Provides
@@ -46,14 +46,14 @@ object ChartModule {
 
     @Provides
     @Singleton
-    fun providesGroupTransactionsByTransferenceWithdrawalDepositUseCase(transactionRepository: TransactionRepository): GroupTransactionsByTransferenceWithdrawalDepositUsecase {
+    fun providesGroupTransactionsByTransferenceWithdrawalDepositUseCase(transactionRepository: com.vullpes.transaction.TransactionRepository): GroupTransactionsByTransferenceWithdrawalDepositUsecase {
         return GroupTransactionsByTransferenceWithdrawalDepositUsecase(transactionRepository)
     }
 
 
     @Provides
     @Singleton
-    fun providesAllCategoryTransactionByAccountAndDateUseCase(transactionRepository: TransactionRepository): AllCategoryTransactionByAccountAndDateUseCase {
+    fun providesAllCategoryTransactionByAccountAndDateUseCase(transactionRepository: com.vullpes.transaction.TransactionRepository): AllCategoryTransactionByAccountAndDateUseCase {
         return AllCategoryTransactionByAccountAndDateUseCase(transactionRepository)
     }
 

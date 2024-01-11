@@ -4,7 +4,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.vullpes.financeapp.presentation.components.ModalBottomSheetCategory
+import com.vullpes.components.ModalBottomSheetCategory
 
 @OptIn(ExperimentalMaterial3Api::class)
 fun NavGraphBuilder.categoryRoute(

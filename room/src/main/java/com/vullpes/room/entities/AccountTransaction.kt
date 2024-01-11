@@ -2,7 +2,7 @@ package com.vullpes.room.entities
 
 import androidx.room.Embedded
 import androidx.room.Relation
-import com.vullpes.financeapp.transaction.domain.Transaction
+import com.vullpes.transaction.Transaction
 
 data class AccountTransaction(
     @Embedded

@@ -22,11 +22,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.vullpes.financeapp.transaction.domain.Transaction
 import com.vullpes.util.domain.dates.tolongStringDate
 import com.vullpes.util.domain.currency.toCurrencyFormat
-import com.vullpes.financeapp.ui.theme.Green
+import com.vullpes.transaction.Transaction
 import java.util.Date
+import com.vullpes.util.R
 
 
 @Composable
@@ -76,7 +76,7 @@ fun TransactionItem(transaction: Transaction) {
                 .background(
                     color = when {
                         transaction.withdrawal -> Color.Red
-                        transaction.deposit -> Green
+                        transaction.deposit -> Color(0xFF5F9EA0)
                         transaction.transference -> Color.Red
                         else -> Color.Transparent
                     }

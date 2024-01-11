@@ -29,10 +29,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.vullpes.financeapp.account.domain.Account
-import com.vullpes.financeapp.category.domain.Category
-import com.vullpes.financeapp.transaction.domain.Transaction
+import com.vullpes.account.Account
+import com.vullpes.category.Category
+import com.vullpes.transaction.Transaction
 import java.util.Date
+import com.vullpes.util.R
 
 
 @OptIn(ExperimentalMaterial3Api::class)

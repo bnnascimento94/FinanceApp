@@ -1,6 +1,6 @@
 package com.vullpes.transaction
 
-import com.vullpes.financeapp.transaction.domain.Transaction
+
 import java.time.LocalDate
 
 data class UiTransactionsListState(

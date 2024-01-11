@@ -21,7 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.vullpes.financeapp.category.domain.Category
+import com.vullpes.category.Category
 import java.util.Date
 import com.vullpes.util.R
 

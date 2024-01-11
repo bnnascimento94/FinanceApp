@@ -3,16 +3,16 @@ package com.vullpes.room
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
-import com.vullpes.financeapp.data.dataSource.room.entities.AccountDao
-import com.vullpes.financeapp.data.dataSource.room.entities.AccountDb
-import com.vullpes.financeapp.data.dataSource.room.entities.CategoryDao
-import com.vullpes.financeapp.data.dataSource.room.entities.CategoryDb
-import com.vullpes.financeapp.data.dataSource.room.entities.DayBalanceDao
-import com.vullpes.financeapp.data.dataSource.room.entities.DayBalanceDb
-import com.vullpes.financeapp.data.dataSource.room.entities.TransactionDao
-import com.vullpes.financeapp.data.dataSource.room.entities.TransactionDb
-import com.vullpes.financeapp.data.dataSource.room.entities.UserDao
-import com.vullpes.financeapp.data.dataSource.room.entities.UserDb
+import com.vullpes.room.entities.AccountDao
+import com.vullpes.room.entities.AccountDb
+import com.vullpes.room.entities.CategoryDao
+import com.vullpes.room.entities.CategoryDb
+import com.vullpes.room.entities.DayBalanceDao
+import com.vullpes.room.entities.DayBalanceDb
+import com.vullpes.room.entities.TransactionDao
+import com.vullpes.room.entities.TransactionDb
+import com.vullpes.room.entities.UserDao
+import com.vullpes.room.entities.UserDb
 
 @Database(
     entities = [AccountDb::class, DayBalanceDb::class, CategoryDb::class, TransactionDb::class, UserDb::class],

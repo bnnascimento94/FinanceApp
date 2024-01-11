@@ -49,4 +49,6 @@ dependencies {
     implementation(libs.hilt.android)
 
     implementation(project(":util"))
+    implementation(project(":domain:category"))
+    implementation(project(":ui:components"))
 }

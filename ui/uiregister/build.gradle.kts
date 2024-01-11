@@ -53,4 +53,5 @@ dependencies {
     implementation(libs.hilt.android)
 
     implementation(project(":util"))
+    implementation(project(":domain:authentication"))
 }

@@ -13,7 +13,7 @@ import com.vullpes.login.loginRoute
 import com.vullpes.uiregister.registerRoute
 import com.vullpes.category.categoryRoute
 import com.vullpes.charts.chartRoute
-import com.vullpes.financeapp.presentation.home.homeRoute
+import com.vullpes.financeapp.home.homeRoute
 import com.vullpes.profile.profileRoute
 import com.vullpes.transaction.transactionsRoute
 import com.vullpes.util.presentation.MessageDialog

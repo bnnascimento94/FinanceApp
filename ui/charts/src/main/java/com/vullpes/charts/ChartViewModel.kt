@@ -12,9 +12,9 @@ import co.yml.charts.common.model.PlotType
 import co.yml.charts.common.model.Point
 import co.yml.charts.ui.barchart.models.BarData
 import co.yml.charts.ui.piechart.models.PieChartData
-import com.vullpes.financeapp.charts.domain.usecase.AccountBalanceByDateUseCase
-import com.vullpes.financeapp.charts.domain.usecase.AllCategoryTransactionByAccountAndDateUseCase
-import com.vullpes.financeapp.charts.domain.usecase.GroupTransactionsByTransferenceWithdrawalDepositUsecase
+import com.vullpes.charts.usecase.AccountBalanceByDateUseCase
+import com.vullpes.charts.usecase.AllCategoryTransactionByAccountAndDateUseCase
+import com.vullpes.charts.usecase.GroupTransactionsByTransferenceWithdrawalDepositUsecase
 import com.vullpes.util.domain.dates.toDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers

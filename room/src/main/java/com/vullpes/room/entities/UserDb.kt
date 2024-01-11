@@ -2,7 +2,7 @@ package com.vullpes.room.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.vullpes.financeapp.authentication.domain.User
+import com.vullpes.authentication.User
 
 @Entity
 data class UserDb(

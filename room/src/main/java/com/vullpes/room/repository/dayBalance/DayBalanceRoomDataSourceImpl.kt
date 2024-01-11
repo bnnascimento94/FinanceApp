@@ -1,8 +1,8 @@
 package com.vullpes.room.repository.dayBalance
 
-import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
-import com.vullpes.financeapp.data.dataSource.room.entities.toDayBalance
-import com.vullpes.financeapp.charts.domain.DayBalance
+import com.vullpes.charts.DayBalance
+import com.vullpes.room.FinanceAppDatabase
+import com.vullpes.room.entities.toDayBalance
 import javax.inject.Inject
 
 class DayBalanceRoomDataSourceImpl @Inject constructor(private val financeAppDatabase: FinanceAppDatabase):

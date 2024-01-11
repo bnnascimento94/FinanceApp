@@ -5,11 +5,10 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vullpes.financeapp.category.domain.Category
-import com.vullpes.financeapp.category.domain.usecases.ButtonSaveCategoryEnabledUsecase
-import com.vullpes.financeapp.category.domain.usecases.CreateCategoryUseCase
-import com.vullpes.financeapp.category.domain.usecases.ListCategoryUseCase
-import com.vullpes.financeapp.category.domain.usecases.UpdateCategoryUseCase
+import com.vullpes.category.usecases.ButtonSaveCategoryEnabledUsecase
+import com.vullpes.category.usecases.CreateCategoryUseCase
+import com.vullpes.category.usecases.ListCategoryUseCase
+import com.vullpes.category.usecases.UpdateCategoryUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -52,4 +52,5 @@ dependencies {
     implementation(libs.ycharts)
 
     implementation(project(":util"))
+    implementation(project(":domain:charts"))
 }

@@ -1,9 +1,9 @@
 package com.vullpes.room.repository.category
 
-import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
-import com.vullpes.financeapp.data.dataSource.room.entities.toCategory
-import com.vullpes.financeapp.data.dataSource.room.entities.toCategoryDb
-import com.vullpes.financeapp.category.domain.Category
+import com.vullpes.category.Category
+import com.vullpes.room.FinanceAppDatabase
+import com.vullpes.room.entities.toCategory
+import com.vullpes.room.entities.toCategoryDb
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import javax.inject.Inject
