@@ -1,7 +1,7 @@
 package com.vullpes.room.repository.transaction
 
 import com.vullpes.account.Account
-import com.vullpes.charts.DayBalance
+import com.vullpes.account.DayBalance
 
 import com.vullpes.room.FinanceAppDatabase
 import com.vullpes.room.entities.toAccountDb

@@ -1,18 +1,10 @@
 package com.vullpes.financeapp.di
 
-import com.vullpes.transaction.TransactionRepositoryImpl
-import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
-import com.vullpes.financeapp.data.dataSource.room.repository.transaction.TransactionRoomDataSource
-import com.vullpes.financeapp.data.dataSource.room.repository.transaction.TransactionRoomDataSourceImpl
-import com.vullpes.transaction.TransactionRepository
-import com.vullpes.account.domain.usecases.account.FindAccountByIdUsecase
-import com.vullpes.financeapp.charts.domain.usecase.SetDayBalanceAccountUsecase
-import com.vullpes.transaction.usecases.ButtonSaveTransactionEnabledUseCase
-import com.vullpes.transaction.usecases.CreateTransactionUseCase
-import com.vullpes.transaction.usecases.GetLastTransactionsByAccountUseCase
-import com.vullpes.transaction.usecases.ListAllTransactionsByAccountUsecase
-import com.vullpes.transaction.usecases.ListAllTransactionsByNameUsecase
-import com.vullpes.transaction.usecases.ListTransactionByAccountDateUseCase
+import com.vullpes.account.usecases.account.FindAccountByIdUsecase
+import com.vullpes.account.usecases.dayBalance.SetDayBalanceAccountUsecase
+import com.vullpes.room.FinanceAppDatabase
+import com.vullpes.room.repository.transaction.TransactionRoomDataSource
+import com.vullpes.room.repository.transaction.TransactionRoomDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,7 +31,7 @@ object TransactionModule {
     @Singleton
     fun providesCreateTransactionUsecase(
         transactionRepository: com.vullpes.transaction.TransactionRepository,
-        findAccountByIdUsecase: com.vullpes.account.domain.usecases.account.FindAccountByIdUsecase,
+        findAccountByIdUsecase: FindAccountByIdUsecase,
         setDayBalanceAccountUsecase: SetDayBalanceAccountUsecase
     ): com.vullpes.transaction.usecases.CreateTransactionUseCase {
         return com.vullpes.transaction.usecases.CreateTransactionUseCase(

@@ -33,7 +33,7 @@ import com.vullpes.account.Account
 import com.vullpes.category.Category
 import com.vullpes.transaction.Transaction
 import java.util.Date
-import com.vullpes.util.R
+import com.vullpes.common.R
 
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -46,7 +46,7 @@ fun ModalBottomSheetTransactions(
     accountSelected: Account,
     listCategory: List<Category>,
     listAccounts: List<Account>,
-    onKindOfTransactionSelected: (com.vullpes.util.domain.KindOfTransaction) -> Unit,
+    onKindOfTransactionSelected: (com.vullpes.common.domain.KindOfTransaction) -> Unit,
     onTransactionNameChanged: (String) -> Unit,
     onCategorySelected: (String) -> Unit,
     onAccountSelected: (Int) -> Unit,
@@ -94,7 +94,7 @@ fun TransactionScreen(
     accountSelected: Account,
     listCategory: List<Category>,
     listAccounts: List<Account>,
-    onKindOfTransactionSelected: (com.vullpes.util.domain.KindOfTransaction) -> Unit,
+    onKindOfTransactionSelected: (com.vullpes.common.domain.KindOfTransaction) -> Unit,
     onTransactionNameChanged: (String) -> Unit,
     onCategorySelected: (String) -> Unit,
     onAccountSelected: (Int) -> Unit,
@@ -126,7 +126,7 @@ fun TransactionScreen(
         ) {
             Row(verticalAlignment = Alignment.CenterVertically) {
                 RadioButton(selected = transaction.withdrawal, onClick = {
-                    onKindOfTransactionSelected(com.vullpes.util.domain.KindOfTransaction.WITHDRAW)
+                    onKindOfTransactionSelected(com.vullpes.common.domain.KindOfTransaction.WITHDRAW)
                 }
                 )
                 Text(text = stringResource(R.string.withdraw))
@@ -134,14 +134,14 @@ fun TransactionScreen(
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 RadioButton(selected = transaction.deposit, onClick = {
-                    onKindOfTransactionSelected(com.vullpes.util.domain.KindOfTransaction.DEPOSIT)
+                    onKindOfTransactionSelected(com.vullpes.common.domain.KindOfTransaction.DEPOSIT)
                 })
                 Text(text = stringResource(R.string.deposit))
             }
 
             Row(verticalAlignment = Alignment.CenterVertically) {
                 RadioButton(selected = transaction.transference, onClick = {
-                    onKindOfTransactionSelected(com.vullpes.util.domain.KindOfTransaction.TRANSFERENCE)
+                    onKindOfTransactionSelected(com.vullpes.common.domain.KindOfTransaction.TRANSFERENCE)
                 })
                 Text(text = stringResource(R.string.transference))
             }
@@ -195,7 +195,7 @@ fun TransactionScreen(
             supportingText = {
                  if(withdrawalBlocked){ Text(text = "You don't have sufficient amount") }
             },
-            visualTransformation = com.vullpes.util.domain.currency.CurrencyAmountInputVisualTransformation(),
+            visualTransformation = com.vullpes.common.domain.currency.CurrencyAmountInputVisualTransformation(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.NumberPassword
             )

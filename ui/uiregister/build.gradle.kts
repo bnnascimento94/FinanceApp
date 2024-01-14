@@ -1,6 +1,6 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.com.android.library)
     id("org.jetbrains.kotlin.android")
     id ("org.jetbrains.kotlin.kapt")
 }
@@ -29,6 +29,12 @@ android {
             )
         }
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = ProjectConfig.extensionVersion
+    }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
@@ -52,6 +58,6 @@ dependencies {
     implementation(libs.hilt.navigation.compose)
     implementation(libs.hilt.android)
 
-    implementation(project(":util"))
+    implementation(project(":common"))
     implementation(project(":domain:authentication"))
 }

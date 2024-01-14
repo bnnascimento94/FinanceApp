@@ -1,16 +1,8 @@
 package com.vullpes.financeapp.di
 
-import com.vullpes.category.CategoryRepositoryImpl
-import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
-import com.vullpes.financeapp.data.dataSource.room.repository.category.CategoryRoomDataSource
-import com.vullpes.financeapp.data.dataSource.room.repository.category.CategoryRoomDataSourceImpl
-import com.vullpes.category.CategoryRepository
-import com.vullpes.category.usecases.ButtonSaveCategoryEnabledUsecase
-import com.vullpes.category.usecases.UpdateCategoryUseCase
-import com.vullpes.category.usecases.CreateCategoryUseCase
-import com.vullpes.category.usecases.CreateDefaultCategoriesUsecase
-import com.vullpes.category.usecases.DeactivateCategoryUseCase
-import com.vullpes.category.usecases.ListCategoryUseCase
+import com.vullpes.room.FinanceAppDatabase
+import com.vullpes.room.repository.category.CategoryRoomDataSource
+import com.vullpes.room.repository.category.CategoryRoomDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

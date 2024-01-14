@@ -15,7 +15,7 @@ import co.yml.charts.ui.piechart.models.PieChartData
 import com.vullpes.charts.usecase.AccountBalanceByDateUseCase
 import com.vullpes.charts.usecase.AllCategoryTransactionByAccountAndDateUseCase
 import com.vullpes.charts.usecase.GroupTransactionsByTransferenceWithdrawalDepositUsecase
-import com.vullpes.util.domain.dates.toDate
+import com.vullpes.common.domain.dates.toDate
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -37,10 +37,10 @@ class ChartViewModel @Inject constructor(
 
 
     init {
-        val currentMonth: Map<String, Date> = com.vullpes.util.domain.dates.BegginingEndMonth.execute()
+        val currentMonth: Map<String, Date> = com.vullpes.common.domain.dates.BegginingEndMonth.execute()
         uiState = uiState.copy(
             accountID = savedStateHandle.get<Int>(
-                key = com.vullpes.util.navigation.Constants.ACCOUNTID
+                key = com.vullpes.common.navigation.Constants.ACCOUNTID
             ) ?: 0,
             firstDate = currentMonth["firstDate"],
             secondDate = currentMonth["lastDate"]
@@ -90,10 +90,10 @@ class ChartViewModel @Inject constructor(
     private fun getGroupAccountByDate() = viewModelScope.launch(Dispatchers.IO) {
         withContext(Dispatchers.Main){
             if(uiState.accountID == 0 && uiState.firstDate == null && uiState.secondDate == null){
-                val currentMonth: Map<String, Date> = com.vullpes.util.domain.dates.BegginingEndMonth.execute()
+                val currentMonth: Map<String, Date> = com.vullpes.common.domain.dates.BegginingEndMonth.execute()
                 uiState = uiState.copy(
                     accountID = savedStateHandle.get<Int>(
-                        key = com.vullpes.util.navigation.Constants.ACCOUNTID
+                        key = com.vullpes.common.navigation.Constants.ACCOUNTID
                     ) ?: 0,
                     firstDate = currentMonth["firstDate"],
                     secondDate = currentMonth["lastDate"]
@@ -125,10 +125,10 @@ class ChartViewModel @Inject constructor(
     private fun categoryTransactionsByAccountAndDate() = viewModelScope.launch(Dispatchers.IO) {
         withContext(Dispatchers.Main){
             if(uiState.accountID == 0 && uiState.firstDate == null && uiState.secondDate == null){
-                val currentMonth: Map<String, Date> = com.vullpes.util.domain.dates.BegginingEndMonth.execute()
+                val currentMonth: Map<String, Date> = com.vullpes.common.domain.dates.BegginingEndMonth.execute()
                 uiState = uiState.copy(
                     accountID = savedStateHandle.get<Int>(
-                        key = com.vullpes.util.navigation.Constants.ACCOUNTID
+                        key = com.vullpes.common.navigation.Constants.ACCOUNTID
                     ) ?: 0,
                     firstDate = currentMonth["firstDate"],
                     secondDate = currentMonth["lastDate"]

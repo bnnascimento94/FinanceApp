@@ -1,6 +1,6 @@
 package com.vullpes.room.repository.dayBalance
 
-import com.vullpes.charts.DayBalance
+import com.vullpes.account.DayBalance
 import com.vullpes.room.FinanceAppDatabase
 import com.vullpes.room.entities.toDayBalance
 import javax.inject.Inject

@@ -11,11 +11,12 @@ import androidx.compose.runtime.setValue
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vullpes.financeapp.authentication.domain.usecases.AllowBiometricsUsecase
-import com.vullpes.financeapp.authentication.domain.usecases.GetBiometricStatusUsecase
-import com.vullpes.financeapp.authentication.domain.usecases.GetCurrentUserUsecase
-import com.vullpes.financeapp.authentication.domain.usecases.UpdatePhotoImageUsecase
-import com.vullpes.financeapp.authentication.domain.usecases.UpdateUserUsercase
+import com.vullpes.authentication.usecases.AllowBiometricsUsecase
+import com.vullpes.authentication.usecases.GetBiometricStatusUsecase
+import com.vullpes.authentication.usecases.GetCurrentUserUsecase
+import com.vullpes.authentication.usecases.UpdatePhotoImageUsecase
+import com.vullpes.authentication.usecases.UpdateUserUsercase
+import com.vullpes.common.domain.biometrics.CheckBiometricSupportUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +37,7 @@ class ProfileViewModel @Inject constructor(
     private val updatePhotoImageUsecase: UpdatePhotoImageUsecase,
     private val allowBiometricsUsecase: AllowBiometricsUsecase,
     private val getBiometricStatusUsecase: GetBiometricStatusUsecase,
-    private val checkBiometricSupportUsecase: com.vullpes.util.domain.biometrics.CheckBiometricSupportUsecase
+    private val checkBiometricSupportUsecase: com.vullpes.common.domain.biometrics.CheckBiometricSupportUsecase
 ) : ViewModel() {
 
     var uiState by mutableStateOf(UiStateProfile())

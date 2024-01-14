@@ -5,13 +5,13 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.vullpes.util.navigation.Screen
+import com.vullpes.common.navigation.Screen
 
 fun NavGraphBuilder.registerRoute(
     onBackPressed: () -> Unit,
     onSignIn: () -> Unit
 ) {
-    composable(route = Screen.Register.route) {
+    composable(route = com.vullpes.common.navigation.Screen.Register.route) {
         val viewModel: RegisterViewModel = hiltViewModel()
         val context = LocalContext.current
 

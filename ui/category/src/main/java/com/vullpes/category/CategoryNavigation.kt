@@ -11,7 +11,7 @@ fun NavGraphBuilder.categoryRoute(
     onBackPressed: () -> Unit,
     onInteraction: () -> Unit
 ) {
-    composable(route = com.vullpes.util.navigation.Screen.Category.route) {
+    composable(route = com.vullpes.common.navigation.Screen.Category.route) {
         val viewModel: CategoryViewmodel = hiltViewModel()
 
         CategoryScreen(

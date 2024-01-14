@@ -1,6 +1,6 @@
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
-    id("com.android.application")
+    alias(libs.plugins.com.android.library)
     id("org.jetbrains.kotlin.android")
     id ("org.jetbrains.kotlin.kapt")
 }
@@ -29,6 +29,12 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+    buildFeatures {
+        compose = true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion = ProjectConfig.extensionVersion
+    }
     kotlinOptions {
         jvmTarget = "17"
     }
@@ -51,6 +57,6 @@ dependencies {
     implementation(libs.calendar)
     implementation(libs.ycharts)
 
-    implementation(project(":util"))
+    implementation(project(":common"))
     implementation(project(":domain:charts"))
 }

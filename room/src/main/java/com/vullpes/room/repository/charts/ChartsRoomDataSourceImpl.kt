@@ -4,7 +4,7 @@ import com.vullpes.room.FinanceAppDatabase
 import com.vullpes.room.entities.TransactionDb
 import com.vullpes.room.entities.toTransaction
 import com.vullpes.transaction.Transaction
-import com.vullpes.util.Resource
+import com.vullpes.common.Resource
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.util.Date
@@ -42,7 +42,7 @@ class ChartsRoomDataSourceImpl @Inject constructor(private val financeAppDatabas
     override fun getAllCategoryBalanceByDate(
         date1: Date,
         date2: Date
-    ): Flow<Resource<Map<String, Map<String?, Double>>>> {
+    ): Flow<com.vullpes.common.Resource<Map<String, Map<String?, Double>>>> {
         val accountDao = financeAppDatabase.accountDao()
         val accountTransactions = accountDao.loadAccountTransactionsByDate(date1 = date1,date2 = date2)
 
@@ -55,7 +55,7 @@ class ChartsRoomDataSourceImpl @Inject constructor(private val financeAppDatabas
                 }
                 .mapKeys { listTransactions -> listTransactions.key.accountName }
 
-           Resource.Success(result)
+           com.vullpes.common.Resource.Success(result)
         }
     }
 
@@ -63,7 +63,7 @@ class ChartsRoomDataSourceImpl @Inject constructor(private val financeAppDatabas
         accountId: Int,
         date1: Date,
         date2: Date
-    ): Flow<Resource<Map<String, List<Transaction>>>> {
+    ): Flow<com.vullpes.common.Resource<Map<String, List<Transaction>>>> {
         val accountDao = financeAppDatabase.accountDao()
         val accountTransactions = accountDao.loadAccountTransactionsByDateAndAccountID(accountID = accountId, date1 = date1, date2 = date2)
 
@@ -74,7 +74,7 @@ class ChartsRoomDataSourceImpl @Inject constructor(private val financeAppDatabas
                 }
                 .mapKeys { listTransactions -> listTransactions.key.accountName }
 
-            Resource.Success(result)
+            com.vullpes.common.Resource.Success(result)
         }
     }
 

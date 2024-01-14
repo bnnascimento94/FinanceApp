@@ -1,7 +1,7 @@
 package com.vullpes.room.repository.transaction
 
 import com.vullpes.account.Account
-import com.vullpes.charts.DayBalance
+import com.vullpes.account.DayBalance
 import com.vullpes.transaction.Transaction
 import kotlinx.coroutines.flow.Flow
 import java.util.Date

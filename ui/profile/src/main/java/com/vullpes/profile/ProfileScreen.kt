@@ -48,6 +48,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.content.ContextCompat
 import coil.compose.AsyncImage
 import com.vullpes.profile.components.ProfileTopAppBar
+import com.vullpes.common.R
 
 
 @Composable

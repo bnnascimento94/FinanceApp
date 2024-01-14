@@ -10,8 +10,8 @@ fun NavGraphBuilder.chartRoute(
     onBackPressed: () -> Unit,
     onInteraction: () -> Unit
 ) {
-    composable(route = com.vullpes.util.navigation.Screen.Chart.route,
-        arguments = listOf(navArgument(name = com.vullpes.util.navigation.Constants.ACCOUNTID) {
+    composable(route = com.vullpes.common.navigation.Screen.Chart.route,
+        arguments = listOf(navArgument(name = com.vullpes.common.navigation.Constants.ACCOUNTID) {
             type = NavType.IntType
             nullable = false
             defaultValue = 0

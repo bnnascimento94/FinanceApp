@@ -22,11 +22,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.vullpes.util.domain.dates.tolongStringDate
-import com.vullpes.util.domain.currency.toCurrencyFormat
+import com.vullpes.common.domain.dates.tolongStringDate
+import com.vullpes.common.domain.currency.toCurrencyFormat
 import com.vullpes.transaction.Transaction
 import java.util.Date
-import com.vullpes.util.R
+import com.vullpes.common.R
 
 
 @Composable

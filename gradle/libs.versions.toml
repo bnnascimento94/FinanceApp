@@ -89,6 +89,7 @@ hamcrest = {module="org.hamcrest:hamcrest", version.ref="hamcrest"}
 kotlinx-coroutines-test = {module="org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref="kotlinx-coroutines-test"}
 appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
 org-jetbrains-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "org-jetbrains-kotlin-android" }

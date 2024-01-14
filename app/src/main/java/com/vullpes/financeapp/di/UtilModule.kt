@@ -2,10 +2,7 @@ package com.vullpes.financeapp.di
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.itm.juipdv.util.imagem.ImageSaver
-import com.itm.juipdv.util.imagem.ImageSaverImpl
-import com.vullpes.sharedpreferences.PreferenciasRepository
-import com.vullpes.sharedpreferences.PreferenciasRepositoryImpl
+import com.vullpes.common.domain.imagem.ImageSaverImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,7 +16,7 @@ object UtilModule {
 
     @Provides
     @Singleton
-    fun providesImageSaver(@ApplicationContext context: Context): ImageSaver {
+    fun providesImageSaver(@ApplicationContext context: Context): com.vullpes.common.domain.imagem.ImageSaver {
         return ImageSaverImpl(context)
     }
 

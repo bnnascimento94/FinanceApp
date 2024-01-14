@@ -5,14 +5,14 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.vullpes.util.navigation.Screen
+import com.vullpes.common.navigation.Screen
 
 fun NavGraphBuilder.loginRoute(
     onSignIn: () -> Unit,
     onRegisterUser:() -> Unit
 ) {
 
-    composable(route = com.vullpes.util.navigation.Screen.Login.route) {
+    composable(route = com.vullpes.common.navigation.Screen.Login.route) {
         val viewModel: LoginViewModel = hiltViewModel()
         val context = LocalContext.current
 

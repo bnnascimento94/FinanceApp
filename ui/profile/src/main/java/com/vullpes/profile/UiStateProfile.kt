@@ -1,6 +1,7 @@
 package com.vullpes.profile
 
-import com.vullpes.financeapp.authentication.domain.User
+import com.vullpes.authentication.User
+
 
 data class UiStateProfile(
     val profile: User? = null,

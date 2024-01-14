@@ -2,7 +2,7 @@ package com.vullpes.room.entities
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.vullpes.charts.DayBalance
+import com.vullpes.account.DayBalance
 import java.util.Date
 
 @Entity

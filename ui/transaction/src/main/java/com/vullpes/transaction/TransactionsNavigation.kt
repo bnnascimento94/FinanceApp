@@ -11,8 +11,8 @@ fun NavGraphBuilder.transactionsRoute(
     onInteraction: () -> Unit
 ) {
     composable(
-        route = com.vullpes.util.navigation.Screen.Transactions.route,
-        arguments = listOf(navArgument(name = com.vullpes.util.navigation.Constants.ACCOUNTID) {
+        route = com.vullpes.common.navigation.Screen.Transactions.route,
+        arguments = listOf(navArgument(name = com.vullpes.common.navigation.Constants.ACCOUNTID) {
             type = NavType.IntType
             nullable = false
             defaultValue = 0

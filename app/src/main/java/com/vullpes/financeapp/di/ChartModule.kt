@@ -1,15 +1,14 @@
 package com.vullpes.financeapp.di
 
-import com.vullpes.charts.ChartRepositoryImpl
-import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
-import com.vullpes.financeapp.data.dataSource.room.repository.charts.ChartsRoomDataSource
-import com.vullpes.financeapp.data.dataSource.room.repository.charts.ChartsRoomDataSourceImpl
-import com.vullpes.financeapp.charts.domain.ChartsRepository
+import com.vullpes.charts.ChartsRepository
+import com.vullpes.charts.usecase.AccountBalanceByDateUseCase
+import com.vullpes.charts.usecase.AllCategoryBalanceByDateUseCase
+import com.vullpes.charts.usecase.AllCategoryTransactionByAccountAndDateUseCase
+import com.vullpes.charts.usecase.GroupTransactionsByTransferenceWithdrawalDepositUsecase
+import com.vullpes.room.FinanceAppDatabase
+import com.vullpes.room.repository.charts.ChartsRoomDataSource
+import com.vullpes.room.repository.charts.ChartsRoomDataSourceImpl
 import com.vullpes.transaction.TransactionRepository
-import com.vullpes.financeapp.charts.domain.usecase.AccountBalanceByDateUseCase
-import com.vullpes.financeapp.charts.domain.usecase.AllCategoryBalanceByDateUseCase
-import com.vullpes.financeapp.charts.domain.usecase.AllCategoryTransactionByAccountAndDateUseCase
-import com.vullpes.financeapp.charts.domain.usecase.GroupTransactionsByTransferenceWithdrawalDepositUsecase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -22,7 +21,7 @@ object ChartModule {
 
     @Provides
     @Singleton
-    fun providesChartsRoomDataSource(financeAppDatabase: FinanceAppDatabase):ChartsRoomDataSource{
+    fun providesChartsRoomDataSource(financeAppDatabase: FinanceAppDatabase): ChartsRoomDataSource {
         return ChartsRoomDataSourceImpl(financeAppDatabase)
     }
 
@@ -46,14 +45,14 @@ object ChartModule {
 
     @Provides
     @Singleton
-    fun providesGroupTransactionsByTransferenceWithdrawalDepositUseCase(transactionRepository: com.vullpes.transaction.TransactionRepository): GroupTransactionsByTransferenceWithdrawalDepositUsecase {
+    fun providesGroupTransactionsByTransferenceWithdrawalDepositUseCase(transactionRepository: TransactionRepository): GroupTransactionsByTransferenceWithdrawalDepositUsecase {
         return GroupTransactionsByTransferenceWithdrawalDepositUsecase(transactionRepository)
     }
 
 
     @Provides
     @Singleton
-    fun providesAllCategoryTransactionByAccountAndDateUseCase(transactionRepository: com.vullpes.transaction.TransactionRepository): AllCategoryTransactionByAccountAndDateUseCase {
+    fun providesAllCategoryTransactionByAccountAndDateUseCase(transactionRepository: TransactionRepository): AllCategoryTransactionByAccountAndDateUseCase {
         return AllCategoryTransactionByAccountAndDateUseCase(transactionRepository)
     }
 

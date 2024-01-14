@@ -26,7 +26,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vullpes.account.Account
 import java.util.Date
-import com.vullpes.util.R
+import com.vullpes.common.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -137,7 +137,7 @@ fun CreateAccount(
                 onChangeAccountValue(value)
             } ,
             prefix = { Text(text = "$") },
-            visualTransformation = com.vullpes.util.domain.currency.CurrencyAmountInputVisualTransformation(),
+            visualTransformation = com.vullpes.common.domain.currency.CurrencyAmountInputVisualTransformation(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.NumberPassword
             )

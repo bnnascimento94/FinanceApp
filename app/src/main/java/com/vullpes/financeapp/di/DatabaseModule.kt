@@ -2,7 +2,7 @@ package com.vullpes.financeapp.di
 
 import android.content.Context
 import androidx.room.Room
-import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
+import com.vullpes.room.FinanceAppDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

@@ -56,7 +56,7 @@ import com.maxkeppeker.sheets.core.models.base.rememberSheetState
 import com.maxkeppeler.sheets.calendar.CalendarDialog
 import com.maxkeppeler.sheets.calendar.models.CalendarConfig
 import com.maxkeppeler.sheets.calendar.models.CalendarSelection
-import com.vullpes.util.domain.dates.toStringDate
+import com.vullpes.common.domain.dates.toStringDate
 import java.time.LocalDate
 
 @OptIn(ExperimentalMaterial3Api::class)

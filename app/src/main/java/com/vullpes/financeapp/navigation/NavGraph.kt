@@ -8,15 +8,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
-import com.vullpes.util.domain.session.UserSession
-import com.vullpes.login.loginRoute
-import com.vullpes.uiregister.registerRoute
 import com.vullpes.category.categoryRoute
 import com.vullpes.charts.chartRoute
-import com.vullpes.financeapp.home.homeRoute
+import com.vullpes.home.homeRoute
+import com.vullpes.login.loginRoute
 import com.vullpes.profile.profileRoute
 import com.vullpes.transaction.transactionsRoute
-import com.vullpes.util.presentation.MessageDialog
+import com.vullpes.uiregister.registerRoute
+import com.vullpes.common.presentation.MessageDialog
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -33,16 +32,16 @@ fun SetupNavGraph(
     val scope = rememberCoroutineScope()
 
     if(openDialog.value){
-        com.vullpes.util.presentation.MessageDialog(
+        com.vullpes.common.presentation.MessageDialog(
             title = "Timeout",
             message = "It's been a while since the last activity, please login again",
             onDismiss = { /*TODO*/ },
             onNegativeClick = { /*TODO*/ }
         ) {
             openDialog.value = false
-            com.vullpes.util.domain.session.UserSession.stopSession()
+            com.vullpes.common.domain.session.UserSession.stopSession()
             navController.popBackStack()
-            navController.navigate(com.vullpes.util.navigation.Screen.Login.route)
+            navController.navigate(com.vullpes.common.navigation.Screen.Login.route)
         }
     }
     NavHost(
@@ -54,10 +53,10 @@ fun SetupNavGraph(
         loginRoute(
             onSignIn = {
                 navController.popBackStack()
-                navController.navigate(com.vullpes.util.navigation.Screen.Home.route)
+                navController.navigate(com.vullpes.common.navigation.Screen.Home.route)
             },
             onRegisterUser = {
-                navController.navigate(com.vullpes.util.navigation.Screen.Register.route)
+                navController.navigate(com.vullpes.common.navigation.Screen.Register.route)
             }
 
         )
@@ -66,7 +65,7 @@ fun SetupNavGraph(
         },
             onSignIn = {
                 navController.popBackStack()
-                navController.navigate(com.vullpes.util.navigation.Screen.Home.route)
+                navController.navigate(com.vullpes.common.navigation.Screen.Home.route)
             })
         chartRoute(
             onBackPressed = {
@@ -74,7 +73,7 @@ fun SetupNavGraph(
             },
             onInteraction = {
                 scope.launch {
-                    com.vullpes.util.domain.session.UserSession.startSession(onLimitReached = {
+                    com.vullpes.common.domain.session.UserSession.startSession(onLimitReached = {
                         openDialog.value = true
                     })
                 }
@@ -83,23 +82,23 @@ fun SetupNavGraph(
         homeRoute(
             onExitAppClicked = {
                 navController.popBackStack()
-                navController.navigate(com.vullpes.util.navigation.Screen.Login.route)
+                navController.navigate(com.vullpes.common.navigation.Screen.Login.route)
             },
             onProfileClick = {
-                navController.navigate(com.vullpes.util.navigation.Screen.Profile.route)
+                navController.navigate(com.vullpes.common.navigation.Screen.Profile.route)
             },
             onChart = {
-                navController.navigate(com.vullpes.util.navigation.Screen.Chart.passAccountId(it))
+                navController.navigate(com.vullpes.common.navigation.Screen.Chart.passAccountId(it))
             },
             onCategory = {
-                navController.navigate(com.vullpes.util.navigation.Screen.Category.route)
+                navController.navigate(com.vullpes.common.navigation.Screen.Category.route)
             },
             onTransactions = {
-                navController.navigate(com.vullpes.util.navigation.Screen.Transactions.passAccountId(it))
+                navController.navigate(com.vullpes.common.navigation.Screen.Transactions.passAccountId(it))
             },
             onInteraction = {
                 scope.launch {
-                    com.vullpes.util.domain.session.UserSession.startSession(onLimitReached = {
+                    com.vullpes.common.domain.session.UserSession.startSession(onLimitReached = {
                         openDialog.value = true
                     })
                 }
@@ -112,7 +111,7 @@ fun SetupNavGraph(
             },
             onInteraction = {
                 scope.launch {
-                    com.vullpes.util.domain.session.UserSession.startSession(onLimitReached = {
+                    com.vullpes.common.domain.session.UserSession.startSession(onLimitReached = {
                         openDialog.value = true
                     })
                 }
@@ -125,7 +124,7 @@ fun SetupNavGraph(
             },
             onInteraction = {
                 scope.launch {
-                    com.vullpes.util.domain.session.UserSession.startSession(onLimitReached = {
+                    com.vullpes.common.domain.session.UserSession.startSession(onLimitReached = {
                         openDialog.value = true
                     })
                 }
@@ -138,7 +137,7 @@ fun SetupNavGraph(
             },
             onInteraction = {
                 scope.launch {
-                    com.vullpes.util.domain.session.UserSession.startSession(onLimitReached = {
+                    com.vullpes.common.domain.session.UserSession.startSession(onLimitReached = {
                         openDialog.value = true
                     })
                 }

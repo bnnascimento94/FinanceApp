@@ -2,7 +2,7 @@ package com.vullpes.transaction.usecases
 
 import com.vullpes.transaction.TransactionRepository
 import com.vullpes.transaction.Transaction
-import com.vullpes.util.domain.dates.toLocalDate
+import com.vullpes.common.domain.dates.toLocalDate
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
 import java.time.LocalDate

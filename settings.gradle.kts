@@ -15,7 +15,6 @@ dependencyResolutionManagement {
 
 rootProject.name = "FinanceApp"
 include(":app")
-include(":util")
 include(":ui:uiregister")
 include(":room")
 include(":sharedPreferences")
@@ -36,3 +35,5 @@ include(":domain:charts")
 include(":data:charts")
 include(":data:transaction")
 include(":domain:transaction")
+include(":ui:home")
+include(":common")

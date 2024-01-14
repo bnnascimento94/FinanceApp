@@ -10,7 +10,7 @@ import androidx.lifecycle.viewModelScope
 import com.vullpes.transaction.usecases.ListAllTransactionsByAccountUsecase
 import com.vullpes.transaction.usecases.ListAllTransactionsByNameUsecase
 import com.vullpes.transaction.usecases.ListTransactionByAccountDateUseCase
-import com.vullpes.util.navigation.Constants.ACCOUNTID
+import com.vullpes.common.navigation.Constants.ACCOUNTID
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.cancelAndJoin

@@ -1,11 +1,11 @@
 package com.vullpes.financeapp.di
 
-import com.vullpes.charts.DayBalanceRepositoryImpl
-import com.vullpes.financeapp.data.dataSource.room.FinanceAppDatabase
-import com.vullpes.financeapp.data.dataSource.room.repository.dayBalance.DayBalanceRoomDataSource
-import com.vullpes.financeapp.data.dataSource.room.repository.dayBalance.DayBalanceRoomDataSourceImpl
-import com.vullpes.financeapp.charts.domain.DayBalanceRepository
-import com.vullpes.financeapp.charts.domain.usecase.SetDayBalanceAccountUsecase
+import com.vullpes.account.DayBalanceRepository
+import com.vullpes.account.usecases.dayBalance.SetDayBalanceAccountUsecase
+import com.vullpes.account.DayBalanceRepositoryImpl
+import com.vullpes.room.FinanceAppDatabase
+import com.vullpes.room.repository.dayBalance.DayBalanceRoomDataSource
+import com.vullpes.room.repository.dayBalance.DayBalanceRoomDataSourceImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -25,7 +25,7 @@ object DayBalanceModule {
     @Provides
     @Singleton
     fun providesDayBalanceRepository(dayBalanceRoomDataSource: DayBalanceRoomDataSource): DayBalanceRepository {
-        return com.vullpes.charts.DayBalanceRepositoryImpl(dayBalanceRoomDataSource)
+        return DayBalanceRepositoryImpl(dayBalanceRoomDataSource)
     }
 
     @Provides

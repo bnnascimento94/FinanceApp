@@ -6,9 +6,9 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.annotation.RequiresApi
 import androidx.navigation.compose.rememberNavController
-import com.vullpes.util.navigation.Screen
 import com.vullpes.financeapp.navigation.SetupNavGraph
-import com.vullpes.financeapp.ui.theme.FinanceAppTheme
+import com.vullpes.components.ui.theme.FinanceAppTheme
+import com.vullpes.common.navigation.Screen
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
             FinanceAppTheme {
                 val navController = rememberNavController()
                 SetupNavGraph(
-                    firstDestination = com.vullpes.util.navigation.Screen.Login.route,
+                    firstDestination = com.vullpes.common.navigation.Screen.Login.route,
                     navController = navController
                 )
             }

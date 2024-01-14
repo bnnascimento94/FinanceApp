@@ -23,7 +23,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.vullpes.category.Category
 import java.util.Date
-import com.vullpes.util.R
+import com.vullpes.common.R
 
 
 @OptIn(ExperimentalMaterial3Api::class)

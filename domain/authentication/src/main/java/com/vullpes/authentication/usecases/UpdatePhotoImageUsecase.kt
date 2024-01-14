@@ -2,13 +2,13 @@ package com.vullpes.authentication.usecases
 
 import android.graphics.Bitmap
 import com.vullpes.authentication.UserRepository
-import com.vullpes.util.domain.imagem.ImageSaver
+import com.vullpes.common.domain.imagem.ImageSaver
 import java.util.UUID
 import javax.inject.Inject
 
 class UpdatePhotoImageUsecase @Inject constructor(
     private val userRepository: UserRepository,
-    private val imageSaver: ImageSaver
+    private val imageSaver: com.vullpes.common.domain.imagem.ImageSaver
 ) {
 
     suspend fun execute(photo: Bitmap, oldImage:String?){

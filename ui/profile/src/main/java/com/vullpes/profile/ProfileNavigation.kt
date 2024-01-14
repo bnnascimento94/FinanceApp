@@ -9,9 +9,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import com.vullpes.components.LoadingDialog
-import com.vullpes.components.ModalBottomSheetChangePicture
-import com.vullpes.util.R
+import com.vullpes.common.R
 import kotlinx.coroutines.launch
 
 @RequiresApi(Build.VERSION_CODES.P)
@@ -20,7 +18,7 @@ fun NavGraphBuilder.profileRoute(
     onBackPressed: () -> Unit,
     onInteraction: () -> Unit
 ) {
-    composable(route = com.vullpes.util.navigation.Screen.Profile.route) {
+    composable(route = com.vullpes.common.navigation.Screen.Profile.route) {
         val viewModel: ProfileViewModel = hiltViewModel()
         val context = LocalContext.current
         val scope = rememberCoroutineScope()

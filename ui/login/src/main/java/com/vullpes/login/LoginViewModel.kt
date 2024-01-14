@@ -6,16 +6,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.vullpes.util.domain.biometrics.BiometricAuthenticationUsecase
-import com.vullpes.financeapp.authentication.domain.usecases.ForgotPasswordUsecase
-import com.vullpes.financeapp.authentication.domain.usecases.GetBiometricStatusUsecase
-import com.vullpes.financeapp.authentication.domain.usecases.LoginUsecase
+import com.vullpes.authentication.usecases.ForgotPasswordUsecase
+import com.vullpes.authentication.usecases.GetBiometricStatusUsecase
+import com.vullpes.authentication.usecases.LoginUsecase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import javax.inject.Inject
+import com.vullpes.common.R
 
 @HiltViewModel
 class LoginViewModel @Inject constructor(
@@ -23,7 +23,7 @@ class LoginViewModel @Inject constructor(
     private val loginUsecase: LoginUsecase,
     private val forgotPasswordUsecase: ForgotPasswordUsecase,
     private val getBiometricStatusUsecase: GetBiometricStatusUsecase,
-    private val biometricAuthenticationUsecase: com.vullpes.util.domain.biometrics.BiometricAuthenticationUsecase
+    private val biometricAuthenticationUsecase: com.vullpes.common.domain.biometrics.BiometricAuthenticationUsecase
 ): ViewModel() {
 
     var uiState by mutableStateOf(UiStateLogin())
