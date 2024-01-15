@@ -155,7 +155,7 @@ fun DayBalanceLinechart(pointsData: List<Point>, widthChart: Dp) {
         //.labelData { i -> i.toString() }
         .axisLabelAngle(20f)
         .labelAndAxisLinePadding(30.dp)
-        .axisLabelColor(Color.Blue)
+        .axisLabelColor(MaterialTheme.colorScheme.onSurface)
         .axisLineColor(Color.Transparent)
         .typeFace(Typeface.DEFAULT_BOLD)
         .build()
@@ -166,11 +166,12 @@ fun DayBalanceLinechart(pointsData: List<Point>, widthChart: Dp) {
            // "${orderedList[i].y} k"
        // }
         .labelAndAxisLinePadding(30.dp)
-        .axisLabelColor(Color.Blue)
+        .axisLabelColor(MaterialTheme.colorScheme.onSurface)
         .axisLineColor(Color.Transparent)
         .typeFace(Typeface.DEFAULT_BOLD)
         .build()
     val data = LineChartData(
+        backgroundColor = MaterialTheme.colorScheme.surface,
         linePlotData = LinePlotData(
             lines = listOf(
                 Line(
@@ -215,13 +216,14 @@ private fun SimpleDonutChart(data:PieChartData) {
         PieChartConfig(
             labelVisible = true,
             strokeWidth = 120f,
-            labelColor = Color.Black,
+            labelColor = MaterialTheme.colorScheme.onSurface,
             activeSliceAlpha = .9f,
             isEllipsizeEnabled = true,
             labelTypeface = Typeface.defaultFromStyle(Typeface.BOLD),
             isAnimationEnable = true,
             chartPadding = 25,
             labelFontSize = 42.sp,
+            backgroundColor = MaterialTheme.colorScheme.surface
         )
     Column(
         modifier = Modifier
@@ -253,6 +255,8 @@ private fun BarchartWithSolidBars(barData:List<BarData>) {
         .bottomPadding(40.dp)
         .axisLabelAngle(20f)
         .startDrawPadding(48.dp)
+        .axisLineColor(MaterialTheme.colorScheme.onSurface)
+        .axisLabelColor(MaterialTheme.colorScheme.onSurface)
         .labelData { index ->"${barData[index].label.subSequence(0,(barData[index].label.length/2))}..."  }
         .build()
     val yAxisData = AxisData.Builder()
@@ -262,6 +266,7 @@ private fun BarchartWithSolidBars(barData:List<BarData>) {
         //.labelData { index -> (index * (maxRange / yStepSize)).toString() }
         .build()
     val barChartData = BarChartData(
+        backgroundColor = MaterialTheme.colorScheme.surface,
         chartData = barData,
         xAxisData = xAxisData,
         yAxisData = yAxisData,

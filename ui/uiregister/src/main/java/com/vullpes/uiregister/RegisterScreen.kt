@@ -19,8 +19,10 @@ import androidx.compose.material.icons.filled.VisibilityOff
 import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableStateOf
@@ -50,135 +52,126 @@ fun RegisterScreen(
     BackHandler {
         onBackPressed()
     }
-    Box(modifier = Modifier
-        .background(color = Color.Blue.copy(alpha = 0.5f))
-        .fillMaxSize()
-    ) {
-
-        Column(
+    Scaffold() {padding ->
+        Box(
             modifier = Modifier
-                .padding(16.dp)
-                .verticalScroll(rememberScrollState())
-                .fillMaxWidth()
-                .align(Alignment.Center)
-
+                .fillMaxSize().padding(padding)
         ) {
 
-            var passwordVisibility = remember{ mutableStateOf(false) }
-            var confirmPasswordVisibility = remember{ mutableStateOf(false) }
-            OutlinedTextField(
-                value = uiState.user,
-                label = { Text(text = stringResource(R.string.user), color = Color.White) },
-                onValueChange = onUsernameChanged,
+            Column(
                 modifier = Modifier
+                    .padding(16.dp)
+                    .verticalScroll(rememberScrollState())
                     .fillMaxWidth()
-                    .padding(all = 8.dp),
-                leadingIcon = {
-                    Icon(Icons.Filled.Person, contentDescription = stringResource(R.string.password_icon), tint = Color.White )
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    focusedLabelColor = Color.White,
-                    focusedBorderColor = Color.White,
-                    unfocusedBorderColor = Color.White
-                )
-            )
+                    .align(Alignment.Center)
 
-            OutlinedTextField(
-                value = uiState.email,
-                label = { Text(text = "E-mail", color = Color.White) },
-                onValueChange = onEmailChanged,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(all = 8.dp),
-                leadingIcon = {
-                    Icon(Icons.Filled.Person, contentDescription = stringResource(R.string.password_icon), tint = Color.White )
-                },
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    focusedLabelColor = Color.White,
-                    focusedBorderColor = Color.White,
-                    unfocusedBorderColor = Color.White
-                )
-            )
+            ) {
 
-            OutlinedTextField(
-                value = uiState.password,
-                label = { Text(text = stringResource(R.string.password), color = Color.White) },
-                onValueChange = onPasswordChanged,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                visualTransformation = if(passwordVisibility.value) VisualTransformation.None else PasswordVisualTransformation(),
-                leadingIcon = {
-                    Icon(Icons.Filled.Key, contentDescription = stringResource(R.string.password_icon), tint = Color.White )
-                },
-                trailingIcon = {
-                    IconButton(onClick = {passwordVisibility.value = !passwordVisibility.value}){
+                var passwordVisibility = remember { mutableStateOf(false) }
+                var confirmPasswordVisibility = remember { mutableStateOf(false) }
+                OutlinedTextField(
+                    value = uiState.user,
+                    label = { Text(text = stringResource(R.string.user)) },
+                    onValueChange = onUsernameChanged,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 8.dp),
+                    leadingIcon = {
                         Icon(
-                            imageVector = if(passwordVisibility.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = stringResource(R.string.show_password),
-                            tint = Color.White
+                            Icons.Filled.Person,
+                            contentDescription = stringResource(R.string.password_icon)
                         )
                     }
-                },
-
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    focusedLabelColor = Color.White,
-                    focusedBorderColor = Color.White,
-                    unfocusedBorderColor = Color.White
                 )
-            )
 
-            OutlinedTextField(
-                value = uiState.confirmPassword,
-                label = { Text(text = stringResource(R.string.confirm_password), color = Color.White) },
-                onValueChange = onConfirmPassword,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-                visualTransformation = if(confirmPasswordVisibility.value) VisualTransformation.None else PasswordVisualTransformation(),
-                leadingIcon = {
-                    Icon(Icons.Filled.Key, contentDescription = stringResource(R.string.password_icon), tint = Color.White )
-                },
-                supportingText = {
-                    if(uiState.passwordsDoesntMatch){
-                        Text(text = stringResource(R.string.passwords_doesn_t_match), color = Color.White)
-                    }
-                },
-                trailingIcon = {
-                    IconButton(onClick = {confirmPasswordVisibility.value = !confirmPasswordVisibility.value}){
+                OutlinedTextField(
+                    value = uiState.email,
+                    label = { Text(text = "E-mail") },
+                    onValueChange = onEmailChanged,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(all = 8.dp),
+                    leadingIcon = {
                         Icon(
-                            imageVector = if(confirmPasswordVisibility.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
-                            contentDescription = stringResource(R.string.show_password),
-                            tint = Color.White
+                            Icons.Filled.Person,
+                            contentDescription = stringResource(R.string.password_icon)
                         )
                     }
-                },
-
-                colors = OutlinedTextFieldDefaults.colors(
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    focusedLabelColor = Color.White,
-                    focusedBorderColor = Color.White,
-                    unfocusedBorderColor = Color.White
                 )
-            )
 
-            Spacer(modifier = Modifier.height(10.dp))
+                OutlinedTextField(
+                    value = uiState.password,
+                    label = { Text(text = stringResource(R.string.password)) },
+                    onValueChange = onPasswordChanged,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    visualTransformation = if (passwordVisibility.value) VisualTransformation.None else PasswordVisualTransformation(),
+                    leadingIcon = {
+                        Icon(
+                            Icons.Filled.Key,
+                            contentDescription = stringResource(R.string.password_icon)
+                        )
+                    },
+                    trailingIcon = {
+                        IconButton(onClick = {
+                            passwordVisibility.value = !passwordVisibility.value
+                        }) {
+                            Icon(
+                                imageVector = if (passwordVisibility.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                                contentDescription = stringResource(R.string.show_password),
+                            )
+                        }
+                    }
+                )
 
-            Button(enabled = uiState.loginButtonEnabled,
-                onClick = { onRegisterClicked() },
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(8.dp),
-            )
-            {
-                Text(text = stringResource(R.string.register),fontFamily = FontFamily.Default, color = Color.White)
+                OutlinedTextField(
+                    value = uiState.confirmPassword,
+                    label = { Text(text = stringResource(R.string.confirm_password)) },
+                    onValueChange = onConfirmPassword,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                    visualTransformation = if (confirmPasswordVisibility.value) VisualTransformation.None else PasswordVisualTransformation(),
+                    leadingIcon = {
+                        Icon(
+                            Icons.Filled.Key,
+                            contentDescription = stringResource(R.string.password_icon)
+                        )
+                    },
+                    supportingText = {
+                        if (uiState.passwordsDoesntMatch) {
+                            Text(text = stringResource(R.string.passwords_doesn_t_match))
+                        }
+                    },
+                    trailingIcon = {
+                        IconButton(onClick = {
+                            confirmPasswordVisibility.value = !confirmPasswordVisibility.value
+                        }) {
+                            Icon(
+                                imageVector = if (confirmPasswordVisibility.value) Icons.Filled.Visibility else Icons.Filled.VisibilityOff,
+                                contentDescription = stringResource(R.string.show_password),
+                            )
+                        }
+                    },
+                )
+
+                Spacer(modifier = Modifier.height(10.dp))
+
+                Button(
+                    enabled = uiState.loginButtonEnabled,
+                    onClick = { onRegisterClicked() },
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(8.dp),
+                )
+                {
+                    Text(
+                        text = stringResource(R.string.register),
+                        fontFamily = FontFamily.Default,
+                        color = MaterialTheme.colorScheme.onPrimary
+                    )
+                }
             }
         }
     }

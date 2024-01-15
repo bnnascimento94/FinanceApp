@@ -1,6 +1,7 @@
 package com.vullpes.common.presentation
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -77,7 +78,7 @@ fun MessageDialog(
                         Text(
                             stringResource(R.string.no),
                             fontWeight = FontWeight.Bold,
-                            color = Color.Black,
+                            color = if(isSystemInDarkTheme()) Color.White else Color.Black,
                             modifier = Modifier.padding(top = 5.dp, bottom = 5.dp)
                         )
                     }
@@ -89,7 +90,7 @@ fun MessageDialog(
                     Text(
                         stringResource(R.string.ok),
                         fontWeight = FontWeight.ExtraBold,
-                        color = Color.Black,
+                        color = if(isSystemInDarkTheme())  Color.White else Color.Black,
                         modifier = Modifier.padding(top = 5.dp, bottom = 5.dp)
                     )
                 }

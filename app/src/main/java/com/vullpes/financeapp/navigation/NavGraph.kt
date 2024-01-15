@@ -81,6 +81,7 @@ fun SetupNavGraph(
         )
         homeRoute(
             onExitAppClicked = {
+                com.vullpes.common.domain.session.UserSession.stopSession()
                 navController.popBackStack()
                 navController.navigate(com.vullpes.common.navigation.Screen.Login.route)
             },
