@@ -51,8 +51,18 @@ dependencies {
     implementation(libs.ui.tooling.preview)
     implementation(libs.compose.material3)
     implementation(libs.material.icons.extended)
-    implementation(libs.hilt.navigation.compose)
+    debugImplementation(libs.ui.tooling)
+    debugImplementation(libs.ui.test.manifest)
+
     implementation(libs.hilt.android)
+    kapt(libs.dagger.hilt.compiler)
+    kapt(libs.hilt.compiler)
+    implementation(libs.hilt.navigation.compose)
+
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.junit.ext)
+    androidTestImplementation(libs.espresso.core)
+
 
     implementation(project(":common"))
     implementation(project(":domain:category"))

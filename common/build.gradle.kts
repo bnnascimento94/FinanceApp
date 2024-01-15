@@ -54,8 +54,8 @@ dependencies {
     implementation(libs.material.icons.extended)
 
     implementation(libs.hilt.android)
-    implementation(libs.dagger.hilt.compiler)
-    implementation(libs.hilt.compiler)
+    kapt(libs.dagger.hilt.compiler)
+    kapt(libs.hilt.compiler)
 
 
     testImplementation(libs.junit)

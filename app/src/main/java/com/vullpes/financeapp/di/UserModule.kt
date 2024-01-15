@@ -1,6 +1,7 @@
 package com.vullpes.financeapp.di
 
 import android.content.Context
+import com.google.firebase.auth.FirebaseAuth
 import com.vullpes.room.FinanceAppDatabase
 import com.vullpes.room.repository.user.UserRoomDataSource
 import com.vullpes.room.repository.user.UserRoomDataSourceImpl

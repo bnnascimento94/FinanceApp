@@ -59,8 +59,8 @@ dependencies {
     implementation(libs.activity.compose)
 
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
     kapt(libs.dagger.hilt.compiler)
+    kapt(libs.hilt.compiler)
     implementation(libs.hilt.navigation.compose)
     implementation(libs.hilt.work)
     implementation(libs.work.runtime.ktx)
@@ -68,20 +68,16 @@ dependencies {
     implementation(libs.kotlinx.coroutines.core)
     implementation(libs.kotlinx.coroutines.android)
 
-
     implementation(libs.navigation.compose)
 
     implementation(libs.firebase.auth.ktx)
     implementation(libs.room.ktx)
-    implementation(libs.room.compiler)
+    kapt(libs.room.compiler)
     implementation(libs.room.runtime)
 
 
     implementation(libs.junit)
     implementation(libs.junit.ext)
-    implementation(libs.espresso.core)
-    implementation(libs.mockito.core)
-    implementation(libs.hamcrest)
 
 
     implementation(project(":ui:category"))

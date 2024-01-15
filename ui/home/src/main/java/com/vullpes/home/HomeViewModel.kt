@@ -17,6 +17,7 @@ import com.vullpes.authentication.usecases.ClearAllSessionDataUsecase
 import com.vullpes.authentication.usecases.GetFlowUserUsecase
 import com.vullpes.authentication.usecases.LogoutUsecase
 import com.vullpes.category.usecases.ListCategoryUseCase
+import com.vullpes.common.domain.currency.round
 import com.vullpes.transaction.usecases.ButtonSaveTransactionEnabledUseCase
 import com.vullpes.transaction.usecases.CreateTransactionUseCase
 import com.vullpes.transaction.usecases.GetLastTransactionsByAccountUseCase
@@ -104,6 +105,17 @@ class HomeViewModel @Inject constructor(
 
     fun statusAccountValueChanged(accountValue: String) {
         uiState = uiState.copy(valueAccount = accountValue)
+
+        val value = com.vullpes.common.domain.currency.CurrencyAmountInputVisualTransformation(
+        )
+            .filter(
+                AnnotatedString(
+                    accountValue
+                )
+            ).text.toString().replace(",", "").toDouble()
+
+
+
         uiState = uiState.copy(
             accountCreateUpdate = uiState.accountCreateUpdate?.copy(
                 accountBalance = if(accountValue.isBlank()) 0.00 else com.vullpes.common.domain.currency.CurrencyAmountInputVisualTransformation()
@@ -130,7 +142,18 @@ class HomeViewModel @Inject constructor(
 
     fun onOpenAccountModal(account: Account? = null) {
         uiState = if (account != null) {
-            uiState.copy(accountCreateUpdate = account, openAccountModal = true, valueAccount = account.accountBalance.toString().replace(",", "").replace(".", ""))
+
+            val splitValue = account.accountBalance.toString().split(".")
+            var fractionPart = splitValue[1]
+            if(fractionPart.length == 1){
+                fractionPart += "0"
+            }else{
+                fractionPart
+            }
+
+            val finalValue = splitValue[0]+fractionPart
+
+            uiState.copy(accountCreateUpdate = account, openAccountModal = true, valueAccount = finalValue)
         } else {
             uiState.copy(accountCreateUpdate = Account(), openAccountModal = true, valueAccount = "")
         }
@@ -315,6 +338,11 @@ class HomeViewModel @Inject constructor(
             if (uiState.accountSelected == null && it.isNotEmpty()) {
                 uiState = uiState.copy(accountSelected = it.first())
                 listTransactions()
+            }else{
+                uiState = uiState.copy(
+                    accountCreateUpdate = uiState.accounts.first { it.accountID == uiState.accountSelected?.accountID },
+                    accountSelected = uiState.accounts.first { it.accountID == uiState.accountSelected?.accountID }
+                )
             }
         }
     }
