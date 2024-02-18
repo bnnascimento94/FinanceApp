@@ -13,7 +13,8 @@ This Application was developed using the latest technologies in android native d
 - Firebase
 - Modularization
 
-🏛 Architecture
+🏛 Architecture:
+
 The Archtecture used is based on MVVM (recommended by Google) and Clean Archtecture. For better comparison the app has two branches, one in a single module and the second one in a multimodular archtecture. 
 The chosen approach for the multimodular archtecture was modularization by layer.
 
