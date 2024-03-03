@@ -340,8 +340,8 @@ class HomeViewModel @Inject constructor(
                 listTransactions()
             }else{
                 uiState = uiState.copy(
-                    accountCreateUpdate = uiState.accounts.first { it.accountID == uiState.accountSelected?.accountID },
-                    accountSelected = uiState.accounts.first { it.accountID == uiState.accountSelected?.accountID }
+                    accountCreateUpdate = uiState.accounts.find { it.accountID == uiState.accountSelected?.accountID },
+                    accountSelected = uiState.accounts.find { it.accountID == uiState.accountSelected?.accountID }
                 )
             }
         }
