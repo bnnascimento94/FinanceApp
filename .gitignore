@@ -13,3 +13,7 @@
 .externalNativeBuild
 .cxx
 local.properties
+/app/service-account.json
+/app/financeApp.jks
+/app/google-services.json
+

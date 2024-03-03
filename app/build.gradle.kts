@@ -1,10 +1,23 @@
+import java.util.Properties
+import java.io.FileInputStream
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
     id ("com.google.dagger.hilt.android")
     id ("org.jetbrains.kotlin.kapt")
     id("com.google.gms.google-services")
+    id("com.github.triplet.play") version "3.9.0"
 }
+
+// Create a variable called keystorePropertiesFile, and initialize it to your
+// keystore.properties file, in the rootProject folder.
+val keystorePropertiesFile = rootProject.file("app/keystore.properties")
+
+// Initialize a new Properties() object called keystoreProperties.
+val keystoreProperties = Properties()
+
+// Load your keystore.properties file into the keystoreProperties object.
+keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 
 android {
     namespace = "com.vullpes.financeapp"
@@ -14,14 +27,24 @@ android {
         applicationId = "com.vullpes.financeapp"
         minSdk = ProjectConfig.minSdk
         targetSdk = ProjectConfig.targetSdk
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.0.1"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
         }
     }
+
+    signingConfigs {
+        create("release") {
+            keyAlias = keystoreProperties["keyAlias"] as String
+            keyPassword = keystoreProperties["keyPassword"] as String
+            storeFile = file(keystoreProperties["storeFile"] as String)
+            storePassword = keystoreProperties["storePassword"] as String
+        }
+    }
+
 
     buildTypes {
         release {
@@ -30,6 +53,8 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+
+            signingConfig = signingConfigs.getByName("release")
         }
     }
     compileOptions {
@@ -43,13 +68,17 @@ android {
         compose = true
     }
     composeOptions {
-        kotlinCompilerExtensionVersion = ProjectConfig.extensionVersion
+        kotlinCompilerExtensionVersion = ProjectConfig.      extensionVersion
     }
     packaging {
         resources {
             excludes += "/META-INF/{AL2.0,LGPL2.1}"
         }
     }
+}
+
+play {
+    serviceAccountCredentials.set(file("service-account.json"))
 }
 
 dependencies {
