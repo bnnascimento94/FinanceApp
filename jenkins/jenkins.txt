@@ -1,0 +1,66 @@
+1) Install Docker & Compose
+
+* Docker
+
+sudo amazon-linux-extras install docker -y
+sudo service docker start
+sudo chmod 777 /var/run/docker.sock
+
+* Compose
+
+sudo curl -L "https://github.com/docker/compose/releases/download/1.23.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+sudo chmod +x /usr/local/bin/docker-compose
+
+2) Pastas usadas pelo Jenkins
+
+sudo mkdir /var/jenkins_home
+sudo chmod -R 777 /var/jenkins_home
+
+3) Criar o arquivo docker-compose.yaml
+
+4) Subindo o Jenkins
+
+docker-compose up
+
+5) Configurando o Jenkins
+
+> Manage Jenkins > Manage Plugins
+
+* Instalar os plugins Locale, Docker e  Docker Pipeline.
+
+    > Manage Jenkins > Configure System > Locale.
+        - Digite "en_US" em 'Default Language'.
+        - Selecione o checkbox 'Ignore browser preference and force this language to all users'
+        - Clique em Salvar.
+
+6) Env Var $BASE_URL
+
+> Manage Jenkins > Configure System > Global properties > Env Var
+
+BASE_URL
+xxx
+
+DOCKER_HOME
+/Applications/Docker.app/Contents/Resources
+
+ANDROID_SDK_ROOT
+/Users/rlecheta/Library/Android/sdk
+
+7) Credenciais
+
+> Manage Jenkins > Manage Credentials > Jenkins > Global credentials
+
+Criar 1 credencial para o Git:
+    - id: udemy
+    - colocar o login e senha do Git.
+
+Criar 2 credenciais do tipo Secret File para os arquivos:
+    - ANDROID_KEYSTORE_FILE
+    - FIREBASE_SERVICE_ACCOUNT_FILE
+
+8) Pronto, é só configurar a Pipeline e executar a build.
+
+9) Mac
+
+Criar agent SSH para:
+    - docker.for.mac.localhost
