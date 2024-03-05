@@ -15,11 +15,6 @@ pipeline {
 
     stages {
 
-        stage('Initialize'){
-            def dockerHome = tool 'myDocker'
-            env.PATH = "${dockerHome}/bin:${env.PATH}"
-        }
-
         stage('Checkout git') {
             steps {
                 git branch: branch, credentialsId: 'gitHubCredential', url: url
